@@ -10,18 +10,20 @@ ALL tools and services used are 100% FREE -- no paid API keys required.
 Quick start
 -----------
   1. pip install -r requirements.txt
-  2. Edit config.yaml  (set your city, state, and target niches)
-  3. Follow setup_guide.md to get a free Google Sheets credentials.json
-  4. python main.py
+  2. python main.py --city "Dallas" --state TX --limit 40
 
 Full usage
 ----------
-  python main.py                          # Run with default config.yaml
-  python main.py --config my_config.yaml  # Use a different config file
-  python main.py --export-only            # Re-export from SQLite (no scraping)
-  python main.py --niche "plumbers"       # Scrape a single niche
-  python main.py --no-sheets             # Scrape but skip Google Sheets export
-  python main.py --dry-run               # Scrape but don't save anything
+  python main.py                                # Run with default config.yaml
+  python main.py --city "Miami" --state FL      # Override city/state from CLI
+  python main.py --limit 50                     # Max results per niche
+  python main.py --config my_config.yaml        # Use a different config file
+  python main.py --export-only                  # Re-export from SQLite (no scraping)
+  python main.py --niche "plumbers"             # Scrape a single niche
+  python main.py --no-sheets                    # Scrape but skip Google Sheets export
+  python main.py --dry-run                      # Scrape but don't save anything
+  python main.py --serve                        # Launch dashboard after run
+  python main.py --city "Houston" --state TX --limit 30 --serve
 """
 
 import argparse
@@ -168,7 +170,7 @@ def apply_filters(leads: list[dict], config: dict) -> list[dict]:
     max_reviews         = f.get("max_reviews",          9999)
     min_rating          = f.get("min_rating",           0.0)
     max_rating          = f.get("max_rating",           5.0)
-    exclude_with_web    = f.get("exclude_with_website", False)
+    exclude_with_web    = f.get("exclude_with_website", True)
     min_score           = f.get("min_lead_score",       0)
 
     filtered = []
@@ -432,6 +434,18 @@ Examples:
         help="Path to YAML configuration file (default: config.yaml)",
     )
     parser.add_argument(
+        "--city",     default=None,
+        help='Override target city (e.g. --city "Dallas")',
+    )
+    parser.add_argument(
+        "--state",    default=None,
+        help="Override target state abbreviation (e.g. --state TX)",
+    )
+    parser.add_argument(
+        "--limit",    type=int, default=None,
+        help="Max results per niche, overrides config (e.g. --limit 50)",
+    )
+    parser.add_argument(
         "--niche",    default=None,
         help="Scrape a single niche and exit",
     )
@@ -447,7 +461,52 @@ Examples:
         "--dry-run",     action="store_true",
         help="Run scrapers but do not write to database or Google Sheets",
     )
+    parser.add_argument(
+        "--serve",       action="store_true",
+        help="Launch the localhost dashboard after the run completes",
+    )
+    parser.add_argument(
+        "--port",     type=int, default=5000,
+        help="Dashboard port (default: 5000, used with --serve)",
+    )
     return parser.parse_args()
+
+
+def _apply_cli_overrides(config: dict, args: argparse.Namespace):
+    """Push CLI flags into the live config dict before running the pipeline."""
+    if args.city:
+        config["location"]["city"] = args.city
+        config["location"]["full_address"] = (
+            f"{args.city}, {config['location'].get('state', '')}"
+        )
+        print(f"  {Fore.CYAN}City overridden:{Style.RESET_ALL} {args.city}")
+    if args.state:
+        config["location"]["state"] = args.state
+        config["location"]["full_address"] = (
+            f"{config['location'].get('city', '')}, {args.state}"
+        )
+        print(f"  {Fore.CYAN}State overridden:{Style.RESET_ALL} {args.state}")
+    if args.limit is not None:
+        config["scraping"]["max_results_per_niche"] = args.limit
+        print(f"  {Fore.CYAN}Limit per niche:{Style.RESET_ALL} {args.limit}")
+
+
+def _launch_dashboard(port: int):
+    """Start dashboard.py in a background process and open the browser."""
+    import subprocess
+    from threading import Timer
+    import webbrowser
+
+    dashboard = Path(__file__).parent / "dashboard.py"
+    if not dashboard.exists():
+        print(f"\n{Fore.RED}dashboard.py not found — skipping.{Style.RESET_ALL}")
+        return
+
+    url = f"http://localhost:{port}"
+    print(f"\n{Fore.CYAN}Starting dashboard → {url}{Style.RESET_ALL}")
+    subprocess.Popen([sys.executable, str(dashboard), "--port", str(port)])
+    # Give Flask a moment to start, then open the browser
+    Timer(1.5, webbrowser.open, args=[url]).start()
 
 
 def main():
@@ -455,6 +514,7 @@ def main():
     load_dotenv()    # Load .env file if present
     args   = parse_args()
     config = load_config(args.config)
+    _apply_cli_overrides(config, args)
     logger = setup_logging(config)
 
     start = time.time()
@@ -475,6 +535,9 @@ def main():
     logger.info(f"Total runtime: {elapsed:.0f}s")
 
     print_stats(stats, url, csv_path=stats.get("csv_path"))
+
+    if args.serve:
+        _launch_dashboard(args.port)
 
 
 if __name__ == "__main__":

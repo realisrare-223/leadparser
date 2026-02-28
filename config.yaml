@@ -29,7 +29,7 @@ filters:
   min_rating: 0.0
   max_rating: 5.0
   # Set true to ONLY include businesses that have no website
-  exclude_with_website: false
+  exclude_with_website: true
   # Minimum lead score to include in export (0 = include all)
   min_lead_score: 0
   # Set true to attempt to filter for recently opened businesses
@@ -38,16 +38,16 @@ filters:
 # ── SCRAPING SETTINGS ─────────────────────────────────────────
 scraping:
   # Delay between requests (seconds) — stay polite and avoid blocks
-  delay_min: 2.5
-  delay_max: 6.0
+  delay_min: 2.0
+  delay_max: 4.0
   # Retry failed requests up to this many times
   max_retries: 3
   # true = hidden browser (faster); false = visible browser (easier debugging)
   headless: true
   # Maximum businesses to collect per niche (0 = no limit)
-  max_results_per_niche: 25
+  max_results_per_niche: 100
   # Seconds to pause between scroll actions in the results feed
-  scroll_pause_time: 2.0
+  scroll_pause_time: 1.0
   # Give up scrolling after this many attempts with no new results
   max_scroll_attempts: 20
   # Use undetected-chromedriver for better anti-bot evasion

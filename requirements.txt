@@ -35,6 +35,9 @@ tenacity>=8.2.3                 # Retry logic with backoff (free)
 tqdm>=4.66.1                    # Progress bars (free)
 colorama>=0.4.6                 # Colored terminal output (free)
 
+# ── Dashboard (localhost lead viewer) ─────────────────────────
+flask>=3.0.0                    # Localhost lead dashboard (free)
+
 # ── Optional: OCR for phone number extraction from images ────
 # Uncomment if you install Tesseract OCR engine first:
 # See setup_guide.md for Tesseract installation instructions

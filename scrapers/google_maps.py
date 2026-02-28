@@ -105,10 +105,10 @@ class GoogleMapsScraper(BaseScraper):
         max_scroll_att = self.config["scraping"].get("max_scroll_attempts", 20)
 
         # Wait for the results feed container to appear
-        feed = self._wait_for('div[role="feed"]', timeout=15)
+        feed = self._wait_for('div[role="feed"]', timeout=10)
         if not feed:
             # Sometimes results appear without the feed wrapper
-            feed = self._wait_for("div.m6QErb", timeout=8)
+            feed = self._wait_for("div.m6QErb", timeout=5)
         if not feed:
             self.logger.error("Results feed did not load — possible CAPTCHA or rate-limit")
             return []
@@ -226,10 +226,10 @@ class GoogleMapsScraper(BaseScraper):
     # ── Field extractors (each tries multiple fallback selectors) ──────
 
     def _wait_for_name(self):
-        """Wait up to 10 s for the business name heading to appear."""
+        """Wait up to 6 s for the business name heading to appear."""
         for sel in ("h1.DUwDvf", 'h1[class*="fontHeadline"]', "h1"):
             try:
-                return WebDriverWait(self.driver, 10).until(
+                return WebDriverWait(self.driver, 6).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, sel))
                 )
             except TimeoutException:
@@ -358,42 +358,22 @@ class GoogleMapsScraper(BaseScraper):
         return ""
 
     def _extract_hours(self) -> str:
-        """Extract operating hours as a compact string."""
-        # Approach 1: table of hours inside the hours button
+        """Extract operating hours as a compact string (no button click for speed)."""
+        # Approach 1: aria-label on hours button often contains the full schedule
         try:
             hours_btn = self._find_xpath(
                 '//button[contains(@aria-label, "hours")]'
                 '| //div[contains(@aria-label, "hours")]'
             )
             if hours_btn:
-                # Click to expand hours table (if collapsed)
                 label = hours_btn.get_attribute("aria-label") or ""
-                # Often the aria-label contains the whole schedule
+                # aria-label commonly holds the full schedule when > 20 chars
                 if len(label) > 20:
-                    # Strip "Sunday, …" prefix sometimes present
                     return label.split(";")[0].strip()
-
-                # Try expanding and reading the table
-                hours_btn.click()
-                time.sleep(0.5)
-                rows = self.driver.find_elements(
-                    By.CSS_SELECTOR, "table.WgFkxc tr"
-                )
-                if rows:
-                    parts = []
-                    for row in rows:
-                        cells = row.find_elements(By.TAG_NAME, "td")
-                        if len(cells) >= 2:
-                            day   = cells[0].text.strip()
-                            times = cells[1].text.strip()
-                            if day and times:
-                                parts.append(f"{day}: {times}")
-                    if parts:
-                        return " | ".join(parts)
         except Exception:
             pass
 
-        # Approach 2: look for "Open" / "Closed" status text
+        # Approach 2: look for "Open" / "Closed" status text via CSS
         for sel in ("div.MkV9", 'span[jstcache*="hour"]', "div.t39EBf"):
             text = self._text(sel)
             if text:
