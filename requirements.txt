@@ -1,0 +1,62 @@
+# ============================================================
+# LeadParser - Requirements (ALL FREE - no paid services)
+# ============================================================
+# Install with: pip install -r requirements.txt
+
+# ── Web Scraping Core ────────────────────────────────────────
+selenium>=4.15.0                # Browser automation (free)
+webdriver-manager>=4.0.1        # Auto-manages ChromeDriver (free)
+beautifulsoup4>=4.12.2          # HTML parsing (free)
+requests>=2.31.0                # HTTP requests (free)
+lxml>=4.9.3                     # Fast XML/HTML parser (free)
+
+# ── Anti-Detection ───────────────────────────────────────────
+undetected-chromedriver>=3.5.5  # Bypasses bot detection (free)
+fake-useragent>=1.4.0           # Random user agents (free)
+
+# ── Google Sheets Integration (FREE via Google Cloud Console) ─
+gspread>=5.12.0                 # Google Sheets client (free)
+google-auth>=2.23.4             # Google authentication (free)
+google-auth-oauthlib>=1.1.0     # OAuth flow support (free)
+
+# ── Data Processing ──────────────────────────────────────────
+pandas>=2.1.0                   # Data manipulation (free)
+phonenumbers>=8.13.26           # Phone number parsing/validation (free)
+
+# ── Sentiment Analysis (completely free, no API needed) ──────
+vaderSentiment>=3.3.2           # VADER: works offline, no API (free)
+textblob>=0.17.1                # TextBlob NLP library (free)
+
+# ── Configuration & Utilities ────────────────────────────────
+python-dotenv>=1.0.0            # Load .env files (free)
+pyyaml>=6.0.1                   # YAML config file parsing (free)
+schedule>=1.2.0                 # Pure-Python job scheduler (free)
+tenacity>=8.2.3                 # Retry logic with backoff (free)
+tqdm>=4.66.1                    # Progress bars (free)
+colorama>=0.4.6                 # Colored terminal output (free)
+
+# ── Optional: OCR for phone number extraction from images ────
+# Uncomment if you install Tesseract OCR engine first:
+# See setup_guide.md for Tesseract installation instructions
+# pytesseract>=0.3.10
+# Pillow>=10.1.0
+
+# ── Built-in Python modules (no install needed) ──────────────
+# sqlite3  - local database for deduplication
+# logging  - progress and error logging
+# json     - data serialization
+# re       - regex for phone/address parsing
+# hashlib  - deduplication hashing
+# os       - environment variables
+# pathlib  - file path handling
+# datetime - timestamps
+# time     - delays/rate limiting
+# random   - randomized delays and user agents
+# urllib   - URL encoding
+
+# ── Version 2 Upgrades (paid - NOT needed for v1) ────────────
+# serpapi          - paid Google search API ($50/mo)
+# bright-data      - paid proxy service ($500+/mo)
+# smartproxy       - paid proxy service ($80/mo)
+# opencage         - paid geocoding API (free tier: 2500/day)
+# twilio           - paid SMS/call verification

@@ -1,0 +1,281 @@
+# ============================================================
+# LeadParser Configuration File
+# Edit this file to customize your lead generation campaign.
+# No code changes needed — everything is controlled here.
+# ============================================================
+
+# ── LOCATION SETTINGS ────────────────────────────────────────
+location:
+  city: "Los Angeles"
+  state: "CA"
+  # Optional: specific zip codes to target (leave empty for whole city)
+  zip_codes: []          # e.g., ["90001", "90210"]
+  radius_miles: 20       # Used for geographic cluster analysis
+  # Full string used in search queries
+  full_address: "Los Angeles, CA"
+
+# ── TARGET NICHES/INDUSTRIES ─────────────────────────────────
+# Add or remove any niches you want to target.
+# These are sent directly as Google Maps search queries.
+niches:
+  - "auto detailing"
+  - "car detailing"
+  - "mobile car detailing"
+
+# ── FILTERING CRITERIA ───────────────────────────────────────
+filters:
+  min_reviews: 0
+  max_reviews: 9999          # No upper cap — collect everything
+  min_rating: 0.0
+  max_rating: 5.0
+  # Set true to ONLY include businesses that have no website
+  exclude_with_website: false
+  # Minimum lead score to include in export (0 = include all)
+  min_lead_score: 0
+  # Set true to attempt to filter for recently opened businesses
+  recently_opened_only: false
+
+# ── SCRAPING SETTINGS ─────────────────────────────────────────
+scraping:
+  # Delay between requests (seconds) — stay polite and avoid blocks
+  delay_min: 2.5
+  delay_max: 6.0
+  # Retry failed requests up to this many times
+  max_retries: 3
+  # true = hidden browser (faster); false = visible browser (easier debugging)
+  headless: true
+  # Maximum businesses to collect per niche (0 = no limit)
+  max_results_per_niche: 25
+  # Seconds to pause between scroll actions in the results feed
+  scroll_pause_time: 2.0
+  # Give up scrolling after this many attempts with no new results
+  max_scroll_attempts: 20
+  # Use undetected-chromedriver for better anti-bot evasion
+  use_undetected_chrome: true
+  # Window size for the browser (ignored in headless mode)
+  window_width: 1366
+  window_height: 768
+
+# ── FREE PROXY SETTINGS ──────────────────────────────────────
+proxies:
+  enabled: false           # Set true to rotate through free proxies
+  # Sources: "free-proxy-list", "sslproxies", "us-proxy"
+  sources:
+    - "free-proxy-list"
+    - "sslproxies"
+  # Test proxies before using them
+  test_before_use: true
+  # Timeout (seconds) when testing proxy connectivity
+  test_timeout: 5
+  # Rotate proxy every N requests
+  rotate_every: 10
+
+# ── SUPPLEMENTARY SCRAPERS (all free, no API keys) ────────────
+# Enabled scrapers are used to fill in missing phone numbers
+# and find social media profiles for leads lacking contact info.
+supplementary_scrapers:
+  yelp: true
+  yellow_pages: true
+  bbb: true                # Better Business Bureau
+  whitepages: true
+  facebook: false          # More restricted; enable with caution
+  linkedin: false          # Heavy rate-limiting; disabled by default
+
+# ── GOOGLE SHEETS EXPORT ─────────────────────────────────────
+# See setup_guide.md for free setup instructions (takes ~10 min)
+google_sheets:
+  enabled: false
+  spreadsheet_name: "LeadParser — Local Business Leads"
+  # Path to your downloaded service account JSON file
+  service_account_file: "credentials.json"
+  # Create a new sheet tab for each niche when > this many leads
+  leads_per_sheet_threshold: 50
+  # Apply niche-color formatting and bold headers
+  apply_formatting: true
+  # Pause between Sheets API write batches (respects 100 req/100s limit)
+  write_batch_size: 50
+  write_batch_pause: 2.0   # seconds between batches
+
+# ── HIGH-VALUE NICHES (earn bonus lead score points) ──────────
+high_value_niches:
+  - "auto detailing"
+  - "car detailing"
+  - "mobile car detailing"
+  - "plumbers"
+  - "electricians"
+  - "HVAC contractors"
+  - "roofing contractors"
+  - "water damage restoration"
+  - "emergency services"
+  - "tree services"
+
+# ── LEAD SCORING CONFIGURATION ────────────────────────────────
+# Adjust these weights to match what you sell.
+# Final score = sum of all applicable bonuses.
+scoring:
+  # Review count brackets
+  no_reviews_score: 10         # 0 reviews  → brand new / needs everything
+  very_few_reviews_score: 8    # 1–10 reviews → just getting started
+  few_reviews_score: 5         # 11–25 reviews → small presence
+  some_reviews_score: 3        # 26–50 reviews → some traction
+  many_reviews_score: 1        # 51–100 reviews → established
+  # Rating bonuses
+  low_rating_bonus: 9          # ≤ 3.5 stars → unhappy customers, needs help
+  medium_rating_bonus: 4       # 3.6–4.0 stars → room to improve
+  # Other bonuses
+  high_value_niche_bonus: 7    # In high_value_niches list above
+  complete_contact_bonus: 2    # Has phone AND complete address
+  no_website_bonus: 3          # No website found → higher need for digital services
+  has_facebook_bonus: 1        # Active on social media
+
+# ── SALES PITCH TEMPLATES ─────────────────────────────────────
+# Available placeholders: {name}, {city}, {niche}, {review_count}, {rating}
+# The "default" template is used for any niche not listed here.
+pitch_templates:
+
+  default: >
+    Hi {name}, I help local businesses in {city} build a stronger online
+    presence to attract more customers. I came across your listing and
+    thought you might benefit from what we offer. Would you be open to a
+    quick 10-minute call this week?
+
+  restaurants: >
+    Hi {name}, I noticed your restaurant has {review_count} reviews on
+    Google. I specialize in helping local restaurants in {city} increase
+    their online visibility and turn online searches into full tables.
+    Would you be open to a quick 10-minute call to see if we can help
+    bring in more diners?
+
+  plumbers: >
+    Hi {name}, I work with local plumbers in {city} to help them capture
+    more emergency calls and keep their schedule full year-round. A
+    stronger online presence means homeowners find YOU first when a pipe
+    bursts at 2am. Worth a quick 10-minute chat?
+
+  electricians: >
+    Hi {name}, I help electricians in {city} get more residential and
+    commercial leads through better local search visibility. With
+    {review_count} reviews, there's real room to capture more of the
+    customers searching right now. Can we talk for 10 minutes?
+
+  "HVAC contractors": >
+    Hi {name}, HVAC is one of the most competitive local service markets
+    online. I help HVAC companies in {city} dominate local search results
+    and get more service calls — especially during peak seasons.
+    Worth a 10-minute conversation?
+
+  "landscaping services": >
+    Hi {name}, I help landscaping companies in {city} build steady streams
+    of recurring clients through smarter online presence. With spring
+    coming up, now is the perfect time to get ahead of competitors.
+    Can we chat for 10 minutes?
+
+  "auto detailing": >
+    Hi {name}, I help auto detailing businesses in {city} get more
+    consistent bookings by showing up where car owners are already searching.
+    With {review_count} reviews, I think we could significantly grow your
+    client base. Worth a quick 10-minute call?
+
+  "car detailing": >
+    Hi {name}, I help car detailing shops in {city} fill their calendar
+    with repeat customers and new bookings through better online visibility.
+    Would you have 10 minutes to chat about how we could help you get more
+    cars in?
+
+  "mobile car detailing": >
+    Hi {name}, mobile detailing is perfect for online marketing — customers
+    search and book instantly. I help mobile detailers in {city} show up
+    first when local car owners are ready to book. Quick 10-minute call?
+
+  "auto repair shops": >
+    Hi {name}, I work with auto repair shops to help them reach more local
+    drivers searching for a trusted mechanic in {city}. With
+    {review_count} reviews, there's real opportunity to capture more of
+    that search traffic. Got 10 minutes to explore this?
+
+  "hair salons": >
+    Hi {name}, I help hair salons in {city} attract new clients and keep
+    existing ones coming back more often. With a {rating}-star rating and
+    {review_count} reviews, I believe we could grow your book significantly.
+    Want to chat for 10 minutes?
+
+  "nail salons": >
+    Hi {name}, I help nail salons in {city} build a loyal client base
+    through better online visibility. More visibility means more bookings —
+    without relying on walk-ins. Would you have 10 minutes this week?
+
+  "roofing contractors": >
+    Hi {name}, roofing is a high-ticket local service where being first
+    on Google can mean hundreds of thousands in new contracts. I help
+    roofers in {city} show up when homeowners need them most.
+    Worth a quick call?
+
+  painters: >
+    Hi {name}, I help painters in {city} build a consistent pipeline of
+    residential and commercial projects through better online presence.
+    Would you have 10 minutes to talk about how we could keep your
+    calendar full?
+
+  "cleaning services": >
+    Hi {name}, I help cleaning businesses in {city} build consistent
+    recurring client rosters through smarter digital presence. Steady
+    recurring clients are the foundation of a cleaning business —
+    and I know exactly how to attract them. Quick 10-minute call?
+
+  "pest control": >
+    Hi {name}, when someone has a pest emergency they search Google
+    immediately. I help pest control companies in {city} show up first
+    at that exact moment. Would you have 10 minutes to discuss how we
+    could get you more of those urgent calls?
+
+  locksmiths: >
+    Hi {name}, locksmith calls are almost always urgent — people search
+    and call within minutes. I help locksmiths in {city} dominate those
+    emergency searches so they get the call before competitors.
+    Worth a quick 10 minutes?
+
+  "towing services": >
+    Hi {name}, when someone's stranded they need help NOW. I help towing
+    companies in {city} show up first in those urgent searches. More
+    visibility means more calls per hour. Got 10 minutes to discuss?
+
+  dentists: >
+    Hi {name}, I help dental practices in {city} attract new patients
+    through better online visibility and review management. With
+    {review_count} reviews, I think we could significantly grow your
+    new patient count. Would you have 10 minutes this week?
+
+  chiropractors: >
+    Hi {name}, I help chiropractors in {city} attract new patients who
+    are actively searching for pain relief solutions online. A stronger
+    digital presence means patients find you before your competitors.
+    Worth a quick 10-minute call?
+
+  "pet grooming": >
+    Hi {name}, I help pet grooming businesses in {city} build loyal
+    client relationships that lead to consistent monthly bookings.
+    Would you be open to a quick 10-minute conversation about growing
+    your grooming client base?
+
+# ── DATABASE SETTINGS ─────────────────────────────────────────
+database:
+  path: "data/leads.db"         # SQLite file for deduplication + local storage
+  # Deduplicate on: business name + city (normalized, lowercased)
+  dedup_key: "name_city"
+
+# ── LOGGING SETTINGS ──────────────────────────────────────────
+logging:
+  level: "INFO"                 # DEBUG | INFO | WARNING | ERROR
+  log_dir: "logs"
+  # Keep log files for this many days before rotating
+  max_log_days: 30
+
+# ── SCHEDULING SETTINGS ───────────────────────────────────────
+scheduling:
+  enabled: false
+  # How often to run: "daily" | "weekly" | "monthly"
+  frequency: "weekly"
+  # Time to run (24-hour clock, local time)
+  run_time: "08:00"
+  # Day of week for weekly runs: "monday" through "sunday"
+  day_of_week: "monday"
