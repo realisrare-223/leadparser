@@ -28,8 +28,10 @@ filters:
   max_reviews: 9999          # No upper cap — collect everything
   min_rating: 0.0
   max_rating: 5.0
-  # Set true to ONLY include businesses that have no website
-  exclude_with_website: true
+  # Set true to ONLY include businesses that have no website.
+  # Leave false to collect ALL leads — you can filter by website
+  # in the dashboard's lead filters after scraping.
+  exclude_with_website: false
   # Minimum lead score to include in export (0 = include all)
   min_lead_score: 0
   # Set true to attempt to filter for recently opened businesses

@@ -17,12 +17,13 @@ Full usage
 ----------
   python main.py                                # Run with default config.yaml
   python main.py --city "Miami" --state FL      # Override city/state from CLI
-  python main.py --limit 50                     # Max results per niche
+  python main.py --limit 50                     # Target N filtered leads
   python main.py --config my_config.yaml        # Use a different config file
   python main.py --niche "plumbers"             # Scrape a single niche
-  python main.py --dry-run                      # Scrape but don't save anything
+  python main.py --export-only                  # Export DB -> CSV, no scraping
+  python main.py --no-csv                       # Skip local CSV export
+  python main.py --dry-run                      # Scrape but don't write to DB
   python main.py --serve                        # Launch dashboard after run
-  python main.py --city "Houston" --state TX --limit 30 --serve
 """
 
 import argparse
@@ -39,22 +40,75 @@ from dotenv import load_dotenv
 from colorama import init as colorama_init, Fore, Style
 
 # -- Internal modules -------------------------------------------------
-from scrapers.google_maps      import GoogleMapsScraper
-from scrapers.supplementary    import SupplementaryScraper
+from scrapers.google_maps       import GoogleMapsScraper
+from scrapers.supplementary     import SupplementaryScraper
 from exporters.supabase_handler import SupabaseHandler
-from utils.rate_limiter        import RateLimiter
-from utils.proxy_manager       import ProxyManager
-from utils.phone_validator     import PhoneValidator
-from utils.address_parser      import AddressParser
-from utils.lead_scorer         import LeadScorer
-from utils.pitch_engine        import PitchEngine
-from utils.sentiment_analyzer  import SentimentAnalyzer
+from utils.rate_limiter         import RateLimiter
+from utils.proxy_manager        import ProxyManager
+from utils.phone_validator      import PhoneValidator
+from utils.address_parser       import AddressParser
+from utils.lead_scorer          import LeadScorer
+from utils.pitch_engine         import PitchEngine
+from utils.sentiment_analyzer   import SentimentAnalyzer
 
 # ---------------------------------------------------------------------
 
 
-def setup_logging(config: dict) -> logging.Logger:
-    """Configure rotating file + console logging."""
+# ── Supabase live log handler ─────────────────────────────────────────────────
+
+class SupabaseLogHandler(logging.Handler):
+    """
+    Streams log records to the `scraper_logs` Supabase table so the
+    dashboard can display live progress while the scraper runs.
+
+    Buffers up to BATCH_SIZE records and flushes either when the buffer
+    fills or every FLUSH_INTERVAL seconds — whichever comes first.
+    """
+    BATCH_SIZE     = 8
+    FLUSH_INTERVAL = 3.0   # seconds
+
+    def __init__(self, supabase_client, job_id: str):
+        super().__init__()
+        self._sb         = supabase_client
+        self._job_id     = job_id
+        self._buffer     = []
+        self._last_flush = time.time()
+
+    def emit(self, record: logging.LogRecord) -> None:
+        try:
+            msg   = self.format(record)
+            level = record.levelname.lower()
+            self._buffer.append({
+                'job_id':  self._job_id,
+                'level':   level,
+                'message': msg,
+            })
+            if len(self._buffer) >= self.BATCH_SIZE or \
+               time.time() - self._last_flush >= self.FLUSH_INTERVAL:
+                self.flush()
+        except Exception:
+            pass   # never let the log handler crash the scraper
+
+    def flush(self) -> None:
+        if not self._buffer:
+            return
+        try:
+            self._sb.table('scraper_logs').insert(self._buffer).execute()
+            self._buffer.clear()
+            self._last_flush = time.time()
+        except Exception:
+            pass   # best-effort
+
+
+# -----------------------------------------------------------------------------
+
+
+def setup_logging(config: dict, job_id: str = None) -> logging.Logger:
+    """Configure file + console logging.
+
+    If *job_id* is provided (when run as a queued job), also attaches a
+    SupabaseLogHandler so live progress streams to the dashboard.
+    """
     log_cfg = config.get("logging", {})
     level   = getattr(logging, log_cfg.get("level", "INFO").upper(), logging.INFO)
     log_dir = Path(log_cfg.get("log_dir", "logs"))
@@ -73,12 +127,30 @@ def setup_logging(config: dict) -> logging.Logger:
         ],
     )
 
-    # Quieten noisy third-party loggers
     for noisy in ("selenium", "urllib3", "undetected_chromedriver", "WDM"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
 
     logger = logging.getLogger("leadparser.main")
     logger.info(f"LeadParser started | log: {log_file}")
+
+    # Attach Supabase handler when running as a queued job
+    if job_id:
+        try:
+            from supabase import create_client
+            sb_url = os.getenv('SUPABASE_URL') or os.getenv('NEXT_PUBLIC_SUPABASE_URL', '')
+            sb_key = os.getenv('SUPABASE_KEY', '')
+            if sb_url and sb_key:
+                sb_client  = create_client(sb_url, sb_key)
+                sb_handler = SupabaseLogHandler(sb_client, job_id)
+                sb_handler.setFormatter(logging.Formatter('%(levelname)-8s %(message)s'))
+                sb_handler.setLevel(logging.DEBUG)
+                logging.getLogger().addHandler(sb_handler)
+                logger.info(f"Live log streaming active — job {job_id[:8]}")
+            else:
+                logger.warning("SUPABASE_URL/SUPABASE_KEY not set — live logs disabled")
+        except Exception as exc:
+            logger.warning(f"Could not start Supabase log handler: {exc}")
+
     return logger
 
 
@@ -98,29 +170,15 @@ def build_lead(
     validator: PhoneValidator,
     parser:    AddressParser,
 ) -> dict:
-    """
-    Transform a raw scraped dict into the canonical 22-column lead dict.
-
-    Applies:
-      * Address component parsing (street / city / state / zip)
-      * Phone number formatting / validation
-      * Lead scoring
-      * Sales pitch template population
-    """
-    # Parse address into components
+    """Transform a raw scraped dict into the canonical lead dict."""
     addr_parts = parser.infer_city_state(
         raw.get("address", ""), config["location"]
     )
 
-    # Format phone numbers
     phone     = validator.format(raw.get("phone",           ""))
     sec_phone = validator.format(raw.get("secondary_phone", ""))
-
-    # Compute lead score
-    score = scorer.score(raw, niche, config)
-
-    # Generate pitch
-    pitch = pitcher.generate(niche, raw, config)
+    score     = scorer.score(raw, niche, config)
+    pitch     = pitcher.generate(niche, raw, config)
 
     lead: dict = {
         "niche":            niche,
@@ -147,7 +205,6 @@ def build_lead(
         "follow_up_date":   "",
     }
 
-    # Flag leads with no phone so the operator knows to do manual lookup
     if not lead["phone"]:
         flag = "Phone Number Needed - Manual Research Required"
         if flag not in lead["additional_notes"]:
@@ -159,17 +216,14 @@ def build_lead(
 
 
 def apply_filters(leads: list[dict], config: dict) -> list[dict]:
-    """
-    Filter leads based on the criteria in config.yaml -> filters.
-    Returns only the leads that pass all filters.
-    """
+    """Apply config.yaml filter criteria. Returns passing leads."""
     f = config.get("filters", {})
-    min_reviews         = f.get("min_reviews",          0)
-    max_reviews         = f.get("max_reviews",          9999)
-    min_rating          = f.get("min_rating",           0.0)
-    max_rating          = f.get("max_rating",           5.0)
-    exclude_with_web    = f.get("exclude_with_website", True)
-    min_score           = f.get("min_lead_score",       0)
+    min_reviews      = f.get("min_reviews",          0)
+    max_reviews      = f.get("max_reviews",          9999)
+    min_rating       = f.get("min_rating",           0.0)
+    max_rating       = f.get("max_rating",           5.0)
+    exclude_with_web = f.get("exclude_with_website", False)
+    min_score        = f.get("min_lead_score",       0)
 
     filtered = []
     for lead in leads:
@@ -178,21 +232,14 @@ def apply_filters(leads: list[dict], config: dict) -> list[dict]:
             rating = float(lead.get("rating", 0.0) or 0.0)
         except (TypeError, ValueError):
             rating = 0.0
-
         score = int(lead.get("lead_score", 0) or 0)
 
-        if reviews < min_reviews:
-            continue
-        if reviews > max_reviews:
-            continue
-        if rating and rating < min_rating:
-            continue
-        if rating and rating > max_rating:
-            continue
-        if exclude_with_web and lead.get("website"):
-            continue
-        if score < min_score:
-            continue
+        if reviews < min_reviews:                                continue
+        if reviews > max_reviews:                                continue
+        if rating and rating < min_rating:                       continue
+        if rating and rating > max_rating:                       continue
+        if exclude_with_web and lead.get("website"):             continue
+        if score < min_score:                                    continue
 
         filtered.append(lead)
 
@@ -200,7 +247,6 @@ def apply_filters(leads: list[dict], config: dict) -> list[dict]:
 
 
 def print_banner():
-    """Print a colorful startup banner."""
     colorama_init(autoreset=True)
     sep = "=" * 60
     print(f"\n{Fore.CYAN}{sep}")
@@ -226,10 +272,6 @@ CSV_KEYS = [
 
 
 def export_csv(leads: list[dict], output_dir: str = "data") -> str:
-    """
-    Write all leads to a timestamped CSV file in *output_dir*.
-    Returns the file path.
-    """
     Path(output_dir).mkdir(parents=True, exist_ok=True)
     timestamp   = datetime.now().strftime("%Y%m%d_%H%M%S")
     dated_path  = Path(output_dir) / f"leads_{timestamp}.csv"
@@ -246,13 +288,13 @@ def export_csv(leads: list[dict], output_dir: str = "data") -> str:
 
 
 def print_stats(stats: dict, dashboard_url: str = None, csv_path: str = None):
-    """Print a summary report after the run."""
     sep = "-" * 60
     print(f"\n{Fore.GREEN}{sep}")
     print(f"  Run Complete")
     print(f"{sep}{Style.RESET_ALL}")
     print(f"  Niches searched : {stats.get('niches',      0)}")
-    print(f"  Total scraped   : {stats.get('total',       0)}")
+    print(f"  Raw scraped     : {stats.get('raw_total',   0)}")
+    print(f"  After filters   : {stats.get('total',       0)}")
     print(f"  New leads saved : {stats.get('new',         0)}")
     print(f"  Duplicates skip : {stats.get('duplicates',  0)}")
     print(f"  Errors          : {stats.get('errors',      0)}")
@@ -271,15 +313,13 @@ def print_stats(stats: dict, dashboard_url: str = None, csv_path: str = None):
 def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger):
     """
     Full lead-generation pipeline:
-      1. Scrape Google Maps for each niche
+      1. Scrape Google Maps (over-collect to guarantee target count)
       2. Supplement missing phones from Yelp / Yellow Pages / BBB
-      3. Score leads and generate pitch notes
-      4. Apply filters
-      5. Upsert into Supabase (dedup via unique constraint)
-      6. Optionally export CSV locally
+      3. Score + filter leads
+      4. Trim to --limit target (guarantees N filtered leads)
+      5. Upsert into Supabase
+      6. Optional CSV export
     """
-
-    # -- Initialise shared services ------------------------------------
     rate_limiter = RateLimiter(config)
     proxy_mgr    = ProxyManager(config)
     validator    = PhoneValidator()
@@ -287,32 +327,29 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
     scorer       = LeadScorer(config)
     pitcher      = PitchEngine(config)
 
-    # Refresh proxy pool if enabled
     if config["proxies"].get("enabled"):
         proxy_mgr.refresh()
 
-    # Determine which niches to run
-    niches   = config["niches"]
-    if args.niche:
-        niches = [args.niche]
-    location = config["location"]
+    niches       = [args.niche] if args.niche else config["niches"]
+    location     = config["location"]
+    target_count = config["scraping"].get("target_leads")
 
     all_leads: list[dict] = []
     run_stats: dict = {
-        "niches": len(niches), "total": 0, "new": 0,
-        "duplicates": 0, "errors": 0
+        "niches": len(niches), "raw_total": 0, "total": 0,
+        "new": 0, "duplicates": 0, "errors": 0,
     }
 
-    # -- Open Supabase connection --------------------------------------
     with SupabaseHandler(config) as db:
 
         session_id = db.start_session(niches, config)
         logger.info(
-            f"Session #{session_id} | "
-            f"{len(niches)} niche(s) | location: {location['city']}, {location['state']}"
+            f"Session #{session_id} | {len(niches)} niche(s) | "
+            f"location: {location['city']}, {location['state']}"
+            + (f" | target: {target_count} filtered leads" if target_count else "")
         )
 
-        # -- PHASE 1: Google Maps scraping -----------------------------
+        # ── Phase 1: Google Maps ───────────────────────────────────────
         print(f"\n{Fore.YELLOW}Phase 1: Scraping Google Maps...{Style.RESET_ALL}")
 
         with GoogleMapsScraper(config, rate_limiter, proxy_mgr) as gm_scraper:
@@ -324,7 +361,7 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
                 try:
                     raw_leads = gm_scraper.scrape_niche(niche, location)
                 except Exception as exc:
-                    logger.error(f"Scraping failed for '{niche}': {exc}")
+                    logger.error(f"Scraping failed for '{niche}': {exc}", exc_info=True)
                     run_stats["errors"] += 1
                     continue
 
@@ -335,69 +372,115 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
                             scorer, pitcher, validator, addr_parser
                         )
                         all_leads.append(lead)
-                        run_stats["total"] += 1
+                        run_stats["raw_total"] += 1
                     except Exception as exc:
-                        logger.warning(f"Lead build failed: {exc}")
+                        logger.warning(f"Lead build failed: {exc}", exc_info=True)
                         run_stats["errors"] += 1
 
                 logger.info(
                     f"  -> {len(raw_leads)} raw leads for '{niche}'; "
-                    f"running total: {run_stats['total']}"
+                    f"running total: {run_stats['raw_total']}"
                 )
 
-        # -- PHASE 2: Supplementary phone/social enrichment ------------
+        # ── Phase 2: Supplementary enrichment ─────────────────────────
         if all_leads:
             print(f"\n{Fore.YELLOW}Phase 2: Supplementary enrichment...{Style.RESET_ALL}")
-            supp = SupplementaryScraper(config, rate_limiter)
-            supp.enrich_batch(all_leads)
+            try:
+                supp = SupplementaryScraper(config, rate_limiter)
+                supp.enrich_batch(all_leads)
+            except Exception as exc:
+                logger.error(f"Supplementary enrichment failed: {exc}", exc_info=True)
 
-        # -- PHASE 3: Apply filters ------------------------------------
+        # ── Phase 3: Filter ────────────────────────────────────────────
         before_filter = len(all_leads)
         all_leads     = apply_filters(all_leads, config)
-        logger.info(f"Filters applied: {before_filter} -> {len(all_leads)} leads")
-
-        # -- PHASE 4: Upsert into Supabase ----------------------------
-        print(f"\n{Fore.YELLOW}Phase 3: Saving to Supabase...{Style.RESET_ALL}")
-        insert_stats        = db.bulk_insert(all_leads)
-        run_stats["new"]        = insert_stats["new"]
-        run_stats["duplicates"] = insert_stats["duplicates"]
-        run_stats["errors"]    += insert_stats["errors"]
-        logger.info(
-            f"Supabase insert: {insert_stats['new']} new, "
-            f"{insert_stats['duplicates']} dupes, "
-            f"{insert_stats['errors']} errors"
+        logger.info(f"Filters applied: {before_filter} raw -> {len(all_leads)} passed")
+        print(
+            f"\n{Fore.YELLOW}Phase 3: Filtering...{Style.RESET_ALL} "
+            f"{before_filter} raw -> {Fore.GREEN}{len(all_leads)}{Style.RESET_ALL} passed"
         )
 
-        # -- PHASE 5: Optional local CSV export ------------------------
+        # ── Phase 4: Trim to target count ─────────────────────────────
+        # --limit N guarantees N leads after filters by over-collecting 4x raw.
+        # Here we trim down if more passed than requested.
+        if target_count:
+            if len(all_leads) > target_count:
+                all_leads = all_leads[:target_count]
+                logger.info(f"Trimmed to target: {target_count} leads")
+                print(
+                    f"{Fore.YELLOW}Trimming to target:{Style.RESET_ALL} "
+                    f"keeping {Fore.GREEN}{target_count}{Style.RESET_ALL}"
+                )
+            elif len(all_leads) < target_count:
+                logger.warning(
+                    f"Only {len(all_leads)}/{target_count} leads available after filters — "
+                    f"Google Maps may have fewer listings for this niche/city."
+                )
+                print(
+                    f"{Fore.YELLOW}Note:{Style.RESET_ALL} "
+                    f"Only {Fore.GREEN}{len(all_leads)}{Style.RESET_ALL}/{target_count} "
+                    f"leads available — Google Maps exhausted for this search."
+                )
+
+        run_stats["total"] = len(all_leads)
+
+        # ── Phase 5: Upsert into Supabase ─────────────────────────────
+        print(f"\n{Fore.YELLOW}Saving to Supabase...{Style.RESET_ALL}")
+        try:
+            insert_stats            = db.bulk_insert(all_leads)
+            run_stats["new"]        = insert_stats["new"]
+            run_stats["duplicates"] = insert_stats["duplicates"]
+            run_stats["errors"]    += insert_stats["errors"]
+            logger.info(
+                f"Supabase insert: {insert_stats['new']} new, "
+                f"{insert_stats['duplicates']} dupes, "
+                f"{insert_stats['errors']} errors"
+            )
+        except Exception as exc:
+            logger.error(f"Supabase insert failed: {exc}", exc_info=True)
+            run_stats["errors"] += 1
+
+        # ── Phase 6: Optional CSV export ──────────────────────────────
         if not args.no_csv:
-            min_score    = config["filters"].get("min_lead_score", 0)
-            all_db_leads = db.get_all_leads(min_score=min_score)
-            csv_path     = export_csv(all_db_leads)
-            run_stats["csv_path"] = csv_path
-            print(f"\n{Fore.GREEN}CSV saved: {csv_path}{Style.RESET_ALL}")
-            logger.info(f"CSV export: {len(all_db_leads)} leads -> {csv_path}")
+            try:
+                min_score    = config["filters"].get("min_lead_score", 0)
+                all_db_leads = db.get_all_leads(min_score=min_score)
+                csv_path     = export_csv(all_db_leads)
+                run_stats["csv_path"] = csv_path
+                print(f"\n{Fore.GREEN}CSV saved: {csv_path}{Style.RESET_ALL}")
+                logger.info(f"CSV export: {len(all_db_leads)} leads -> {csv_path}")
+            except Exception as exc:
+                logger.error(f"CSV export failed: {exc}", exc_info=True)
 
         db.end_session(run_stats)
 
-    supabase_url = os.environ.get("SUPABASE_URL", "")
-    dashboard_hint = supabase_url.replace("supabase.co", "supabase.com/dashboard") if supabase_url else ""
+    supabase_url   = os.environ.get("SUPABASE_URL", "")
+    dashboard_hint = (
+        supabase_url.replace("supabase.co", "supabase.com/dashboard")
+        if supabase_url else ""
+    )
     return run_stats, dashboard_hint
 
 
 def run_export_only(config: dict, logger: logging.Logger):
-    """Export all leads from Supabase to a local CSV without re-scraping."""
     logger.info("Export-only mode: reading all leads from Supabase")
-    with SupabaseHandler(config) as db:
-        min_score = config["filters"].get("min_lead_score", 0)
-        leads     = db.get_all_leads(min_score=min_score)
+    try:
+        with SupabaseHandler(config) as db:
+            min_score = config["filters"].get("min_lead_score", 0)
+            leads     = db.get_all_leads(min_score=min_score)
+    except Exception as exc:
+        logger.error(f"Export failed: {exc}", exc_info=True)
+        return {}, None
 
     if not leads:
         logger.warning("No leads in Supabase to export")
         return {}, None
 
     csv_path = export_csv(leads)
-    stats    = {"total": len(leads), "new": 0, "duplicates": 0, "errors": 0,
-                "csv_path": csv_path}
+    stats    = {
+        "total": len(leads), "raw_total": len(leads),
+        "new": 0, "duplicates": 0, "errors": 0, "csv_path": csv_path,
+    }
     return stats, None
 
 
@@ -410,80 +493,58 @@ def parse_args() -> argparse.Namespace:
         prog="leadparser",
         description="LeadParser -- Free local business lead generation",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  python main.py                           # Full run using config.yaml
-  python main.py --config my_city.yaml    # Custom config file
-  python main.py --niche "plumbers"       # Single niche
-  python main.py --export-only            # Re-export existing DB -> Sheets
-  python main.py --no-sheets              # Scrape & save DB, skip Sheets
-  python main.py --dry-run                # Scrape only, no DB/Sheets writes
-        """,
     )
+    parser.add_argument("--config",      default="config.yaml")
+    parser.add_argument("--city",        default=None)
+    parser.add_argument("--state",       default=None)
     parser.add_argument(
-        "--config",   default="config.yaml",
-        help="Path to YAML configuration file (default: config.yaml)",
+        "--limit", type=int, default=None,
+        help="TARGET number of leads after all filters. "
+             "The scraper over-collects raw results (4x) to guarantee this.",
     )
+    parser.add_argument("--niche",       default=None)
     parser.add_argument(
-        "--city",     default=None,
-        help='Override target city (e.g. --city "Dallas")',
+        "--job-id", default=None, dest="job_id",
+        help="Supabase scraper_jobs UUID — enables live log streaming to dashboard",
     )
-    parser.add_argument(
-        "--state",    default=None,
-        help="Override target state abbreviation (e.g. --state TX)",
-    )
-    parser.add_argument(
-        "--limit",    type=int, default=None,
-        help="Max results per niche, overrides config (e.g. --limit 50)",
-    )
-    parser.add_argument(
-        "--niche",    default=None,
-        help="Scrape a single niche and exit",
-    )
-    parser.add_argument(
-        "--export-only", action="store_true",
-        help="Skip scraping; export existing Supabase leads to CSV",
-    )
-    parser.add_argument(
-        "--no-csv",      action="store_true",
-        help="Scrape and save to Supabase but skip local CSV export",
-    )
-    parser.add_argument(
-        "--dry-run",     action="store_true",
-        help="Run scrapers but do not write to database or Google Sheets",
-    )
-    parser.add_argument(
-        "--serve",       action="store_true",
-        help="Launch the localhost dashboard after the run completes",
-    )
-    parser.add_argument(
-        "--port",     type=int, default=5000,
-        help="Dashboard port (default: 5000, used with --serve)",
-    )
+    parser.add_argument("--export-only", action="store_true")
+    parser.add_argument("--no-csv",      action="store_true")
+    parser.add_argument("--dry-run",     action="store_true")
+    parser.add_argument("--serve",       action="store_true")
+    parser.add_argument("--port",        type=int, default=5000)
     return parser.parse_args()
 
 
 def _apply_cli_overrides(config: dict, args: argparse.Namespace):
-    """Push CLI flags into the live config dict before running the pipeline."""
+    colorama_init(autoreset=True)
+
     if args.city:
         config["location"]["city"] = args.city
         config["location"]["full_address"] = (
             f"{args.city}, {config['location'].get('state', '')}"
         )
-        print(f"  {Fore.CYAN}City overridden:{Style.RESET_ALL} {args.city}")
+        print(f"  {Fore.CYAN}City:{Style.RESET_ALL} {args.city}")
+
     if args.state:
         config["location"]["state"] = args.state
         config["location"]["full_address"] = (
             f"{config['location'].get('city', '')}, {args.state}"
         )
-        print(f"  {Fore.CYAN}State overridden:{Style.RESET_ALL} {args.state}")
+        print(f"  {Fore.CYAN}State:{Style.RESET_ALL} {args.state}")
+
     if args.limit is not None:
-        config["scraping"]["max_results_per_niche"] = args.limit
-        print(f"  {Fore.CYAN}Limit per niche:{Style.RESET_ALL} {args.limit}")
+        # Over-collect 4x raw listings so filters still leave us with the target.
+        # Cap at 500 to keep run times reasonable.
+        raw_limit = min(args.limit * 4, 500)
+        config["scraping"]["max_results_per_niche"] = raw_limit
+        config["scraping"]["target_leads"]          = args.limit
+        print(
+            f"  {Fore.CYAN}Target:{Style.RESET_ALL} {args.limit} filtered leads "
+            f"(collecting up to {raw_limit} raw)"
+        )
 
 
 def _launch_dashboard(port: int):
-    """Start dashboard.py in a background process and open the browser."""
     import subprocess
     from threading import Timer
     import webbrowser
@@ -496,17 +557,16 @@ def _launch_dashboard(port: int):
     url = f"http://localhost:{port}"
     print(f"\n{Fore.CYAN}Starting dashboard → {url}{Style.RESET_ALL}")
     subprocess.Popen([sys.executable, str(dashboard), "--port", str(port)])
-    # Give Flask a moment to start, then open the browser
     Timer(1.5, webbrowser.open, args=[url]).start()
 
 
 def main():
     print_banner()
-    load_dotenv()    # Load .env file if present
+    load_dotenv()
     args   = parse_args()
     config = load_config(args.config)
     _apply_cli_overrides(config, args)
-    logger = setup_logging(config)
+    logger = setup_logging(config, job_id=args.job_id)
 
     start = time.time()
 
@@ -524,11 +584,19 @@ def main():
 
     elapsed = time.time() - start
     logger.info(f"Total runtime: {elapsed:.0f}s")
-
-    print_stats(stats, dashboard_url=stats.get("dashboard_url"), csv_path=stats.get("csv_path"))
+    print_stats(
+        stats,
+        dashboard_url=stats.get("dashboard_url"),
+        csv_path=stats.get("csv_path"),
+    )
 
     if args.serve:
         _launch_dashboard(args.port)
+
+    # Flush any remaining buffered Supabase log entries
+    for handler in logging.getLogger().handlers:
+        if isinstance(handler, SupabaseLogHandler):
+            handler.flush()
 
 
 if __name__ == "__main__":

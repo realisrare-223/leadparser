@@ -103,10 +103,11 @@ def claim_job() -> dict | None:
 def run_job(job: dict) -> tuple[int, str]:
     """Run main.py for the given job. Returns (leads_count, error_msg)."""
     cmd = [sys.executable, str(MAIN_PY)]
-    if job.get('city'):                            cmd += ['--city',  job['city']]
-    if job.get('state'):                           cmd += ['--state', job['state']]
-    if job.get('niche') and job['niche'] != 'all': cmd += ['--niche', job['niche']]
-    if job.get('limit_count'):                     cmd += ['--limit', str(job['limit_count'])]
+    if job.get('city'):                            cmd += ['--city',   job['city']]
+    if job.get('state'):                           cmd += ['--state',  job['state']]
+    if job.get('niche') and job['niche'] != 'all': cmd += ['--niche',  job['niche']]
+    if job.get('limit_count'):                     cmd += ['--limit',  str(job['limit_count'])]
+    if job.get('id'):                              cmd += ['--job-id', job['id']]  # enables live log streaming
 
     log.info(f'Running: {" ".join(cmd)}')
     try:
