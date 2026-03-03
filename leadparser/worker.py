@@ -1,10 +1,9 @@
-#!/usr/bin/env python3
-"""
+#!/usr/bin/env python3"""
 LeadParser Worker — Scraper Job Queue Processor
 ================================================
-Run this on your 24/7 PC. It polls Supabase every 30 seconds for
-pending scraper jobs queued from the admin dashboard, runs main.py
-as a subprocess, and updates the job status + result count.
+Run this whenever you want to generate leads. The site shows a live
+"Engine Online" indicator while this is running, and lets you queue
+jobs from the Scraper tab.
 
 Setup
 -----
@@ -12,10 +11,7 @@ Setup
   2. cp .env.example .env   # add SUPABASE_URL + SUPABASE_KEY (service role)
   3. python worker.py
 
-The worker runs forever until you Ctrl+C it.
-To run in the background on Windows:
-  pythonw worker.py          # silent background process
-  # or use Task Scheduler to run at startup
+Ctrl+C to stop. The site will show "Engine Offline" within 30 seconds.
 """
 
 import os
@@ -25,6 +21,7 @@ import logging
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
+from threading import Thread
 
 from dotenv import load_dotenv
 from supabase import create_client, Client
@@ -55,14 +52,32 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-POLL_INTERVAL = 30   # seconds between polls
-MAIN_PY       = Path(__file__).parent / 'main.py'
+POLL_INTERVAL      = 15   # seconds between job polls
+HEARTBEAT_INTERVAL = 10   # seconds between heartbeat updates
+MAIN_PY            = Path(__file__).parent / 'main.py'
+
+_stop = False  # shared flag for clean shutdown
 
 
-# ── Core logic ─────────────────────────────────────────────────────────────
+# ── Heartbeat (runs in background thread) ──────────────────────────────────
+
+def heartbeat_loop() -> None:
+    """Update worker_status.last_seen every HEARTBEAT_INTERVAL seconds."""
+    while not _stop:
+        try:
+            supabase.table('worker_status').upsert({
+                'id':        1,
+                'last_seen': datetime.now(timezone.utc).isoformat(),
+            }).execute()
+        except Exception as exc:
+            log.warning(f'Heartbeat failed: {exc}')
+        time.sleep(HEARTBEAT_INTERVAL)
+
+
+# ── Core job logic ─────────────────────────────────────────────────────────
 
 def claim_job() -> dict | None:
-    """Atomically grab one pending job and mark it running."""
+    """Grab one pending job and mark it running."""
     res = (
         supabase.table('scraper_jobs')
         .select('*')
@@ -75,79 +90,54 @@ def claim_job() -> dict | None:
         return None
 
     job = res.data[0]
-    job_id = job['id']
-
-    # Mark running
     supabase.table('scraper_jobs').update({
         'status':     'running',
         'started_at': datetime.now(timezone.utc).isoformat(),
-    }).eq('id', job_id).execute()
+    }).eq('id', job['id']).execute()
 
-    log.info(f'Claimed job {job_id[:8]} — {job["city"]}, {job["state"]} | niche={job["niche"]} limit={job["limit_count"]}')
+    log.info(f'Claimed job {job["id"][:8]} — {job["city"]}, {job["state"]} | niche={job["niche"]} limit={job["limit_count"]}')
     return job
 
 
 def run_job(job: dict) -> tuple[int, str]:
-    """
-    Run main.py for the given job.
-    Returns (leads_scraped, error_message).
-    """
+    """Run main.py for the given job. Returns (leads_count, error_msg)."""
     cmd = [sys.executable, str(MAIN_PY)]
-
-    if job.get('city'):
-        cmd += ['--city', job['city']]
-    if job.get('state'):
-        cmd += ['--state', job['state']]
-    if job.get('niche') and job['niche'] != 'all':
-        cmd += ['--niche', job['niche']]
-    if job.get('limit_count'):
-        cmd += ['--limit', str(job['limit_count'])]
+    if job.get('city'):                            cmd += ['--city',  job['city']]
+    if job.get('state'):                           cmd += ['--state', job['state']]
+    if job.get('niche') and job['niche'] != 'all': cmd += ['--niche', job['niche']]
+    if job.get('limit_count'):                     cmd += ['--limit', str(job['limit_count'])]
 
     log.info(f'Running: {" ".join(cmd)}')
-
     try:
         result = subprocess.run(
-            cmd,
-            cwd=str(MAIN_PY.parent),
-            capture_output=True,
-            text=True,
-            timeout=3600,    # 1 hour max per job
+            cmd, cwd=str(MAIN_PY.parent),
+            capture_output=True, text=True, timeout=3600,
         )
         output = result.stdout + result.stderr
-
         if result.returncode != 0:
-            # Extract a short error from the last 500 chars of output
-            error_snippet = output[-500:].strip().replace('\n', ' ')
-            log.error(f'Job failed (exit {result.returncode}): {error_snippet[:200]}')
-            return 0, error_snippet[:500]
+            snippet = output[-500:].strip().replace('\n', ' ')
+            log.error(f'Job failed (exit {result.returncode}): {snippet[:200]}')
+            return 0, snippet[:500]
 
-        # Try to parse lead count from output
-        # main.py logs "Saved X new leads" or similar
+        # Parse lead count from output lines
         leads_count = 0
         for line in output.splitlines():
-            line_lower = line.lower()
-            for keyword in ['new leads', 'leads saved', 'upserted', 'inserted']:
-                if keyword in line_lower:
-                    # Extract last number on the line
-                    nums = [w for w in line.split() if w.isdigit()]
-                    if nums:
-                        leads_count = max(leads_count, int(nums[-1]))
+            ll = line.lower()
+            if any(k in ll for k in ['new leads', 'leads saved', 'upserted', 'inserted']):
+                nums = [w for w in line.split() if w.isdigit()]
+                if nums:
+                    leads_count = max(leads_count, int(nums[-1]))
 
         log.info(f'Job done — ~{leads_count} leads scraped')
         return leads_count, ''
 
     except subprocess.TimeoutExpired:
-        err = 'Job timed out after 1 hour'
-        log.error(err)
-        return 0, err
+        return 0, 'Job timed out after 1 hour'
     except Exception as exc:
-        err = str(exc)
-        log.error(f'Job exception: {err}')
-        return 0, err
+        return 0, str(exc)
 
 
 def finish_job(job_id: str, result_count: int, error_msg: str = '') -> None:
-    """Mark job done or failed in Supabase."""
     status = 'failed' if error_msg else 'done'
     supabase.table('scraper_jobs').update({
         'status':       status,
@@ -161,23 +151,29 @@ def finish_job(job_id: str, result_count: int, error_msg: str = '') -> None:
 # ── Main loop ──────────────────────────────────────────────────────────────
 
 def main() -> None:
-    log.info('LeadParser Worker started. Polling every %ds. Press Ctrl+C to stop.', POLL_INTERVAL)
+    global _stop
 
-    while True:
-        try:
-            job = claim_job()
-            if job:
-                count, err = run_job(job)
-                finish_job(job['id'], count, err)
-            else:
-                log.debug('No pending jobs.')
-        except KeyboardInterrupt:
-            log.info('Worker stopped.')
-            break
-        except Exception as exc:
-            log.exception(f'Unexpected error in main loop: {exc}')
+    # Start heartbeat thread
+    hb = Thread(target=heartbeat_loop, daemon=True)
+    hb.start()
+    log.info('LeadParser Worker online. Site will show "Engine Online". Press Ctrl+C to stop.')
 
-        time.sleep(POLL_INTERVAL)
+    try:
+        while True:
+            try:
+                job = claim_job()
+                if job:
+                    count, err = run_job(job)
+                    finish_job(job['id'], count, err)
+                else:
+                    log.debug('No pending jobs — waiting.')
+            except Exception as exc:
+                log.exception(f'Unexpected error: {exc}')
+            time.sleep(POLL_INTERVAL)
+
+    except KeyboardInterrupt:
+        _stop = True
+        log.info('Worker stopped. Site will show "Engine Offline" shortly.')
 
 
 if __name__ == '__main__':
