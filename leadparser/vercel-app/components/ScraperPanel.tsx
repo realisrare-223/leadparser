@@ -2,6 +2,8 @@
 
 // ============================================================
 // ScraperPanel — queue scraper jobs, watch live logs, view history.
+// Supports parallel jobs with animated per-job progress bars
+// and advanced per-job filter options.
 // ============================================================
 
 import { useState, useEffect, useCallback, useRef } from 'react'
@@ -52,27 +54,94 @@ const REGION_OPTIONS: ComboOption[] = COUNTRY_ORDER.flatMap(country => {
 
 const NICHE_OPTIONS: ComboOption[] = PRESET_NICHES.map(n => ({ value: n, label: n }))
 
+// ── Progress bar ───────────────────────────────────────────────────────────
+
+function JobProgressBar({ job }: { job: ScraperJob }) {
+  const pct = Math.min(100, Math.max(0, job.progress ?? 0))
+
+  if (job.status === 'pending') {
+    return (
+      <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+        <div className="h-full w-1/3 bg-slate-700 animate-pulse rounded-full" />
+      </div>
+    )
+  }
+
+  if (job.status === 'done') {
+    return (
+      <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+        <div className="h-full w-full bg-green-500 rounded-full" />
+      </div>
+    )
+  }
+
+  if (job.status === 'failed') {
+    return (
+      <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+        <div
+          className="h-full bg-red-500 rounded-full transition-all duration-500"
+          style={{ width: `${Math.max(pct, 15)}%` }}
+        />
+      </div>
+    )
+  }
+
+  // running
+  if (pct === 0) {
+    // indeterminate — no progress data yet
+    return (
+      <div className="h-1 bg-slate-800 rounded-full overflow-hidden relative">
+        <div className="progress-indeterminate bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full" />
+      </div>
+    )
+  }
+
+  return (
+    <div className="h-1 bg-slate-800 rounded-full overflow-hidden relative">
+      {/* filled portion */}
+      <div
+        className="h-full bg-gradient-to-r from-blue-600 to-violet-500 rounded-full transition-all duration-700"
+        style={{ width: `${pct}%` }}
+      />
+      {/* shimmer overlay */}
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent progress-shimmer"
+        style={{ width: `${pct}%` }}
+      />
+    </div>
+  )
+}
+
 // ── Component ──────────────────────────────────────────────────────────────
 
 export function ScraperPanel() {
-  // Form state
-  const [city,    setCity]    = useState('')
-  const [state,   setState]   = useState('')
-  const [niche,   setNiche]   = useState('')
-  const [limitStr, setLimitStr] = useState('50')   // string to avoid "020" bug
+  // ── Core form fields ──
+  const [city,     setCity]     = useState('')
+  const [state,    setState]    = useState('')
+  const [niche,    setNiche]    = useState('')
+  const [limitStr, setLimitStr] = useState('50')
 
-  // UI state
+  // ── Advanced filter state ──
+  const [showFilters,   setShowFilters]   = useState(false)
+  const [minReviews,    setMinReviews]    = useState('')
+  const [maxReviews,    setMaxReviews]    = useState('')
+  const [minRating,     setMinRating]     = useState('')
+  const [maxRating,     setMaxRating]     = useState('')
+  const [websiteFilter, setWebsiteFilter] = useState<'any' | 'yes' | 'no'>('any')
+  const [minScore,      setMinScore]      = useState('')
+
+  // ── UI state ──
   const [queuing,      setQueuing]      = useState(false)
   const [result,       setResult]       = useState<string | null>(null)
   const [resultOk,     setResultOk]     = useState(true)
   const [workerOnline, setWorkerOnline] = useState(false)
   const [lastSeen,     setLastSeen]     = useState<Date | null>(null)
 
-  // Job & log state
-  const [jobs,         setJobs]         = useState<ScraperJob[]>([])
-  const [selectedJob,  setSelectedJob]  = useState<string | null>(null)
-  const [logs,         setLogs]         = useState<LogEntry[]>([])
-  const [lastLogId,    setLastLogId]    = useState(0)
+  // ── Job & log state ──
+  const [jobs,        setJobs]        = useState<ScraperJob[]>([])
+  const [selectedJob, setSelectedJob] = useState<string | null>(null)
+  const [logs,        setLogs]        = useState<LogEntry[]>([])
+  const [lastLogId,   setLastLogId]   = useState(0)
   const logsEndRef = useRef<HTMLDivElement>(null)
 
   // ── Worker status ──────────────────────────────────────────────────────
@@ -103,7 +172,6 @@ export function ScraperPanel() {
     const data = await res.json()
     if (Array.isArray(data)) {
       setJobs(data)
-      // Auto-select the most recent running job if none selected
       setSelectedJob(prev => {
         if (prev) return prev
         const running = data.find((j: ScraperJob) => j.status === 'running')
@@ -128,12 +196,10 @@ export function ScraperPanel() {
     }
   }, [selectedJob, lastLogId])
 
-  // Scroll logs to bottom on new entries
   useEffect(() => {
     logsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [logs])
 
-  // Reset logs when selected job changes
   useEffect(() => {
     setLogs([])
     setLastLogId(0)
@@ -143,15 +209,14 @@ export function ScraperPanel() {
     checkWorker()
     fetchJobs()
     const wv = setInterval(checkWorker, 10_000)
-    const jv = setInterval(fetchJobs,   15_000)
+    const jv = setInterval(fetchJobs,   5_000)   // 5s refresh shows progress updates promptly
     return () => { clearInterval(wv); clearInterval(jv) }
   }, [checkWorker, fetchJobs])
 
-  // Poll logs every 2s when a running job is selected
   const selectedJobObj = jobs.find(j => j.id === selectedJob)
   useEffect(() => {
     if (!selectedJob) return
-    fetchLogs()   // immediate on selection
+    fetchLogs()
     const lv = setInterval(fetchLogs, 2_000)
     return () => clearInterval(lv)
   }, [selectedJob, fetchLogs])
@@ -163,7 +228,6 @@ export function ScraperPanel() {
 
     const limit = parseInt(limitStr, 10) || 1
 
-    // Normalize state abbreviation → canonical name
     let resolvedState = state.trim()
     const matched = resolveRegion(resolvedState)
     if (matched) resolvedState = matched.name
@@ -172,10 +236,21 @@ export function ScraperPanel() {
     setResult(null)
 
     try {
-      const res  = await fetch('/api/scrape', {
+      const res = await fetch('/api/scrape', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ city, state: resolvedState, niche: niche || 'all', limit }),
+        body: JSON.stringify({
+          city,
+          state:          resolvedState,
+          niche:          niche || 'all',
+          limit,
+          min_reviews:    parseInt(minReviews,  10) || 0,
+          max_reviews:    parseInt(maxReviews,  10) || 9999,
+          min_rating:     parseFloat(minRating) || 0,
+          max_rating:     parseFloat(maxRating) || 5,
+          website_filter: websiteFilter,
+          min_score:      parseInt(minScore, 10) || 0,
+        }),
       })
       const data = await res.json()
 
@@ -184,7 +259,6 @@ export function ScraperPanel() {
         setResultOk(true)
         setCity(''); setState(''); setNiche('')
         await fetchJobs()
-        // Auto-select the new job to show its logs
         if (data?.id) setSelectedJob(data.id)
       } else {
         setResult(`Error: ${data.error ?? 'Unknown error'}`)
@@ -221,11 +295,12 @@ export function ScraperPanel() {
   }
 
   function handleLimitChange(e: React.ChangeEvent<HTMLInputElement>) {
-    // Strip leading zeros so "020" never appears
     const raw     = e.target.value.replace(/[^0-9]/g, '')
     const cleaned = raw.replace(/^0+(\d)/, '$1')
     setLimitStr(cleaned || '0')
   }
+
+  const runningCount = jobs.filter(j => j.status === 'running').length
 
   // ── Render ────────────────────────────────────────────────────────────
 
@@ -253,7 +328,7 @@ export function ScraperPanel() {
             </p>
             <p className="text-slate-500 text-xs mt-0.5">
               {workerOnline
-                ? `worker.py is running — last heartbeat ${lastSeenLabel()}`
+                ? `worker.py is running — last heartbeat ${lastSeenLabel()}${runningCount > 0 ? ` · ${runningCount} job${runningCount > 1 ? 's' : ''} running` : ''}`
                 : `Run python worker.py to go online (last seen: ${lastSeenLabel()})`}
             </p>
           </div>
@@ -280,67 +355,213 @@ export function ScraperPanel() {
           listings and filters down, so you always get that many leads (or all available if fewer exist).
         </p>
 
-        <form onSubmit={handleQueue} className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <form onSubmit={handleQueue} className="space-y-4">
 
-          {/* City */}
-          <div>
-            <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-              City *
-            </label>
-            <input
-              value={city}
-              onChange={e => setCity(e.target.value)}
-              required
-              placeholder="e.g. Dallas"
-              className="w-full bg-slate-800 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
-            />
+          {/* ── Row 1: core params ── */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+
+            <div>
+              <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
+                City *
+              </label>
+              <input
+                value={city}
+                onChange={e => setCity(e.target.value)}
+                required
+                placeholder="e.g. Dallas"
+                className="w-full bg-slate-800 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
+                State / Province
+              </label>
+              <Combobox
+                value={state}
+                onChange={setState}
+                options={REGION_OPTIONS}
+                placeholder="TX, Texas, Ontario…"
+                allowFreeText
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
+                Niche
+              </label>
+              <Combobox
+                value={niche}
+                onChange={setNiche}
+                options={NICHE_OPTIONS}
+                placeholder="Plumbers, HVAC…"
+                allowFreeText
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
+                Target Leads
+              </label>
+              <input
+                type="text"
+                inputMode="numeric"
+                value={limitStr}
+                onChange={handleLimitChange}
+                onFocus={e => e.target.select()}
+                placeholder="50"
+                className="w-full bg-slate-800 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
+              />
+            </div>
           </div>
 
-          {/* State / Province — autocomplete */}
+          {/* ── Advanced Filters toggle ── */}
           <div>
-            <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-              State / Province
-            </label>
-            <Combobox
-              value={state}
-              onChange={setState}
-              options={REGION_OPTIONS}
-              placeholder="TX, Texas, Ontario…"
-              allowFreeText
-            />
+            <button
+              type="button"
+              onClick={() => setShowFilters(v => !v)}
+              className="flex items-center gap-1.5 text-xs text-slate-400 hover:text-slate-200 transition select-none"
+            >
+              <svg
+                className={`w-3.5 h-3.5 transition-transform ${showFilters ? 'rotate-90' : ''}`}
+                fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+              Advanced Filters
+              {(minReviews || maxReviews || minRating || maxRating || websiteFilter !== 'any' || minScore) && (
+                <span className="ml-1 px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] font-semibold">
+                  active
+                </span>
+              )}
+            </button>
+
+            {showFilters && (
+              <div className="mt-3 p-4 bg-slate-800/60 border border-slate-700 rounded-xl space-y-4">
+
+                {/* Review count row */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                  <div>
+                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
+                      Min Reviews
+                    </label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={minReviews}
+                      onChange={e => setMinReviews(e.target.value.replace(/\D/g, ''))}
+                      placeholder="0"
+                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
+                      Max Reviews
+                    </label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={maxReviews}
+                      onChange={e => setMaxReviews(e.target.value.replace(/\D/g, ''))}
+                      placeholder="9999"
+                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
+                      Min Rating
+                    </label>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={minRating}
+                      onChange={e => setMinRating(e.target.value.replace(/[^0-9.]/g, ''))}
+                      placeholder="0.0"
+                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
+                      Max Rating
+                    </label>
+                    <input
+                      type="text"
+                      inputMode="decimal"
+                      value={maxRating}
+                      onChange={e => setMaxRating(e.target.value.replace(/[^0-9.]/g, ''))}
+                      placeholder="5.0"
+                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Min lead score + website toggle */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 items-end">
+                  <div>
+                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
+                      Min Lead Score
+                    </label>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      value={minScore}
+                      onChange={e => setMinScore(e.target.value.replace(/\D/g, ''))}
+                      placeholder="0"
+                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                    />
+                  </div>
+
+                  {/* 3-way website toggle */}
+                  <div className="col-span-2">
+                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
+                      Website
+                    </label>
+                    <div className="flex rounded-xl overflow-hidden border border-slate-600 text-xs font-semibold">
+                      {(['any', 'no', 'yes'] as const).map(opt => (
+                        <button
+                          key={opt}
+                          type="button"
+                          onClick={() => setWebsiteFilter(opt)}
+                          className={`flex-1 py-2 transition ${
+                            websiteFilter === opt
+                              ? opt === 'no'
+                                ? 'bg-violet-500 text-white'
+                                : opt === 'yes'
+                                  ? 'bg-green-600 text-white'
+                                  : 'bg-blue-500 text-white'
+                              : 'bg-slate-900 text-slate-400 hover:text-white'
+                          }`}
+                        >
+                          {opt === 'any' ? 'Any' : opt === 'no' ? 'No Website' : 'Has Website'}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMinReviews(''); setMaxReviews(''); setMinRating(''); setMaxRating('')
+                      setWebsiteFilter('any'); setMinScore('')
+                    }}
+                    className="text-xs text-slate-500 hover:text-red-400 transition pt-5 text-left"
+                  >
+                    Clear filters
+                  </button>
+                </div>
+
+                <p className="text-slate-500 text-xs">
+                  Tip: <strong className="text-slate-400">Max Reviews</strong> targets under-reviewed
+                  businesses (easier cold-call wins). <strong className="text-slate-400">No Website</strong> focuses
+                  on businesses that would most benefit from your services.
+                  Phone is always required.
+                </p>
+              </div>
+            )}
           </div>
 
-          {/* Niche — autocomplete */}
-          <div>
-            <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-              Niche
-            </label>
-            <Combobox
-              value={niche}
-              onChange={setNiche}
-              options={NICHE_OPTIONS}
-              placeholder="Plumbers, HVAC…"
-              allowFreeText
-            />
-          </div>
-
-          {/* Limit — fixed 020 bug by using string state */}
-          <div>
-            <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-              Target Leads
-            </label>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={limitStr}
-              onChange={handleLimitChange}
-              onFocus={e => e.target.select()}
-              placeholder="50"
-              className="w-full bg-slate-800 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-white focus:outline-none focus:border-blue-500"
-            />
-          </div>
-
-          <div className="col-span-2 sm:col-span-4 flex items-center gap-4">
+          {/* ── Submit ── */}
+          <div className="flex items-center gap-4">
             <button
               type="submit"
               disabled={queuing || !workerOnline}
@@ -361,10 +582,21 @@ export function ScraperPanel() {
       {/* ── Job history + live logs ── */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
-        {/* Job history table */}
+        {/* Job history table with progress bars */}
         <div className="bg-slate-900 rounded-2xl border border-slate-700 overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-700 flex items-center justify-between">
-            <h2 className="text-blue-400 font-semibold">Run History</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-blue-400 font-semibold">Run History</h2>
+              {runningCount > 0 && (
+                <span className="flex items-center gap-1.5 text-xs text-blue-400 bg-blue-500/10 border border-blue-500/30 px-2 py-0.5 rounded-full">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-400" />
+                  </span>
+                  {runningCount} running
+                </span>
+              )}
+            </div>
             <button onClick={fetchJobs} className="text-slate-400 hover:text-white text-xs transition">
               Refresh
             </button>
@@ -381,32 +613,46 @@ export function ScraperPanel() {
               </thead>
               <tbody>
                 {jobs.map(job => (
-                  <tr
-                    key={job.id}
-                    onClick={() => setSelectedJob(job.id)}
-                    className={`border-t border-slate-800 cursor-pointer transition ${
-                      selectedJob === job.id
-                        ? 'bg-blue-500/10 border-l-2 border-l-blue-500'
-                        : 'hover:bg-slate-800/40'
-                    }`}
-                  >
-                    <td className="px-4 py-3 font-medium">
-                      <span className="block">{job.city}{job.state ? `, ${job.state}` : ''}</span>
-                      <span className="text-slate-400 text-xs font-normal">{job.niche}</span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`px-2 py-0.5 rounded-full text-xs font-semibold border ${STATUS_STYLES[job.status]}`}>
-                        {job.status}
-                      </span>
-                      {job.error_msg && (
-                        <p className="text-red-400 text-xs mt-1 max-w-[180px] truncate" title={job.error_msg}>
-                          {job.error_msg}
-                        </p>
-                      )}
-                    </td>
-                    <td className="px-4 py-3 text-slate-300">{job.result_count || '—'}</td>
-                    <td className="px-4 py-3 text-slate-400 text-xs">{duration(job)}</td>
-                  </tr>
+                  <>
+                    <tr
+                      key={job.id}
+                      onClick={() => setSelectedJob(job.id)}
+                      className={`border-t border-slate-800 cursor-pointer transition ${
+                        selectedJob === job.id
+                          ? 'bg-blue-500/10 border-l-2 border-l-blue-500'
+                          : 'hover:bg-slate-800/40'
+                      }`}
+                    >
+                      <td className="px-4 pt-3 pb-1 font-medium">
+                        <span className="block">{job.city}{job.state ? `, ${job.state}` : ''}</span>
+                        <span className="text-slate-400 text-xs font-normal">{job.niche}</span>
+                      </td>
+                      <td className="px-4 pt-3 pb-1">
+                        <span className={`px-2 py-0.5 rounded-full text-xs font-semibold border ${STATUS_STYLES[job.status]}`}>
+                          {job.status}
+                        </span>
+                        {job.status === 'running' && (job.progress ?? 0) > 0 && (
+                          <span className="ml-2 text-xs text-blue-400">{job.progress}%</span>
+                        )}
+                        {job.error_msg && (
+                          <p className="text-red-400 text-xs mt-1 max-w-[180px] truncate" title={job.error_msg}>
+                            {job.error_msg}
+                          </p>
+                        )}
+                      </td>
+                      <td className="px-4 pt-3 pb-1 text-slate-300">{job.result_count || '—'}</td>
+                      <td className="px-4 pt-3 pb-1 text-slate-400 text-xs">{duration(job)}</td>
+                    </tr>
+                    {/* Progress bar sub-row */}
+                    <tr
+                      key={`${job.id}-bar`}
+                      className={`border-0 ${selectedJob === job.id ? 'bg-blue-500/5' : ''}`}
+                    >
+                      <td colSpan={4} className="px-4 pb-2.5 pt-0">
+                        <JobProgressBar job={job} />
+                      </td>
+                    </tr>
+                  </>
                 ))}
                 {!jobs.length && (
                   <tr>

@@ -80,9 +80,18 @@ export interface ScraperJob {
   niche: string
   limit_count: number
   status: JobStatus
+  progress: number       // 0–100
   result_count: number
   error_msg: string
   created_at: string
   started_at: string | null
   finished_at: string | null
+  // Per-job filter overrides
+  min_reviews: number
+  max_reviews: number
+  min_rating: number
+  max_rating: number
+  website_filter: 'any' | 'yes' | 'no'   // 'any'=no filter | 'yes'=has website | 'no'=no website
+  require_phone: boolean
+  min_score: number
 }

@@ -54,6 +54,21 @@ from utils.sentiment_analyzer   import SentimentAnalyzer
 # ---------------------------------------------------------------------
 
 
+# ── Module-level progress updater ─────────────────────────────────────────────
+# Set by setup_logging when --job-id is provided. Called from run_pipeline.
+
+_progress_fn = None   # callable(pct: int) | None
+
+
+def update_job_progress(pct: int) -> None:
+    """Best-effort update of scraper_jobs.progress (no-op outside queued runs)."""
+    if _progress_fn:
+        try:
+            _progress_fn(int(pct))
+        except Exception:
+            pass
+
+
 # ── Supabase live log handler ─────────────────────────────────────────────────
 
 class SupabaseLogHandler(logging.Handler):
@@ -146,6 +161,17 @@ def setup_logging(config: dict, job_id: str = None) -> logging.Logger:
                 sb_handler.setLevel(logging.DEBUG)
                 logging.getLogger().addHandler(sb_handler)
                 logger.info(f"Live log streaming active — job {job_id[:8]}")
+
+                # Wire up module-level progress updater
+                global _progress_fn
+                _job_id_captured = job_id
+                def _make_progress_fn(client, jid):
+                    def _prog(pct: int) -> None:
+                        client.table('scraper_jobs').update(
+                            {'progress': pct}
+                        ).eq('id', jid).execute()
+                    return _prog
+                _progress_fn = _make_progress_fn(sb_client, _job_id_captured)
             else:
                 logger.warning("SUPABASE_URL/SUPABASE_KEY not set — live logs disabled")
         except Exception as exc:
@@ -223,6 +249,8 @@ def apply_filters(leads: list[dict], config: dict) -> list[dict]:
     min_rating       = f.get("min_rating",           0.0)
     max_rating       = f.get("max_rating",           5.0)
     exclude_with_web = f.get("exclude_with_website", False)
+    require_website  = f.get("require_website",      False)
+    require_phone    = f.get("require_phone",        False)
     min_score        = f.get("min_lead_score",       0)
 
     filtered = []
@@ -233,12 +261,15 @@ def apply_filters(leads: list[dict], config: dict) -> list[dict]:
         except (TypeError, ValueError):
             rating = 0.0
         score = int(lead.get("lead_score", 0) or 0)
+        phone = (lead.get("phone") or "").strip()
 
         if reviews < min_reviews:                                continue
         if reviews > max_reviews:                                continue
         if rating and rating < min_rating:                       continue
         if rating and rating > max_rating:                       continue
-        if exclude_with_web and lead.get("website"):             continue
+        if exclude_with_web and lead.get("website"):              continue
+        if require_website  and not lead.get("website"):          continue
+        if require_phone and (not phone or phone == "NOT FOUND"): continue
         if score < min_score:                                    continue
 
         filtered.append(lead)
@@ -340,6 +371,8 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
         "new": 0, "duplicates": 0, "errors": 0,
     }
 
+    update_job_progress(5)
+
     with SupabaseHandler(config) as db:
 
         session_id = db.start_session(niches, config)
@@ -351,6 +384,7 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
 
         # ── Phase 1: Google Maps ───────────────────────────────────────
         print(f"\n{Fore.YELLOW}Phase 1: Scraping Google Maps...{Style.RESET_ALL}")
+        update_job_progress(10)
 
         with GoogleMapsScraper(config, rate_limiter, proxy_mgr) as gm_scraper:
             for i, niche in enumerate(niches, start=1):
@@ -381,10 +415,14 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
                     f"  -> {len(raw_leads)} raw leads for '{niche}'; "
                     f"running total: {run_stats['raw_total']}"
                 )
+                # Phase 1 progress: 10% → 55% spread across niches
+                phase1_pct = 10 + int((i / len(niches)) * 45)
+                update_job_progress(phase1_pct)
 
         # ── Phase 2: Supplementary enrichment ─────────────────────────
         if all_leads:
             print(f"\n{Fore.YELLOW}Phase 2: Supplementary enrichment...{Style.RESET_ALL}")
+            update_job_progress(60)
             try:
                 supp = SupplementaryScraper(config, rate_limiter)
                 supp.enrich_batch(all_leads)
@@ -392,6 +430,7 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
                 logger.error(f"Supplementary enrichment failed: {exc}", exc_info=True)
 
         # ── Phase 3: Filter ────────────────────────────────────────────
+        update_job_progress(72)
         before_filter = len(all_leads)
         all_leads     = apply_filters(all_leads, config)
         logger.info(f"Filters applied: {before_filter} raw -> {len(all_leads)} passed")
@@ -403,6 +442,7 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
         # ── Phase 4: Trim to target count ─────────────────────────────
         # --limit N guarantees N leads after filters by over-collecting 4x raw.
         # Here we trim down if more passed than requested.
+        update_job_progress(80)
         if target_count:
             if len(all_leads) > target_count:
                 all_leads = all_leads[:target_count]
@@ -426,6 +466,7 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
 
         # ── Phase 5: Upsert into Supabase ─────────────────────────────
         print(f"\n{Fore.YELLOW}Saving to Supabase...{Style.RESET_ALL}")
+        update_job_progress(85)
         try:
             insert_stats            = db.bulk_insert(all_leads)
             run_stats["new"]        = insert_stats["new"]
@@ -441,11 +482,12 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
             run_stats["errors"] += 1
 
         # ── Phase 6: Optional CSV export ──────────────────────────────
+        update_job_progress(94)
         if not args.no_csv:
             try:
-                min_score    = config["filters"].get("min_lead_score", 0)
-                all_db_leads = db.get_all_leads(min_score=min_score)
-                csv_path     = export_csv(all_db_leads)
+                min_score_val = config["filters"].get("min_lead_score", 0)
+                all_db_leads  = db.get_all_leads(min_score=min_score_val)
+                csv_path      = export_csv(all_db_leads)
                 run_stats["csv_path"] = csv_path
                 print(f"\n{Fore.GREEN}CSV saved: {csv_path}{Style.RESET_ALL}")
                 logger.info(f"CSV export: {len(all_db_leads)} leads -> {csv_path}")
@@ -453,6 +495,7 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
                 logger.error(f"CSV export failed: {exc}", exc_info=True)
 
         db.end_session(run_stats)
+    update_job_progress(100)
 
     supabase_url   = os.environ.get("SUPABASE_URL", "")
     dashboard_hint = (
@@ -507,6 +550,15 @@ def parse_args() -> argparse.Namespace:
         "--job-id", default=None, dest="job_id",
         help="Supabase scraper_jobs UUID — enables live log streaming to dashboard",
     )
+    # Per-job filter overrides (worker.py passes these from scraper_jobs columns)
+    parser.add_argument("--min-reviews",     type=int,   default=None, dest="min_reviews")
+    parser.add_argument("--max-reviews",     type=int,   default=None, dest="max_reviews")
+    parser.add_argument("--min-rating",      type=float, default=None, dest="min_rating")
+    parser.add_argument("--max-rating",      type=float, default=None, dest="max_rating")
+    parser.add_argument("--exclude-website", action="store_true",       dest="exclude_website")
+    parser.add_argument("--require-website", action="store_true",       dest="require_website")
+    parser.add_argument("--require-phone",   action="store_true",       dest="require_phone")
+    parser.add_argument("--min-score",       type=int,   default=None, dest="min_score")
     parser.add_argument("--export-only", action="store_true")
     parser.add_argument("--no-csv",      action="store_true")
     parser.add_argument("--dry-run",     action="store_true")
@@ -542,6 +594,33 @@ def _apply_cli_overrides(config: dict, args: argparse.Namespace):
             f"  {Fore.CYAN}Target:{Style.RESET_ALL} {args.limit} filtered leads "
             f"(collecting up to {raw_limit} raw)"
         )
+
+    # Apply per-job filter overrides from CLI (worker.py passes these)
+    filters = config.setdefault("filters", {})
+    if args.min_reviews is not None:
+        filters["min_reviews"] = args.min_reviews
+        print(f"  {Fore.CYAN}Min reviews:{Style.RESET_ALL} {args.min_reviews}")
+    if args.max_reviews is not None:
+        filters["max_reviews"] = args.max_reviews
+        print(f"  {Fore.CYAN}Max reviews:{Style.RESET_ALL} {args.max_reviews}")
+    if args.min_rating is not None:
+        filters["min_rating"] = args.min_rating
+        print(f"  {Fore.CYAN}Min rating:{Style.RESET_ALL} {args.min_rating}")
+    if args.max_rating is not None:
+        filters["max_rating"] = args.max_rating
+        print(f"  {Fore.CYAN}Max rating:{Style.RESET_ALL} {args.max_rating}")
+    if args.exclude_website:
+        filters["exclude_with_website"] = True
+        print(f"  {Fore.CYAN}Filter:{Style.RESET_ALL} no website only")
+    if args.require_website:
+        filters["require_website"] = True
+        print(f"  {Fore.CYAN}Filter:{Style.RESET_ALL} has website only")
+    if args.require_phone:
+        filters["require_phone"] = True
+        print(f"  {Fore.CYAN}Require phone:{Style.RESET_ALL} yes")
+    if args.min_score is not None:
+        filters["min_lead_score"] = args.min_score
+        print(f"  {Fore.CYAN}Min lead score:{Style.RESET_ALL} {args.min_score}")
 
 
 def _launch_dashboard(port: int):

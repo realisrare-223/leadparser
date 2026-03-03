@@ -6,6 +6,9 @@ Run this whenever you want to generate leads. The site shows a live
 "Engine Online" indicator while this is running, and lets you queue
 jobs from the Scraper tab.
 
+Supports running up to MAX_PARALLEL jobs simultaneously — each job
+runs main.py in its own subprocess so scrapes don't block each other.
+
 Setup
 -----
   1. pip install -r requirements.txt
@@ -20,6 +23,7 @@ import sys
 import time
 import logging
 import subprocess
+from concurrent.futures import ThreadPoolExecutor, Future
 from datetime import datetime, timezone
 from pathlib import Path
 from threading import Thread
@@ -53,8 +57,9 @@ if not SUPABASE_URL or not SUPABASE_KEY:
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-POLL_INTERVAL      = 15   # seconds between job polls
+POLL_INTERVAL      = 10   # seconds between job polls
 HEARTBEAT_INTERVAL = 10   # seconds between heartbeat updates
+MAX_PARALLEL       = 2    # max concurrent scrape jobs (increase if your machine allows)
 MAIN_PY            = Path(__file__).parent / 'main.py'
 
 _stop = False  # shared flag for clean shutdown
@@ -78,7 +83,11 @@ def heartbeat_loop() -> None:
 # ── Core job logic ─────────────────────────────────────────────────────────
 
 def claim_job() -> dict | None:
-    """Grab one pending job and mark it running."""
+    """Atomically grab one pending job and mark it running.
+
+    Uses an optimistic-lock pattern (update WHERE status='pending') so
+    parallel workers never double-claim the same job.
+    """
     res = (
         supabase.table('scraper_jobs')
         .select('*')
@@ -91,23 +100,56 @@ def claim_job() -> dict | None:
         return None
 
     job = res.data[0]
-    supabase.table('scraper_jobs').update({
-        'status':     'running',
-        'started_at': datetime.now(timezone.utc).isoformat(),
-    }).eq('id', job['id']).execute()
+    now = datetime.now(timezone.utc).isoformat()
 
-    log.info(f'Claimed job {job["id"][:8]} — {job["city"]}, {job["state"]} | niche={job["niche"]} limit={job["limit_count"]}')
+    # Only proceed if the row is still 'pending' (guards against parallel claims)
+    update_res = (
+        supabase.table('scraper_jobs')
+        .update({'status': 'running', 'started_at': now, 'progress': 0})
+        .eq('id', job['id'])
+        .eq('status', 'pending')   # guard
+        .execute()
+    )
+    if not update_res.data:
+        return None   # another worker thread claimed it first
+
+    log.info(
+        f'Claimed job {job["id"][:8]} — {job["city"]}, {job["state"]}'
+        f' | niche={job["niche"]} limit={job["limit_count"]}'
+    )
     return job
 
 
 def run_job(job: dict) -> tuple[int, str]:
     """Run main.py for the given job. Returns (leads_count, error_msg)."""
     cmd = [sys.executable, str(MAIN_PY)]
-    if job.get('city'):                            cmd += ['--city',   job['city']]
-    if job.get('state'):                           cmd += ['--state',  job['state']]
-    if job.get('niche') and job['niche'] != 'all': cmd += ['--niche',  job['niche']]
-    if job.get('limit_count'):                     cmd += ['--limit',  str(job['limit_count'])]
-    if job.get('id'):                              cmd += ['--job-id', job['id']]  # enables live log streaming
+
+    # Core params
+    if job.get('city'):                             cmd += ['--city',   job['city']]
+    if job.get('state'):                            cmd += ['--state',  job['state']]
+    if job.get('niche') and job['niche'] != 'all':  cmd += ['--niche',  job['niche']]
+    if job.get('limit_count'):                      cmd += ['--limit',  str(job['limit_count'])]
+    if job.get('id'):                               cmd += ['--job-id', job['id']]
+
+    # Per-job filter overrides
+    if job.get('min_reviews', 0) > 0:
+        cmd += ['--min-reviews', str(job['min_reviews'])]
+    if job.get('max_reviews', 9999) < 9999:
+        cmd += ['--max-reviews', str(job['max_reviews'])]
+    if job.get('min_rating', 0) > 0:
+        cmd += ['--min-rating', str(job['min_rating'])]
+    if job.get('max_rating', 5.0) < 5.0:
+        cmd += ['--max-rating', str(job['max_rating'])]
+    # website_filter: 'any'=no flag | 'no'=exclude website | 'yes'=require website
+    wf = job.get('website_filter', 'any')
+    if wf == 'no':
+        cmd += ['--exclude-website']
+    elif wf == 'yes':
+        cmd += ['--require-website']
+    # Phone is always required (no UI toggle)
+    cmd += ['--require-phone']
+    if job.get('min_score', 0) > 0:
+        cmd += ['--min-score', str(job['min_score'])]
 
     log.info(f'Running: {" ".join(cmd)}')
     try:
@@ -118,7 +160,7 @@ def run_job(job: dict) -> tuple[int, str]:
         output = result.stdout + result.stderr
         if result.returncode != 0:
             snippet = output[-500:].strip().replace('\n', ' ')
-            log.error(f'Job failed (exit {result.returncode}): {snippet[:200]}')
+            log.error(f'Job {job["id"][:8]} failed (exit {result.returncode}): {snippet[:200]}')
             return 0, snippet[:500]
 
         # Parse lead count from output lines
@@ -130,7 +172,7 @@ def run_job(job: dict) -> tuple[int, str]:
                 if nums:
                     leads_count = max(leads_count, int(nums[-1]))
 
-        log.info(f'Job done — ~{leads_count} leads scraped')
+        log.info(f'Job {job["id"][:8]} done — ~{leads_count} leads scraped')
         return leads_count, ''
 
     except subprocess.TimeoutExpired:
@@ -143,11 +185,18 @@ def finish_job(job_id: str, result_count: int, error_msg: str = '') -> None:
     status = 'failed' if error_msg else 'done'
     supabase.table('scraper_jobs').update({
         'status':       status,
+        'progress':     100 if not error_msg else None,
         'result_count': result_count,
         'error_msg':    error_msg,
         'finished_at':  datetime.now(timezone.utc).isoformat(),
     }).eq('id', job_id).execute()
     log.info(f'Job {job_id[:8]} → {status}')
+
+
+def process_job(job: dict) -> None:
+    """Full job lifecycle: run then finalize. Designed for thread pool use."""
+    count, err = run_job(job)
+    finish_job(job['id'], count, err)
 
 
 # ── Main loop ──────────────────────────────────────────────────────────────
@@ -158,23 +207,43 @@ def main() -> None:
     # Start heartbeat thread
     hb = Thread(target=heartbeat_loop, daemon=True)
     hb.start()
-    log.info('LeadParser Worker online. Site will show "Engine Online". Press Ctrl+C to stop.')
+    log.info(
+        f'LeadParser Worker online — up to {MAX_PARALLEL} parallel jobs. '
+        f'Site will show "Engine Online". Press Ctrl+C to stop.'
+    )
+
+    futures: dict[str, Future] = {}
+    executor = ThreadPoolExecutor(max_workers=MAX_PARALLEL, thread_name_prefix='scraper')
 
     try:
         while True:
             try:
-                job = claim_job()
-                if job:
-                    count, err = run_job(job)
-                    finish_job(job['id'], count, err)
-                else:
+                # Prune completed futures
+                done_ids = [jid for jid, f in futures.items() if f.done()]
+                for jid in done_ids:
+                    del futures[jid]
+
+                # Claim new jobs up to available slots
+                slots = MAX_PARALLEL - len(futures)
+                for _ in range(slots):
+                    job = claim_job()
+                    if job:
+                        futures[job['id']] = executor.submit(process_job, job)
+                    else:
+                        break   # no more pending jobs right now
+
+                if not futures:
                     log.debug('No pending jobs — waiting.')
+
             except Exception as exc:
-                log.exception(f'Unexpected error: {exc}')
+                log.exception(f'Unexpected error in main loop: {exc}')
+
             time.sleep(POLL_INTERVAL)
 
     except KeyboardInterrupt:
         _stop = True
+        log.info('Worker stopping — waiting for active jobs to finish…')
+        executor.shutdown(wait=True)
         log.info('Worker stopped. Site will show "Engine Offline" shortly.')
 
 

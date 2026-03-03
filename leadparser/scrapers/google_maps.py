@@ -266,10 +266,10 @@ class GoogleMapsScraper(BaseScraper):
         return ""
 
     def _extract_review_count(self) -> int:
-        # Approach 1: button with aria-label containing "reviews"
+        # Approach 1: button/span with aria-label containing "review" (singular OR plural)
         for xpath in (
-            '//button[contains(@aria-label, "reviews")]',
-            '//span[contains(@aria-label, "reviews")]',
+            '//button[contains(@aria-label, "review")]',
+            '//span[contains(@aria-label, "review")]',
         ):
             elem = self._find_xpath(xpath)
             if elem:
