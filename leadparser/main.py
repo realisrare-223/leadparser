@@ -142,7 +142,8 @@ def setup_logging(config: dict, job_id: str = None) -> logging.Logger:
         ],
     )
 
-    for noisy in ("selenium", "urllib3", "undetected_chromedriver", "WDM"):
+    for noisy in ("selenium", "urllib3", "undetected_chromedriver", "WDM",
+                  "httpx", "httpcore"):
         logging.getLogger(noisy).setLevel(logging.WARNING)
 
     logger = logging.getLogger("leadparser.main")
