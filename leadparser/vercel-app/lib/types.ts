@@ -71,7 +71,7 @@ export interface CallerStats {
   conversion_pct: number | null
 }
 
-export type JobStatus = 'pending' | 'running' | 'done' | 'failed'
+export type JobStatus = 'pending' | 'running' | 'done' | 'failed' | 'cancelled'
 
 export interface ScraperJob {
   id: string

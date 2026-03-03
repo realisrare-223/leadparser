@@ -120,8 +120,16 @@ def claim_job() -> dict | None:
     return job
 
 
+CANCEL_POLL = 5  # seconds between cancellation checks while subprocess is running
+
+
 def run_job(job: dict) -> tuple[int, str]:
-    """Run main.py for the given job. Returns (leads_count, error_msg)."""
+    """Run main.py for the given job. Returns (leads_count, error_msg).
+
+    Uses Popen instead of subprocess.run so we can check for cancellation
+    every CANCEL_POLL seconds without blocking the thread indefinitely.
+    Returns (0, '__cancelled__') when the job is cancelled via the UI.
+    """
     cmd = [sys.executable, str(MAIN_PY)]
 
     # Core params
@@ -153,35 +161,73 @@ def run_job(job: dict) -> tuple[int, str]:
 
     log.info(f'Running: {" ".join(cmd)}')
     try:
-        result = subprocess.run(
+        proc = subprocess.Popen(
             cmd, cwd=str(MAIN_PY.parent),
-            capture_output=True, text=True, timeout=3600,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
         )
-        output = result.stdout + result.stderr
-        if result.returncode != 0:
-            snippet = output[-500:].strip().replace('\n', ' ')
-            log.error(f'Job {job["id"][:8]} failed (exit {result.returncode}): {snippet[:200]}')
-            return 0, snippet[:500]
-
-        # Parse lead count from output lines
-        leads_count = 0
-        for line in output.splitlines():
-            ll = line.lower()
-            if any(k in ll for k in ['new leads', 'leads saved', 'upserted', 'inserted']):
-                nums = [w for w in line.split() if w.isdigit()]
-                if nums:
-                    leads_count = max(leads_count, int(nums[-1]))
-
-        log.info(f'Job {job["id"][:8]} done — ~{leads_count} leads scraped')
-        return leads_count, ''
-
-    except subprocess.TimeoutExpired:
-        return 0, 'Job timed out after 1 hour'
     except Exception as exc:
         return 0, str(exc)
 
+    # Poll: wait CANCEL_POLL seconds, then check DB for cancellation signal.
+    # Repeat until the subprocess finishes naturally or is cancelled.
+    stdout = stderr = ''
+    elapsed = 0
+    MAX_SECONDS = 3600
+    while True:
+        try:
+            stdout, stderr = proc.communicate(timeout=CANCEL_POLL)
+            break  # subprocess finished naturally
+        except subprocess.TimeoutExpired:
+            elapsed += CANCEL_POLL
+            if elapsed >= MAX_SECONDS:
+                proc.kill()
+                proc.communicate()
+                return 0, 'Job timed out after 1 hour'
+
+            # Check whether the UI cancelled this job
+            try:
+                check = (
+                    supabase.table('scraper_jobs')
+                    .select('status')
+                    .eq('id', job['id'])
+                    .single()
+                    .execute()
+                )
+                if check.data and check.data['status'] == 'cancelled':
+                    log.info(f'Job {job["id"][:8]} cancelled — killing subprocess')
+                    proc.kill()
+                    proc.communicate()   # reap zombie
+                    return 0, '__cancelled__'
+            except Exception as exc:
+                log.warning(f'Cancel-check DB call failed: {exc}')
+
+    output = stdout + stderr
+    if proc.returncode != 0:
+        snippet = output[-500:].strip().replace('\n', ' ')
+        log.error(f'Job {job["id"][:8]} failed (exit {proc.returncode}): {snippet[:200]}')
+        return 0, snippet[:500]
+
+    # Parse lead count from output lines
+    leads_count = 0
+    for line in output.splitlines():
+        ll = line.lower()
+        if any(k in ll for k in ['new leads', 'leads saved', 'upserted', 'inserted']):
+            nums = [w for w in line.split() if w.isdigit()]
+            if nums:
+                leads_count = max(leads_count, int(nums[-1]))
+
+    log.info(f'Job {job["id"][:8]} done — ~{leads_count} leads scraped')
+    return leads_count, ''
+
 
 def finish_job(job_id: str, result_count: int, error_msg: str = '') -> None:
+    if error_msg == '__cancelled__':
+        # Row was already set to 'cancelled' by the API; delete it so it's
+        # completely gone from history (consistent with the frontend's optimistic removal).
+        supabase.table('scraper_jobs').delete().eq('id', job_id).execute()
+        log.info(f'Job {job_id[:8]} cancelled and removed from history')
+        return
+
     status = 'failed' if error_msg else 'done'
     supabase.table('scraper_jobs').update({
         'status':       status,
