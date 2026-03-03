@@ -17,7 +17,12 @@ export default async function RootPage() {
     .eq('id', user.id)
     .single()
 
-  if (caller?.role === 'admin') {
+  // Not in callers table = account not configured yet
+  if (!caller) {
+    redirect('/login?error=not_configured')
+  }
+
+  if (caller.role === 'admin') {
     redirect('/admin')
   }
 

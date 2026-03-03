@@ -1,14 +1,19 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
   const router = useRouter()
+  const params = useSearchParams()
   const [email, setEmail]       = useState('')
   const [password, setPassword] = useState('')
-  const [error, setError]       = useState('')
+  const [error, setError]       = useState(
+    params.get('error') === 'not_configured'
+      ? 'Account not configured. Ask your admin to add you to the system.'
+      : ''
+  )
   const [loading, setLoading]   = useState(false)
 
   async function handleLogin(e: React.FormEvent) {

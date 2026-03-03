@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useCallback, useTransition } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { NavBar } from '@/components/NavBar'
 import { LeadTable } from '@/components/LeadTable'
 import type { Lead, LeadStatus } from '@/lib/types'
 
@@ -10,12 +11,13 @@ const STATUS_FILTERS = ['all', 'new', 'called', 'sold', 'followup', 'dead'] as c
 
 export default function CallerDashboard() {
   const router  = useRouter()
-  const [leads,      setLeads]      = useState<Lead[]>([])
-  const [loading,    setLoading]    = useState(true)
+  const [leads,        setLeads]        = useState<Lead[]>([])
+  const [loading,      setLoading]      = useState(true)
   const [statusFilter, setStatusFilter] = useState('all')
   const [nicheFilter,  setNicheFilter]  = useState('all')
-  const [niches,     setNiches]     = useState<string[]>([])
-  const [callerName, setCallerName] = useState('')
+  const [niches,       setNiches]       = useState<string[]>([])
+  const [callerName,   setCallerName]   = useState('')
+  const [role,         setRole]         = useState<'caller' | 'admin'>('caller')
 
   const fetchLeads = useCallback(async () => {
     const params = new URLSearchParams()
@@ -26,7 +28,6 @@ export default function CallerDashboard() {
     const data = await res.json()
     if (Array.isArray(data)) {
       setLeads(data)
-      // Collect unique niches for filter
       const unique = Array.from(new Set(data.map((l: Lead) => l.niche))).sort()
       setNiches(unique as string[])
     }
@@ -34,12 +35,14 @@ export default function CallerDashboard() {
   }, [statusFilter, nicheFilter])
 
   useEffect(() => {
-    // Get caller name from Supabase auth
     const supabase = createClient()
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (!user) { router.push('/login'); return }
-      supabase.from('callers').select('name').eq('id', user.id).single()
-        .then(({ data }) => setCallerName(data?.name ?? user.email ?? ''))
+      supabase.from('callers').select('name, role').eq('id', user.id).single()
+        .then(({ data }) => {
+          setCallerName(data?.name ?? user.email ?? '')
+          setRole(data?.role ?? 'caller')
+        })
     })
   }, [router])
 
@@ -66,12 +69,6 @@ export default function CallerDashboard() {
     })
   }
 
-  async function handleLogout() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push('/login')
-  }
-
   // Counts per status for the tab badges
   const counts = leads.reduce((acc, l) => {
     acc[l.status] = (acc[l.status] ?? 0) + 1
@@ -80,21 +77,7 @@ export default function CallerDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-950">
-      {/* Header */}
-      <header className="bg-slate-900 border-b border-slate-700 px-6 py-4 flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
-            LeadParser Engine
-          </h1>
-          <p className="text-slate-400 text-sm mt-0.5">Caller Dashboard — {callerName}</p>
-        </div>
-        <button
-          onClick={handleLogout}
-          className="text-slate-400 hover:text-white text-sm transition"
-        >
-          Sign Out
-        </button>
-      </header>
+      <NavBar role={role} subtitle={`Caller — ${callerName}`} />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Quick stats bar */}
@@ -109,7 +92,6 @@ export default function CallerDashboard() {
 
         {/* Filters */}
         <div className="flex flex-wrap items-center gap-3 mb-5">
-          {/* Status filter pills */}
           <div className="flex flex-wrap gap-2">
             {STATUS_FILTERS.map(f => (
               <button
@@ -127,7 +109,6 @@ export default function CallerDashboard() {
             ))}
           </div>
 
-          {/* Niche dropdown */}
           {niches.length > 0 && (
             <select
               value={nicheFilter}
@@ -140,12 +121,10 @@ export default function CallerDashboard() {
           )}
         </div>
 
-        {/* Lead count */}
         <p className="text-slate-400 text-sm mb-4">
           {loading ? 'Loading...' : `${leads.length} lead${leads.length !== 1 ? 's' : ''}`}
         </p>
 
-        {/* Table */}
         {loading ? (
           <div className="text-center py-16 text-slate-500">Loading your leads...</div>
         ) : (

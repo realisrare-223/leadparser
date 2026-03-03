@@ -3,12 +3,14 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { NavBar } from '@/components/NavBar'
 import { LeadTable } from '@/components/LeadTable'
 import { LeadStatsGrid, CallerStatsTable } from '@/components/StatsGrid'
 import { AssignPanel } from '@/components/AssignPanel'
+import { ScraperPanel } from '@/components/ScraperPanel'
 import type { Lead, LeadStats, CallerStats, Caller } from '@/lib/types'
 
-type Tab = 'overview' | 'leads' | 'users'
+type Tab = 'overview' | 'leads' | 'scraper' | 'users'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -21,6 +23,7 @@ export default function AdminDashboard() {
   const [niches,     setNiches]     = useState<string[]>([])
   const [cities,     setCities]     = useState<string[]>([])
   const [loading,    setLoading]    = useState(true)
+  const [adminName,  setAdminName]  = useState('')
 
   // Lead filters
   const [statusFilter,   setStatusFilter]   = useState('all')
@@ -65,8 +68,9 @@ export default function AdminDashboard() {
     const supabase = createClient()
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) { router.push('/login'); return }
-      const { data: c } = await supabase.from('callers').select('role').eq('id', user.id).single()
+      const { data: c } = await supabase.from('callers').select('name, role').eq('id', user.id).single()
       if (c?.role !== 'admin') { router.push('/dashboard'); return }
+      setAdminName(c.name ?? user.email ?? '')
     })
     fetchStats()
     fetchCallers()
@@ -110,12 +114,6 @@ export default function AdminDashboard() {
     setUserLoading(false)
   }
 
-  async function handleLogout() {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    router.push('/login')
-  }
-
   const TAB = (t: Tab) =>
     `px-4 py-2 text-sm font-semibold rounded-lg transition ${
       tab === t ? 'bg-blue-500 text-white' : 'text-slate-400 hover:text-white'
@@ -123,26 +121,18 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-950">
-      <header className="bg-slate-900 border-b border-slate-700 px-6 py-4 flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
-            LeadParser Engine
-          </h1>
-          <p className="text-slate-400 text-sm mt-0.5">Admin Dashboard</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <nav className="flex gap-1">
-            <button className={TAB('overview')} onClick={() => setTab('overview')}>Overview</button>
-            <button className={TAB('leads')}    onClick={() => setTab('leads')}>All Leads</button>
-            <button className={TAB('users')}    onClick={() => setTab('users')}>Users</button>
-          </nav>
-          <button onClick={handleLogout} className="text-slate-400 hover:text-white text-sm transition ml-4">
-            Sign Out
-          </button>
-        </div>
-      </header>
+      <NavBar role="admin" subtitle={`Admin — ${adminName}`} />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+        <nav className="flex gap-1 border-b border-slate-800 pb-3 mb-6">
+          <button className={TAB('overview')} onClick={() => setTab('overview')}>Overview</button>
+          <button className={TAB('leads')}    onClick={() => setTab('leads')}>All Leads</button>
+          <button className={TAB('scraper')}  onClick={() => setTab('scraper')}>Scraper</button>
+          <button className={TAB('users')}    onClick={() => setTab('users')}>Users</button>
+        </nav>
+      </div>
+
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 pb-12">
 
         {/* OVERVIEW */}
         {tab === 'overview' && (
@@ -176,6 +166,9 @@ export default function AdminDashboard() {
             <LeadTable leads={leads} showCaller />
           </div>
         )}
+
+        {/* SCRAPER */}
+        {tab === 'scraper' && <ScraperPanel />}
 
         {/* USERS */}
         {tab === 'users' && (
@@ -228,6 +221,7 @@ export default function AdminDashboard() {
                 <thead>
                   <tr className="bg-slate-950 text-slate-400 text-xs uppercase tracking-wide">
                     <th className="px-6 py-3 text-left">Name</th>
+                    <th className="px-6 py-3 text-left">Email</th>
                     <th className="px-6 py-3 text-left">Role</th>
                     <th className="px-6 py-3 text-left">Created</th>
                   </tr>
@@ -236,6 +230,7 @@ export default function AdminDashboard() {
                   {callerList.map(c => (
                     <tr key={c.id} className="border-t border-slate-800 hover:bg-slate-800/40 transition">
                       <td className="px-6 py-3 font-medium">{c.name}</td>
+                      <td className="px-6 py-3 text-slate-400 text-xs">{(c as any).email ?? '—'}</td>
                       <td className="px-6 py-3">
                         <span className={`px-2 py-0.5 rounded-full text-xs font-semibold border ${
                           c.role === 'admin'
@@ -247,7 +242,7 @@ export default function AdminDashboard() {
                     </tr>
                   ))}
                   {!callerList.length && (
-                    <tr><td colSpan={3} className="px-6 py-8 text-center text-slate-500">No users yet.</td></tr>
+                    <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-500">No users yet.</td></tr>
                   )}
                 </tbody>
               </table>

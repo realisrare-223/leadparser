@@ -70,3 +70,19 @@ export interface CallerStats {
   untouched: number
   conversion_pct: number | null
 }
+
+export type JobStatus = 'pending' | 'running' | 'done' | 'failed'
+
+export interface ScraperJob {
+  id: string
+  city: string
+  state: string
+  niche: string
+  limit_count: number
+  status: JobStatus
+  result_count: number
+  error_msg: string
+  created_at: string
+  started_at: string | null
+  finished_at: string | null
+}
