@@ -1,5 +1,6 @@
-#!/usr/bin/env python3"""
-LeadParser Worker — Scraper Job Queue Processor
+#!/usr/bin/env python3
+"""
+LeadParser Worker - Scraper Job Queue Processor
 ================================================
 Run this whenever you want to generate leads. The site shows a live
 "Engine Online" indicator while this is running, and lets you queue
