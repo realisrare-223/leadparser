@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const params = useSearchParams()
   const [email, setEmail]       = useState('')
@@ -37,7 +37,6 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-950">
       <div className="w-full max-w-sm">
-        {/* Logo / title */}
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-400 to-violet-400 bg-clip-text text-transparent">
             LeadParser Engine
@@ -45,7 +44,6 @@ export default function LoginPage() {
           <p className="text-slate-400 mt-2 text-sm">Sign in to your account</p>
         </div>
 
-        {/* Card */}
         <div className="bg-slate-900 border border-slate-700 rounded-2xl p-8">
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
@@ -93,5 +91,13 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   )
 }
