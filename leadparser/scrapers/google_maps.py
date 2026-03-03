@@ -53,14 +53,16 @@ class GoogleMapsScraper(BaseScraper):
 
     # ── Public entry point ────────────────────────────────────────────
 
-    def scrape_niche(self, niche: str, location: dict) -> list[dict]:
+    def scrape_niche(self, niche: str, location: dict, on_progress=None) -> list[dict]:
         """
         Search Google Maps for *niche* in *location* and return all leads.
 
         Parameters
         ----------
-        niche    : e.g. "plumbers"
-        location : dict with keys city, state (from config.yaml → location)
+        niche       : e.g. "plumbers"
+        location    : dict with keys city, state (from config.yaml → location)
+        on_progress : optional callable(current: int, total: int) — called after
+                      each listing so the caller can update a progress bar.
         """
         query = f"{niche} in {location['city']}, {location['state']}"
         url   = self.BASE_URL.format(query=quote_plus(query))
@@ -86,6 +88,12 @@ class GoogleMapsScraper(BaseScraper):
                     leads.append(lead)
             except Exception as exc:
                 self.logger.warning(f"  Skipping listing {i}: {exc}")
+            # Report per-listing progress so callers can animate a progress bar
+            if on_progress:
+                try:
+                    on_progress(i, len(profile_urls))
+                except Exception:
+                    pass
             # Polite delay between individual listings
             self.rate_limiter.wait()
 

@@ -387,13 +387,27 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
         update_job_progress(10)
 
         with GoogleMapsScraper(config, rate_limiter, proxy_mgr) as gm_scraper:
-            for i, niche in enumerate(niches, start=1):
+            for niche_i, niche in enumerate(niches, start=1):
                 print(
-                    f"  [{i}/{len(niches)}] {Fore.CYAN}{niche}{Style.RESET_ALL} "
+                    f"  [{niche_i}/{len(niches)}] {Fore.CYAN}{niche}{Style.RESET_ALL} "
                     f"in {location['city']}, {location['state']}"
                 )
+
+                # Per-listing callback: Phase 1 spans 10%→55%, spread evenly across niches
+                _niche_count  = len(niches)
+                _niche_start  = 10 + int(((niche_i - 1) / _niche_count) * 45)
+                _niche_end    = 10 + int((niche_i        / _niche_count) * 45)
+                _niche_width  = max(_niche_end - _niche_start, 1)
+
+                def _listing_progress(current: int, total: int,
+                                      _s=_niche_start, _w=_niche_width) -> None:
+                    frac = current / max(total, 1)
+                    update_job_progress(_s + int(frac * _w))
+
                 try:
-                    raw_leads = gm_scraper.scrape_niche(niche, location)
+                    raw_leads = gm_scraper.scrape_niche(
+                        niche, location, on_progress=_listing_progress
+                    )
                 except Exception as exc:
                     logger.error(f"Scraping failed for '{niche}': {exc}", exc_info=True)
                     run_stats["errors"] += 1
@@ -415,9 +429,6 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
                     f"  -> {len(raw_leads)} raw leads for '{niche}'; "
                     f"running total: {run_stats['raw_total']}"
                 )
-                # Phase 1 progress: 10% → 55% spread across niches
-                phase1_pct = 10 + int((i / len(niches)) * 45)
-                update_job_progress(phase1_pct)
 
         # ── Phase 2: Supplementary enrichment ─────────────────────────
         if all_leads:

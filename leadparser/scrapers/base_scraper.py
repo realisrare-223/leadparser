@@ -126,6 +126,7 @@ class BaseScraper(ABC):
         options.add_argument(f"--window-size={w},{h}")
 
         driver = uc.Chrome(options=options, version_main=145)
+        driver.set_page_load_timeout(30)   # don't hang forever on CAPTCHA/slow pages
         self._apply_stealth_js(driver)
         return driver
 
@@ -151,6 +152,7 @@ class BaseScraper(ABC):
 
         service = Service(ChromeDriverManager().install())
         driver  = webdriver.Chrome(service=service, options=options)
+        driver.set_page_load_timeout(30)   # don't hang forever on CAPTCHA/slow pages
         self._apply_stealth_js(driver)
         return driver
 
