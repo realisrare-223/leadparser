@@ -23,7 +23,6 @@ export async function POST(request: NextRequest) {
     min_rating      = 0,
     max_rating      = 5,
     website_filter  = 'any',   // 'any' | 'yes' | 'no'
-    require_phone   = false,
     min_score       = 0,
   } = await request.json()
 
@@ -43,7 +42,7 @@ export async function POST(request: NextRequest) {
       min_rating,
       max_rating,
       website_filter,
-      require_phone,
+      require_phone:  true,
       min_score,
     })
     .select()

@@ -238,12 +238,22 @@ class BaseScraper(ABC):
 
     def _safe_get(self, url: str) -> bool:
         """
-        Navigate to *url*.  Returns True on success, False on error.
+        Navigate to *url*.  Returns True on success, False on hard error.
         Applies the configured rate-limit delay before navigating.
+
+        On page-load timeout (slow network or CAPTCHA stall) we return True
+        anyway: Chrome has usually loaded the visible business-card content
+        well before the 30 s deadline, so extraction can still succeed.
         """
         self.rate_limiter.wait()
         try:
             self.driver.get(url)
+            return True
+        except TimeoutException:
+            # Page took > page_load_timeout seconds — but the DOM content
+            # (name, phone, address) is typically already rendered.  Let
+            # the caller attempt extraction rather than skipping the lead.
+            self.logger.debug(f"Page load timeout (partial load OK): {url[:80]}")
             return True
         except WebDriverException as exc:
             self.logger.error(f"Failed to navigate to {url}: {exc}")

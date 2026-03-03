@@ -130,7 +130,6 @@ export function ScraperPanel() {
   const [minRating,     setMinRating]     = useState('')
   const [maxRating,     setMaxRating]     = useState('')
   const [websiteFilter, setWebsiteFilter] = useState<'any' | 'yes' | 'no'>('any')
-  const [requirePhone,  setRequirePhone]  = useState(false)
   const [minScore,      setMinScore]      = useState('')
 
   // ── UI state ──
@@ -290,7 +289,6 @@ export function ScraperPanel() {
           min_rating:     parseFloat(minRating) || 0,
           max_rating:     parseFloat(maxRating) || 5,
           website_filter: websiteFilter,
-          require_phone:  requirePhone,
           min_score:      parseInt(minScore, 10) || 0,
         }),
       })
@@ -495,7 +493,7 @@ export function ScraperPanel() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
               Advanced Filters
-              {(minReviews || maxReviews || minRating || maxRating || websiteFilter !== 'any' || requirePhone || minScore) && (
+              {(minReviews || maxReviews || minRating || maxRating || websiteFilter !== 'any' || minScore) && (
                 <span className="ml-1 px-1.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 text-[10px] font-semibold">
                   active
                 </span>
@@ -608,7 +606,7 @@ export function ScraperPanel() {
                     type="button"
                     onClick={() => {
                       setMinReviews(''); setMaxReviews(''); setMinRating(''); setMaxRating('')
-                      setWebsiteFilter('any'); setRequirePhone(false); setMinScore('')
+                      setWebsiteFilter('any'); setMinScore('')
                     }}
                     className="text-xs text-slate-500 hover:text-red-400 transition pt-5 text-left"
                   >
@@ -616,33 +614,11 @@ export function ScraperPanel() {
                   </button>
                 </div>
 
-                {/* Require phone toggle */}
-                <div className="flex items-center justify-between py-2 border-t border-slate-700/60">
-                  <div>
-                    <p className="text-xs font-semibold text-slate-300">Require Phone Number</p>
-                    <p className="text-xs text-slate-500 mt-0.5">
-                      Skip leads with no phone found. Turn off for international cities where phone lookup is limited.
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setRequirePhone(v => !v)}
-                    className={`relative inline-flex h-5 w-9 shrink-0 ml-4 rounded-full border-2 transition-colors duration-200 ${
-                      requirePhone ? 'bg-blue-500 border-blue-500' : 'bg-slate-700 border-slate-600'
-                    }`}
-                  >
-                    <span
-                      className={`pointer-events-none inline-block h-3.5 w-3.5 rounded-full bg-white shadow transform transition-transform duration-200 mt-px ${
-                        requirePhone ? 'translate-x-4' : 'translate-x-0.5'
-                      }`}
-                    />
-                  </button>
-                </div>
-
                 <p className="text-slate-500 text-xs">
                   Tip: <strong className="text-slate-400">Max Reviews</strong> targets under-reviewed
                   businesses (easier cold-call wins). <strong className="text-slate-400">No Website</strong> focuses
                   on businesses that would most benefit from your services.
+                  Phone is always required.
                 </p>
               </div>
             )}
