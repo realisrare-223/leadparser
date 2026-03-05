@@ -143,11 +143,12 @@ export function ScraperPanel() {
   const [jobs,          setJobs]          = useState<ScraperJob[]>([])
   const [selectedJob,   setSelectedJob]   = useState<string | null>(null)
   const [logs,          setLogs]          = useState<LogEntry[]>([])
-  const [lastLogId,     setLastLogId]     = useState(0)
   const [cancelling,    setCancelling]    = useState<Record<string, boolean>>({})
   // smoothProgress: per-job displayed % that slowly interpolates toward the real value
   const [smoothProgress, setSmoothProgress] = useState<Record<string, number>>({})
-  const logsEndRef = useRef<HTMLDivElement>(null)
+  // lastLogId tracked as a ref so fetchLogs closure stays stable
+  const lastLogIdRef     = useRef(0)
+  const logsContainerRef = useRef<HTMLDivElement>(null)
 
   // ── Worker status ──────────────────────────────────────────────────────
 
@@ -190,24 +191,26 @@ export function ScraperPanel() {
   const fetchLogs = useCallback(async () => {
     if (!selectedJob) return
     try {
-      const res  = await fetch(`/api/scrape/logs?job_id=${selectedJob}&after=${lastLogId}`)
+      const res  = await fetch(`/api/scrape/logs?job_id=${selectedJob}&after=${lastLogIdRef.current}`)
       const data = await res.json()
       if (Array.isArray(data) && data.length > 0) {
         setLogs(prev => [...prev, ...data])
-        setLastLogId(data[data.length - 1].id)
+        lastLogIdRef.current = data[data.length - 1].id
       }
     } catch {
       // ignore transient fetch errors
     }
-  }, [selectedJob, lastLogId])
+  }, [selectedJob])
 
+  // Scroll within the log container only — never jumps the whole page
   useEffect(() => {
-    logsEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    const el = logsContainerRef.current
+    if (el) el.scrollTop = el.scrollHeight
   }, [logs])
 
   useEffect(() => {
     setLogs([])
-    setLastLogId(0)
+    lastLogIdRef.current = 0
   }, [selectedJob])
 
   useEffect(() => {
@@ -254,12 +257,16 @@ export function ScraperPanel() {
   }, [jobs])
 
   const selectedJobObj = jobs.find(j => j.id === selectedJob)
+  const selectedJobStatus = selectedJobObj?.status
+
   useEffect(() => {
     if (!selectedJob) return
+    // Only poll while the job is active; stop immediately when done/failed/cancelled
+    if (selectedJobStatus && !['running', 'pending'].includes(selectedJobStatus)) return
     fetchLogs()
     const lv = setInterval(fetchLogs, 2_000)
     return () => clearInterval(lv)
-  }, [selectedJob, fetchLogs])
+  }, [selectedJob, selectedJobStatus, fetchLogs])
 
   // ── Queue job ─────────────────────────────────────────────────────────
 
@@ -783,7 +790,7 @@ export function ScraperPanel() {
               )}
               {logs.length > 0 && (
                 <button
-                  onClick={() => { setLogs([]); setLastLogId(0) }}
+                  onClick={() => setLogs([])}
                   className="text-slate-500 hover:text-red-400 text-xs transition"
                 >
                   Clear
@@ -792,7 +799,7 @@ export function ScraperPanel() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto min-h-[280px] max-h-[420px] p-3 font-mono text-xs space-y-0.5 bg-slate-950/40">
+          <div ref={logsContainerRef} className="flex-1 overflow-y-auto min-h-[280px] max-h-[420px] p-3 font-mono text-xs space-y-0.5 bg-slate-950/40">
             {!selectedJob ? (
               <p className="text-slate-600 p-4 text-center">Click a job row to see its logs.</p>
             ) : logs.length === 0 ? (
@@ -816,7 +823,6 @@ export function ScraperPanel() {
                 </div>
               ))
             )}
-            <div ref={logsEndRef} />
           </div>
         </div>
 

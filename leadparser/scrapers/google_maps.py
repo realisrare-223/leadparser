@@ -297,6 +297,23 @@ class GoogleMapsScraper(BaseScraper):
         return 0
 
     def _extract_phone(self) -> str:
+        # Give the contact section up to 6 s to render before extracting.
+        # Google Maps loads the business name first and contact details
+        # (phone, address) a beat later via a secondary XHR.  Without
+        # this wait, fast machines grab the name element and immediately
+        # call find_element for the phone — which isn't in the DOM yet.
+        phone_xpath = (
+            '//button[starts-with(@data-item-id, "phone:")]'
+            ' | //a[starts-with(@data-item-id, "phone:")]'
+            ' | //button[starts-with(@aria-label, "Phone:")]'
+        )
+        try:
+            WebDriverWait(self.driver, 6).until(
+                EC.presence_of_element_located((By.XPATH, phone_xpath))
+            )
+        except TimeoutException:
+            pass  # phone element may simply not exist for this business
+
         # Approach 1: data-item-id is "phone:tel:+1XXXXXXXXXX"
         for xpath in (
             '//button[starts-with(@data-item-id, "phone:")]',

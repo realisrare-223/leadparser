@@ -3,17 +3,18 @@ Lead Scorer — calculates a numeric priority score for each lead.
 
 Higher score = higher priority for outreach.
 
-Scoring rules (all weights configurable in config.yaml → scoring):
+Scoring philosophy (review count is the primary signal):
   ├─ Review count bracket         (0–15 pts)  ← primary driver
-  ├─ Star rating                  (0–7  pts)  ← secondary driver
-  ├─ High-value niche             (+7 pts bonus)
+  │    Sweet spot is 26–100 reviews: active business, not too big to approach.
+  │    0–5 reviews = unestablished / possibly dead = low score.
+  ├─ Star rating                  (0–5  pts)  ← secondary
+  ├─ High-value niche             (+5 pts bonus)
+  ├─ No website found             (+4 pts bonus)  ← strongest need signal
   ├─ Complete contact info        (+2 pts bonus)
-  ├─ No website found             (+3 pts bonus)  ← strong need signal
-  └─ Active on Facebook           (+1 pt  bonus)
+  └─ Low rating (business struggling online) ← baked into rating bracket
 
-Review count is weighted the most: fewer reviews = easier cold-call win,
-because the business clearly isn't active online.
-Rating is secondary: low rating = business struggling online = better lead.
+More reviews = more established = real business worth calling.
+Very few reviews = unproven / possibly fake / too small to pay.
 """
 
 import logging
@@ -50,51 +51,56 @@ class LeadScorer:
         sc    = self.scoring_cfg
 
         # ── Review count (primary: 0–15 pts) ─────────────────────────
-        # Fewer reviews → higher score (cold-call sweet spot).
+        # More reviews = more established = better cold-call target.
+        # Very few reviews = unproven, possibly closed, too small.
+        # Sweet spot: 26–100 (active business, not a regional giant).
         reviews = self._int(raw.get("review_count", 0))
 
         if reviews == 0:
-            total += sc.get("no_reviews_score",       15)   # completely invisible online
+            total += sc.get("no_reviews_score",         0)   # probably fake/dead
         elif reviews <= 5:
-            total += sc.get("very_few_reviews_score",  12)
-        elif reviews <= 15:
-            total += sc.get("few_reviews_score",        9)
-        elif reviews <= 40:
-            total += sc.get("some_reviews_score",       5)
+            total += sc.get("very_few_reviews_score",   3)   # too new/small
+        elif reviews <= 25:
+            total += sc.get("few_reviews_score",        8)   # emerging
         elif reviews <= 100:
-            total += sc.get("many_reviews_score",       1)
-        # 100+ reviews → 0 pts (too established; hard to pitch)
+            total += sc.get("sweet_spot_reviews_score", 15)  # ← prime targets
+        elif reviews <= 300:
+            total += sc.get("many_reviews_score",       10)  # well-established
+        elif reviews <= 600:
+            total += sc.get("lots_reviews_score",        5)  # large business
+        else:
+            total += sc.get("huge_reviews_score",        1)  # too big to care
 
-        # ── Star rating (secondary: 0–7 pts) ─────────────────────────
-        # Lower rating → higher score (business clearly struggling online).
+        # ── Star rating (secondary: 0–5 pts) ─────────────────────────
+        # Low rating = struggling online = open to help.
+        # High rating = already doing well; lower priority.
         rating = self._float(raw.get("rating", 0.0))
 
-        if 0 < rating <= 3.5:
-            total += sc.get("low_rating_bonus",        7)
-        elif 3.5 < rating <= 4.0:
-            total += sc.get("medium_rating_bonus",     3)
-        # 4.0+ star businesses already have a good online rep; lower priority
+        if 0 < rating <= 3.0:
+            total += sc.get("very_low_rating_bonus",    5)
+        elif 3.0 < rating <= 3.8:
+            total += sc.get("low_rating_bonus",         3)
+        elif 3.8 < rating <= 4.5:
+            total += sc.get("medium_rating_bonus",      1)
+        # 4.5+ = doing great online; 0 extra pts
 
         # ── High-value niche ─────────────────────────────────────────
         if niche.lower() in self.high_val_niches:
-            total += sc.get("high_value_niche_bonus",  7)
+            total += sc.get("high_value_niche_bonus",   5)
+
+        # ── No website (clearest pitch opportunity) ───────────────────
+        if not raw.get("website", "").strip():
+            total += sc.get("no_website_bonus",         4)
 
         # ── Complete contact information ──────────────────────────────
-        has_phone   = bool(raw.get("phone", "").strip())
+        has_phone   = bool(raw.get("phone",   "").strip())
         has_address = bool(raw.get("address", "").strip())
         if has_phone and has_address:
-            total += sc.get("complete_contact_bonus",  2)
-
-        # ── No website (highest need for digital services) ────────────
-        if not raw.get("website", "").strip():
-            total += sc.get("no_website_bonus",        3)
-
-        # ── Social media present ──────────────────────────────────────
-        if raw.get("facebook", "").strip():
-            total += sc.get("has_facebook_bonus",      1)
+            total += sc.get("complete_contact_bonus",   2)
 
         logger.debug(
-            f"Score for '{raw.get('name', '?')}' ({niche}): {total}"
+            f"Score for '{raw.get('name', '?')}' ({niche}): {total} "
+            f"[reviews={reviews}, rating={rating}]"
         )
         return total
 
@@ -103,9 +109,9 @@ class LeadScorer:
         Return a human-readable priority label for a given score.
         Shown in the 'Lead Score' column alongside the number.
         """
-        if score >= 20:
+        if score >= 22:
             return f"{score} ★★★ HOT"
-        if score >= 14:
+        if score >= 15:
             return f"{score} ★★  WARM"
         if score >= 8:
             return f"{score} ★   MEDIUM"
