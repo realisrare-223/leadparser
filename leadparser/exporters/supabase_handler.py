@@ -31,6 +31,7 @@ LEAD_COLUMNS = [
     "gmb_link", "website", "facebook", "instagram",
     "data_source", "lead_score", "pitch_notes", "additional_notes",
     "date_added",
+    "email",
 ]
 
 
@@ -204,6 +205,7 @@ class SupabaseHandler:
             "pitch_notes":      (lead.get("pitch_notes")      or "").strip(),
             "additional_notes": (lead.get("additional_notes") or "").strip(),
             "date_added":       lead.get("date_added") or datetime.now().strftime("%Y-%m-%d"),
+            "email":            (lead.get("email") or "").strip(),
         }
 
         # Must have a name + niche to be valid

@@ -26,6 +26,7 @@ export interface Lead {
   lead_score: number
   pitch_notes: string
   additional_notes: string
+  email: string
   // CRM fields
   status: LeadStatus
   assigned_to: string | null
@@ -33,6 +34,8 @@ export interface Lead {
   call_status: string
   follow_up_date: string | null
   caller_notes: string
+  call_attempts: number
+  last_called_at: string | null
   // Timestamps
   date_added: string
   created_at: string
