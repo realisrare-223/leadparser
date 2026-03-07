@@ -51,6 +51,43 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 NICHE_EXPANSIONS: dict[str, list[str]] = {
 
+    # ── General / broad categories ────────────────────────────────────────────
+    # These are triggered when the user selects a "General" category in the
+    # dashboard (e.g. "Food (General)").  Each expansion term is a sub-niche
+    # that gets its own full Google Maps search, maximising lead volume.
+
+    "food": [
+        "restaurants", "cafes", "coffee shops", "pizzerias", "bakeries",
+        "bars", "fast food", "diners", "bistros", "food near me",
+        "dessert shops", "catering services",
+    ],
+    "home services": [
+        "plumbers", "electricians", "hvac contractors", "roofing contractors",
+        "cleaning services", "landscaping services", "pest control", "painters",
+        "tree services", "locksmiths", "moving companies", "water damage restoration",
+        "pressure washing", "garage door repair", "junk removal",
+    ],
+    "medical": [
+        "dentists", "chiropractors", "clinics", "urgent care",
+        "pharmacies", "optometrists", "physical therapy",
+        "massage therapy", "veterinarians", "mental health counselors",
+    ],
+    "beauty": [
+        "hair salons", "barber shops", "nail salons", "spas",
+        "massage therapy", "gyms", "yoga studios", "pet grooming",
+        "tattoo parlors", "personal trainers",
+    ],
+    "automotive": [
+        "auto repair shops", "auto detailing", "auto body shops",
+        "tire shops", "car wash", "towing services",
+        "auto glass repair", "car dealerships",
+    ],
+    "professional services": [
+        "lawyers", "accountants", "real estate agents",
+        "marketing agencies", "insurance agents", "financial advisors",
+        "mortgage brokers", "it support", "web design", "photographers",
+    ],
+
     # ── Food & Beverage ───────────────────────────────────────────────────────
 
     "restaurants": [

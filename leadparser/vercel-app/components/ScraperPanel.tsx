@@ -11,7 +11,8 @@ import { createClient } from '@/lib/supabase/client'
 import type { ScraperJob, JobStatus } from '@/lib/types'
 import { Combobox, type ComboOption } from '@/components/Combobox'
 import { NA_REGIONS, COUNTRY_ORDER, COUNTRY_LABELS, resolveRegion } from '@/lib/north-america'
-import { PRESET_NICHES } from '@/lib/niches'
+import { NICHE_COMBO_OPTIONS } from '@/lib/niches'
+import { CITY_OPTIONS, CITY_STATE_MAP } from '@/lib/cities'
 
 // ── Types ──────────────────────────────────────────────────────────────────
 
@@ -53,7 +54,7 @@ const REGION_OPTIONS: ComboOption[] = COUNTRY_ORDER.flatMap(country => {
   }))
 })
 
-const NICHE_OPTIONS: ComboOption[] = PRESET_NICHES.map(n => ({ value: n, label: n }))
+const NICHE_OPTIONS: ComboOption[] = NICHE_COMBO_OPTIONS
 
 // ── Progress bar ───────────────────────────────────────────────────────────
 // Receives smoothPct (already interpolated) so the bar never jumps.
@@ -435,12 +436,17 @@ export function ScraperPanel() {
               <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
                 City *
               </label>
-              <input
+              <Combobox
                 value={city}
-                onChange={e => setCity(e.target.value)}
-                required
-                placeholder="e.g. Dallas"
-                className="w-full bg-slate-800 border border-slate-600 rounded-xl px-3 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+                onChange={val => {
+                  setCity(val)
+                  // Auto-fill the State field when a known city is selected
+                  const autoState = CITY_STATE_MAP[val.toLowerCase()]
+                  if (autoState && !state) setState(autoState)
+                }}
+                options={CITY_OPTIONS}
+                placeholder="Edmonton, Dallas…"
+                allowFreeText
               />
             </div>
 
@@ -624,8 +630,8 @@ export function ScraperPanel() {
                 <p className="text-slate-500 text-xs">
                   Tip: <strong className="text-slate-400">Max Reviews</strong> targets under-reviewed
                   businesses (easier cold-call wins). <strong className="text-slate-400">No Website</strong> focuses
-                  on businesses that would most benefit from your services.
-                  Phone is always required.
+                  on businesses that need digital services most. Phone is optional — leads
+                  without one get flagged for manual research.
                 </p>
               </div>
             )}

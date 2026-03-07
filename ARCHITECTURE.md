@@ -102,6 +102,8 @@ leadparser/
     │   └── AssignPanel.tsx   Assign N leads to a caller by niche/city
     └── lib/
         ├── types.ts           Lead, ScraperJob, CallerStats types
+        ├── niches.ts          NICHE_COMBO_OPTIONS — grouped niche list with General categories
+        ├── cities.ts          CITY_OPTIONS — major NA cities for city autocomplete
         ├── supabase/          Browser + server Supabase clients
         └── north-america.ts   US states + Canadian provinces lookup
 ```
@@ -172,34 +174,28 @@ Labels: ≥22 = HOT, ≥15 = WARM, ≥8 = MEDIUM, <8 = LOW
 ## 5. Known Limitations (current)
 
 1. **Supplementary scrapers are US-only** — Yelp/Yellow Pages/BBB have thin
-   Canadian/international coverage. For non-US cities, all leads must have their
-   phone found directly on Google Maps (which works fine; the issue was a missing
-   wait for the phone DOM element to render).
+   Canadian/international coverage. For non-US cities, phones must be found
+   directly on Google Maps (the phone DOM wait was fixed in v2).
 
-2. **Google Maps result cap** — `max_scroll_attempts` limits to ~50–80 results.
-   For a 200-lead job, the scraper needs to be given multiple niches or the cap
-   needs raising.
-
-3. **Single-machine scraper** — worker.py runs on one machine. Parallel scraping
+2. **Single-machine scraper** — worker.py runs on one machine. Parallel scraping
    requires running multiple worker instances or a distributed queue.
 
-4. **No CAPTCHA handling** — if Google serves a CAPTCHA, the scraper gets 0 results
-   for that search with no retry.
+3. **No CAPTCHA handling** — if Google serves a CAPTCHA, the scraper gets 0
+   results for that search with no retry.
 
-5. **Phone always required** — any lead without a phone number is dropped. This
-   is correct for cold calling but reduces yield from businesses that list only a
-   contact form.
+4. **Keyword expansion run-time** — "General" category jobs search 10–15 query
+   variants, so a `--limit 50` job can take 15–30 min depending on city size.
+   Consider using specific niches for faster targeted runs.
 
 ---
 
 ## 6. Short-Term Improvements (1–4 weeks)
 
 ### Scraper quality
-- [ ] **Increase scroll cap** — raise `max_scroll_attempts` to 40+ for large cities;
-      Google Maps typically shows 60–120 results per search.
-- [ ] **Multi-query strategy** — search `"restaurants near downtown Calgary"` +
-      `"restaurants Calgary AB"` + `"best restaurants Calgary"` and union-dedup.
-      Dramatically increases yield per niche.
+- [x] **Multi-query strategy** — `NICHE_EXPANSIONS` dict in `google_maps.py` searches
+      the canonical niche + up to 12 keyword variants per niche, union-deduped.
+      General categories (food, medical, beauty…) expand to all sub-niches.
+- [x] **Keyword expansion for all niches** — 60+ niches covered, 6–12 variants each.
 - [ ] **CAPTCHA wait** — detect the CAPTCHA page by checking the URL or title;
       pause and log a warning instead of silently returning 0 results.
 - [ ] **Canadian supplementary source** — add a Canada411.ca or YellowPages.ca
@@ -332,4 +328,4 @@ Convert the single-org setup to multi-tenant:
 
 ---
 
-*Last updated: 2026-03-05*
+*Last updated: 2026-03-07*
