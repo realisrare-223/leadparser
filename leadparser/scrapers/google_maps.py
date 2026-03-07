@@ -50,114 +50,111 @@ logger = logging.getLogger(__name__)
 # at ~60 per query (common in mid-size cities like Edmonton, Calgary, etc.).
 # ---------------------------------------------------------------------------
 NICHE_EXPANSIONS: dict[str, list[str]] = {
+
+    # ── Food & Beverage ───────────────────────────────────────────────────────
+
     "restaurants": [
         "family restaurants", "local restaurants", "food near me",
-        "diners", "eateries", "cafes", "bistros", "takeout restaurants",
-        "sit-down restaurants", "neighbourhood restaurants",
+        "diners", "eateries", "places to eat", "takeout restaurants",
+        "outdoor seating restaurants", "sit-down restaurants",
+        "neighbourhood restaurants", "bistros", "cafes",
     ],
     "food": [
         "restaurants", "diners", "eateries", "food shops", "cafes",
-        "bistros", "takeout food", "local food spots",
+        "bistros", "takeout food", "local food spots", "places to eat",
     ],
     "cafes": [
-        "coffee shops", "coffee houses", "espresso bars", "local cafes",
-        "bakery cafes", "tea shops", "brunch spots",
+        "coffee shops", "coffee near me", "local roasters", "espresso bar",
+        "cafes with free wifi", "late-night cafes", "artisanal coffee",
+        "tea house", "study cafes", "coffee houses", "brunch spots",
     ],
+    "coffee shops": [
+        "cafes", "coffee near me", "local roasters", "espresso bar",
+        "artisanal coffee", "tea house", "late-night cafes", "coffee houses",
+    ],
+    "pizzerias": [
+        "pizza delivery", "wood-fired pizza", "best pizza", "deep dish pizza",
+        "gluten-free pizza", "24-hour pizza takeout", "pizza restaurants",
+        "pizza near me", "Italian restaurant", "pizza shop",
+    ],
+    "pizza": [
+        "pizzerias", "pizza delivery", "pizza restaurants", "wood-fired pizza",
+        "best pizza near me", "pizza shop", "Italian restaurant",
+    ],
+    "bakeries": [
+        "custom cakes", "local bakery", "fresh pastries", "gluten-free bakery",
+        "dessert shop", "donut shop", "wedding cake baker", "vegan desserts",
+        "cake shop", "pastry shop", "bread bakery",
+    ],
+    "dessert shops": [
+        "ice cream parlor", "donut shop", "local bakery", "custom cakes",
+        "vegan desserts", "gluten-free bakery", "cake shop", "sweet shop",
+        "frozen yogurt", "gelato",
+    ],
+    "bars": [
+        "sports bar", "cocktail lounge", "local pub", "dive bars",
+        "craft brewery", "wine bar", "nightlife near me", "bars with live music",
+        "bar and grill", "neighbourhood bar",
+    ],
+    "nightlife": [
+        "bars near me", "sports bar", "cocktail lounge", "local pub",
+        "craft brewery", "wine bar", "bars with live music", "nightclub",
+        "dance club", "lounge",
+    ],
+    "fast food": [
+        "drive-thru near me", "quick lunch spots", "burger joints",
+        "taco stands", "sandwich shops", "late-night fast food",
+        "takeout near me", "quick service restaurant", "food to go",
+    ],
+
+    # ── Home & Trade Services ─────────────────────────────────────────────────
+
     "plumbers": [
-        "plumbing services", "emergency plumbers", "plumbing repair",
-        "local plumbers", "drain cleaning services", "pipe repair",
-        "residential plumbing", "commercial plumbing",
+        "emergency plumber", "residential plumbing contractor", "leak repair",
+        "water heater installation", "drain cleaning service", "24/7 plumbing",
+        "plumbing services", "plumbing repair", "local plumbers",
+        "pipe repair", "residential plumbing", "commercial plumbing",
     ],
     "plumbing": [
-        "plumbers", "plumbing services", "plumbing repair", "drain cleaning",
-        "pipe repair", "local plumbing", "emergency plumbing",
+        "plumbers", "emergency plumber", "plumbing services", "plumbing repair",
+        "drain cleaning", "pipe repair", "water heater installation",
+        "local plumbing", "24/7 plumbing",
     ],
     "electricians": [
-        "electrical contractors", "electrical services", "licensed electricians",
-        "residential electricians", "commercial electricians", "local electricians",
-        "electrical repair", "wiring services",
+        "residential electrician", "emergency electrical repair",
+        "licensed electrician", "home rewiring", "panel upgrade",
+        "commercial electrician", "electrical contractors",
+        "electrical services", "local electricians", "wiring services",
     ],
     "hvac contractors": [
-        "heating and cooling", "air conditioning repair", "AC repair services",
-        "furnace repair", "HVAC services", "heating contractors",
-        "air conditioning installation", "duct cleaning",
-    ],
-    "auto detailing": [
-        "car detailing", "mobile car detailing", "auto detailing services",
-        "vehicle detailing", "car wash detailing", "full detail car wash",
-        "paint correction", "ceramic coating",
-    ],
-    "car detailing": [
-        "auto detailing", "mobile detailing", "car detailing services",
-        "vehicle detailing", "paint protection", "car cleaning",
-        "interior detailing", "exterior detailing",
-    ],
-    "mobile car detailing": [
-        "mobile auto detailing", "at-home car detailing", "car detailing",
-        "mobile vehicle detailing", "auto detailing", "mobile detailers",
-    ],
-    "hair salons": [
-        "hair stylists", "hair studios", "beauty salons", "hair care services",
-        "local hair salons", "women's hair salons", "hair colour specialists",
-        "blow dry bars",
-    ],
-    "barber shops": [
-        "barbers", "men's hair salons", "barbershops", "men's grooming",
-        "local barbers", "hair cut shops",
-    ],
-    "nail salons": [
-        "nail studios", "manicure pedicure", "nail technicians", "gel nails",
-        "nail care", "beauty nails", "acrylic nails", "nail spas",
+        "AC repair near me", "furnace installation", "heating contractor",
+        "duct cleaning", "emergency HVAC", "AC maintenance",
+        "heating and cooling", "air conditioning repair", "HVAC services",
+        "air conditioning installation", "furnace repair",
     ],
     "roofing contractors": [
-        "roofing services", "roof repair", "roofers", "roofing companies",
-        "local roofers", "residential roofing", "commercial roofing",
+        "local roofers", "roof leak repair", "roofing contractor",
+        "shingle replacement", "commercial roofing", "roof inspection",
+        "roofing services", "roof repair", "roofers", "residential roofing",
         "roof replacement",
     ],
-    "landscaping services": [
-        "lawn care", "landscapers", "yard maintenance", "garden services",
-        "lawn maintenance", "local landscaping", "yard care",
-        "snow removal and landscaping",
-    ],
     "cleaning services": [
-        "house cleaning", "maid services", "commercial cleaning", "janitorial services",
-        "residential cleaning", "office cleaning", "move-out cleaning",
-        "deep cleaning services",
+        "maid service", "house cleaning near me", "move-out cleaning",
+        "commercial janitorial services", "deep cleaning", "carpet cleaning",
+        "residential cleaning", "office cleaning", "commercial cleaning",
+        "janitorial services",
+    ],
+    "landscaping services": [
+        "lawn mowing service", "landscape design", "tree removal",
+        "local arborists", "hardscaping contractor", "seasonal yard cleanup",
+        "lawn care", "landscapers", "yard maintenance", "garden services",
+        "snow removal",
     ],
     "pest control": [
-        "exterminator", "bug control", "rodent control", "termite services",
+        "exterminator near me", "bed bug removal", "rodent control",
+        "termite inspection", "eco-friendly pest control", "bug control",
         "pest management", "insect control", "local exterminators",
         "wildlife removal",
-    ],
-    "auto repair shops": [
-        "car repair", "mechanic", "auto mechanics", "vehicle repair",
-        "oil change", "car service centre", "auto service shops",
-        "transmission repair",
-    ],
-    "dentists": [
-        "dental clinics", "dental care", "family dentist", "cosmetic dentistry",
-        "teeth cleaning", "local dentist", "dental offices",
-        "emergency dentist",
-    ],
-    "chiropractors": [
-        "chiropractic care", "chiropractic clinics", "spinal adjustment",
-        "back pain treatment", "local chiropractors", "physiotherapy",
-        "massage therapy",
-    ],
-    "pet grooming": [
-        "dog grooming", "cat grooming", "pet salon", "animal grooming",
-        "mobile pet grooming", "dog groomers", "pet spa",
-        "dog wash",
-    ],
-    "locksmiths": [
-        "locksmith services", "emergency locksmith", "lock and key",
-        "car locksmith", "residential locksmith", "local locksmiths",
-        "lock repair", "key cutting",
-    ],
-    "towing services": [
-        "tow truck", "roadside assistance", "car towing", "vehicle recovery",
-        "emergency towing", "local towing", "flatbed towing",
-        "accident towing",
     ],
     "painters": [
         "painting contractors", "house painters", "interior painters",
@@ -167,28 +164,236 @@ NICHE_EXPANSIONS: dict[str, list[str]] = {
     "tree services": [
         "tree removal", "tree trimming", "arborist", "tree cutting",
         "stump removal", "tree care", "tree pruning", "local arborists",
+        "emergency tree removal",
     ],
     "water damage restoration": [
         "flood restoration", "water damage repair", "mold remediation",
         "water damage cleanup", "emergency restoration", "flood cleanup",
         "basement flooding repair",
     ],
-    "emergency services": [
-        "24 hour emergency services", "emergency repair contractors",
-        "urgent home repair", "emergency plumbers", "emergency electricians",
-    ],
     "moving companies": [
         "movers", "local movers", "residential moving", "commercial moving",
         "moving services", "furniture movers", "long distance movers",
+        "moving and storage", "packing services",
     ],
-    "gyms": [
-        "fitness centres", "fitness clubs", "workout gyms", "local gyms",
-        "personal training", "health clubs", "crossfit gyms",
+    "locksmiths": [
+        "locksmith services", "emergency locksmith", "lock and key",
+        "car locksmith", "residential locksmith", "local locksmiths",
+        "lock repair", "key cutting", "24 hour locksmith",
+    ],
+    "towing services": [
+        "tow truck", "roadside assistance", "car towing", "vehicle recovery",
+        "emergency towing", "local towing", "flatbed towing",
+        "accident towing", "24 hour towing",
+    ],
+    "emergency services": [
+        "24 hour emergency services", "emergency repair contractors",
+        "urgent home repair", "emergency plumbers", "emergency electricians",
+        "emergency HVAC", "emergency locksmith",
+    ],
+
+    # ── Medical & Healthcare ──────────────────────────────────────────────────
+
+    "dentists": [
+        "family dentist", "cosmetic dentistry", "emergency dental repair",
+        "teeth whitening", "orthodontist near me", "oral surgeon",
+        "pediatric dentist", "dental clinics", "dental care",
+        "local dentist", "dental offices",
+    ],
+    "chiropractors": [
+        "back pain relief", "local chiropractor", "sports injury rehab",
+        "physical therapy clinic", "auto accident chiropractor",
+        "chiropractic care", "chiropractic clinics", "spinal adjustment",
+        "back pain treatment",
+    ],
+    "clinics": [
+        "family doctor", "urgent care near me", "walk-in clinic",
+        "general practitioner", "pediatric clinic", "telehealth services",
+        "medical clinic", "health clinic", "primary care doctor",
+    ],
+    "urgent care": [
+        "walk-in clinic", "emergency clinic", "urgent care near me",
+        "after-hours clinic", "same-day doctor", "medical clinic",
+    ],
+    "pharmacies": [
+        "24-hour pharmacy", "local drugstore", "prescription refill",
+        "compounding pharmacy", "drive-thru pharmacy", "pharmacy near me",
+        "drugstore", "chemist",
+    ],
+    "optometrists": [
+        "eye doctor near me", "prescription glasses", "eye exam",
+        "contact lens fitting", "local optometrist", "vision care",
+        "eyeglasses store", "eye clinic",
+    ],
+    "physical therapy": [
+        "physiotherapy", "sports rehab", "physical therapist near me",
+        "sports injury clinic", "rehabilitation clinic",
+        "back pain physical therapy", "physiotherapy clinic",
+    ],
+
+    # ── Beauty & Wellness ─────────────────────────────────────────────────────
+
+    "hair salons": [
+        "haircuts near me", "color specialist", "balayage salon",
+        "curly hair specialist", "men's haircuts", "bridal hair styling",
+        "hair stylists", "hair studios", "beauty salons",
+        "women's hair salons", "blow dry bars",
+    ],
+    "barber shops": [
+        "local barber", "fade haircut", "beard trim",
+        "traditional hot towel shave", "men's grooming",
+        "barbers", "men's hair salons", "barbershops", "hair cut shops",
+    ],
+    "nail salons": [
+        "acrylic nails", "gel manicure", "pedicure spa", "nail art",
+        "local nail bar", "dip powder nails", "nail studios",
+        "manicure pedicure", "nail technicians", "nail spas",
+    ],
+    "spas": [
+        "day spa near me", "facial treatments", "medical spa",
+        "reflexology", "couples massage", "body wrap",
+        "luxury spa", "wellness spa", "beauty spa",
     ],
     "massage therapy": [
+        "deep tissue massage", "couples massage", "day spa near me",
         "massage therapists", "therapeutic massage", "sports massage",
-        "relaxation massage", "local massage therapy", "deep tissue massage",
-        "registered massage therapists",
+        "relaxation massage", "registered massage therapists",
+        "local massage therapy",
+    ],
+    "gyms": [
+        "24-hour gym", "personal trainer", "yoga studio",
+        "pilates class", "crossfit box", "martial arts school",
+        "boutique fitness", "fitness centres", "fitness clubs",
+        "workout gyms", "health clubs",
+    ],
+    "fitness": [
+        "gym near me", "personal trainer", "yoga studio", "pilates",
+        "crossfit", "fitness club", "workout studio", "health club",
+        "bootcamp classes",
+    ],
+    "yoga studios": [
+        "yoga classes near me", "hot yoga", "yoga instructor",
+        "meditation classes", "pilates studio", "mindfulness classes",
+    ],
+    "pet grooming": [
+        "dog grooming", "cat grooming", "pet salon", "animal grooming",
+        "mobile pet grooming", "dog groomers", "pet spa", "dog wash",
+    ],
+
+    # ── Automotive ────────────────────────────────────────────────────────────
+
+    "auto repair shops": [
+        "mechanic near me", "auto repair shop", "oil change",
+        "brake repair", "transmission specialist", "engine diagnostics",
+        "car repair", "auto mechanics", "vehicle repair",
+        "car service centre",
+    ],
+    "auto detailing": [
+        "car detailing", "mobile car detailing", "auto detailing services",
+        "vehicle detailing", "hand car wash", "ceramic coating",
+        "interior car cleaning", "paint correction",
+        "car wash detailing", "full detail car wash",
+    ],
+    "car detailing": [
+        "auto detailing", "mobile detailing", "car detailing services",
+        "vehicle detailing", "paint protection", "ceramic coating",
+        "interior detailing", "exterior detailing",
+    ],
+    "mobile car detailing": [
+        "mobile auto detailing", "at-home car detailing", "car detailing",
+        "mobile vehicle detailing", "auto detailing", "mobile detailers",
+    ],
+    "auto body shops": [
+        "collision repair", "dent removal", "auto paint shop",
+        "scratch repair", "bumper repair", "auto body repair",
+        "car body shop", "fender repair", "hail damage repair",
+    ],
+    "tire shops": [
+        "discount tires", "tire repair", "wheel alignment",
+        "winter tires", "local tire dealer", "tire change",
+        "flat tire repair", "tire installation",
+    ],
+    "car wash": [
+        "touchless car wash", "automatic car wash", "hand car wash",
+        "full-service car wash", "car wash near me", "drive-through car wash",
+    ],
+
+    # ── Professional & B2B Services ───────────────────────────────────────────
+
+    "real estate agents": [
+        "realtors near me", "listing agent", "home buyers agent",
+        "commercial real estate", "property management companies",
+        "real estate broker", "local realtor", "home selling agent",
+    ],
+    "lawyers": [
+        "personal injury lawyer", "family law attorney", "divorce lawyer",
+        "criminal defense attorney", "estate planning attorney",
+        "local attorney", "law firm near me", "legal services",
+    ],
+    "attorneys": [
+        "personal injury lawyer", "family law attorney", "divorce lawyer",
+        "criminal defense", "estate planning attorney", "local lawyer",
+        "law firm", "legal services",
+    ],
+    "accountants": [
+        "CPA near me", "tax preparation", "small business bookkeeping",
+        "financial advisor", "payroll services", "tax accountant",
+        "local accounting firm", "income tax services",
+    ],
+    "marketing agencies": [
+        "local SEO agency", "web developers", "digital marketing consultant",
+        "social media management", "graphic design studio",
+        "online marketing agency", "advertising agency", "web design agency",
+    ],
+    "web design": [
+        "web developers", "website design", "local SEO agency",
+        "digital marketing", "web design agency", "website developers",
+        "ecommerce website design",
+    ],
+
+    # ── Retail & Shopping ─────────────────────────────────────────────────────
+
+    "clothing stores": [
+        "local boutiques", "men's clothing store", "shoe store near me",
+        "vintage clothing", "formal wear", "plus-size clothing",
+        "fashion boutique", "women's clothing store", "thrift store",
+    ],
+    "florists": [
+        "flower delivery", "wedding florist", "custom bouquets",
+        "local flower shop", "sympathy flowers", "flower arrangements",
+        "event florist", "same-day flower delivery",
+    ],
+    "electronics repair": [
+        "phone repair near me", "computer repair shop", "screen replacement",
+        "local electronics store", "laptop repair", "iphone repair",
+        "tablet repair", "device repair",
+    ],
+    "furniture stores": [
+        "mattress store", "local furniture shop", "home decor boutique",
+        "office furniture", "vintage furniture", "sofa store",
+        "bedroom furniture", "custom furniture",
+    ],
+
+    # ── Hospitality & Events ──────────────────────────────────────────────────
+
+    "hotels": [
+        "hotels near me", "boutique hotels", "pet-friendly motels",
+        "bed and breakfast", "luxury resorts", "extended stay hotels",
+        "affordable hotels", "local inn",
+    ],
+    "event venues": [
+        "wedding venues", "banquet halls", "corporate event space",
+        "party room rental", "outdoor venues", "reception hall",
+        "conference centre", "function room",
+    ],
+    "wedding venues": [
+        "wedding reception hall", "outdoor wedding venues",
+        "banquet halls", "wedding event space", "bridal venue",
+        "garden wedding venue",
+    ],
+    "travel agencies": [
+        "local travel agency", "tour guides", "airport shuttle service",
+        "passport photo service", "vacation packages", "travel consultants",
     ],
 }
 
