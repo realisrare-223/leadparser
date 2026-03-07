@@ -42,6 +42,156 @@ from .base_scraper import BaseScraper
 
 logger = logging.getLogger(__name__)
 
+# ---------------------------------------------------------------------------
+# Keyword expansion map
+# When a niche is searched, these variants are searched in order after the
+# canonical term until max_results_per_niche unique listings are collected.
+# This dramatically increases yield for niches where Google Maps caps results
+# at ~60 per query (common in mid-size cities like Edmonton, Calgary, etc.).
+# ---------------------------------------------------------------------------
+NICHE_EXPANSIONS: dict[str, list[str]] = {
+    "restaurants": [
+        "family restaurants", "local restaurants", "food near me",
+        "diners", "eateries", "cafes", "bistros", "takeout restaurants",
+        "sit-down restaurants", "neighbourhood restaurants",
+    ],
+    "food": [
+        "restaurants", "diners", "eateries", "food shops", "cafes",
+        "bistros", "takeout food", "local food spots",
+    ],
+    "cafes": [
+        "coffee shops", "coffee houses", "espresso bars", "local cafes",
+        "bakery cafes", "tea shops", "brunch spots",
+    ],
+    "plumbers": [
+        "plumbing services", "emergency plumbers", "plumbing repair",
+        "local plumbers", "drain cleaning services", "pipe repair",
+        "residential plumbing", "commercial plumbing",
+    ],
+    "plumbing": [
+        "plumbers", "plumbing services", "plumbing repair", "drain cleaning",
+        "pipe repair", "local plumbing", "emergency plumbing",
+    ],
+    "electricians": [
+        "electrical contractors", "electrical services", "licensed electricians",
+        "residential electricians", "commercial electricians", "local electricians",
+        "electrical repair", "wiring services",
+    ],
+    "hvac contractors": [
+        "heating and cooling", "air conditioning repair", "AC repair services",
+        "furnace repair", "HVAC services", "heating contractors",
+        "air conditioning installation", "duct cleaning",
+    ],
+    "auto detailing": [
+        "car detailing", "mobile car detailing", "auto detailing services",
+        "vehicle detailing", "car wash detailing", "full detail car wash",
+        "paint correction", "ceramic coating",
+    ],
+    "car detailing": [
+        "auto detailing", "mobile detailing", "car detailing services",
+        "vehicle detailing", "paint protection", "car cleaning",
+        "interior detailing", "exterior detailing",
+    ],
+    "mobile car detailing": [
+        "mobile auto detailing", "at-home car detailing", "car detailing",
+        "mobile vehicle detailing", "auto detailing", "mobile detailers",
+    ],
+    "hair salons": [
+        "hair stylists", "hair studios", "beauty salons", "hair care services",
+        "local hair salons", "women's hair salons", "hair colour specialists",
+        "blow dry bars",
+    ],
+    "barber shops": [
+        "barbers", "men's hair salons", "barbershops", "men's grooming",
+        "local barbers", "hair cut shops",
+    ],
+    "nail salons": [
+        "nail studios", "manicure pedicure", "nail technicians", "gel nails",
+        "nail care", "beauty nails", "acrylic nails", "nail spas",
+    ],
+    "roofing contractors": [
+        "roofing services", "roof repair", "roofers", "roofing companies",
+        "local roofers", "residential roofing", "commercial roofing",
+        "roof replacement",
+    ],
+    "landscaping services": [
+        "lawn care", "landscapers", "yard maintenance", "garden services",
+        "lawn maintenance", "local landscaping", "yard care",
+        "snow removal and landscaping",
+    ],
+    "cleaning services": [
+        "house cleaning", "maid services", "commercial cleaning", "janitorial services",
+        "residential cleaning", "office cleaning", "move-out cleaning",
+        "deep cleaning services",
+    ],
+    "pest control": [
+        "exterminator", "bug control", "rodent control", "termite services",
+        "pest management", "insect control", "local exterminators",
+        "wildlife removal",
+    ],
+    "auto repair shops": [
+        "car repair", "mechanic", "auto mechanics", "vehicle repair",
+        "oil change", "car service centre", "auto service shops",
+        "transmission repair",
+    ],
+    "dentists": [
+        "dental clinics", "dental care", "family dentist", "cosmetic dentistry",
+        "teeth cleaning", "local dentist", "dental offices",
+        "emergency dentist",
+    ],
+    "chiropractors": [
+        "chiropractic care", "chiropractic clinics", "spinal adjustment",
+        "back pain treatment", "local chiropractors", "physiotherapy",
+        "massage therapy",
+    ],
+    "pet grooming": [
+        "dog grooming", "cat grooming", "pet salon", "animal grooming",
+        "mobile pet grooming", "dog groomers", "pet spa",
+        "dog wash",
+    ],
+    "locksmiths": [
+        "locksmith services", "emergency locksmith", "lock and key",
+        "car locksmith", "residential locksmith", "local locksmiths",
+        "lock repair", "key cutting",
+    ],
+    "towing services": [
+        "tow truck", "roadside assistance", "car towing", "vehicle recovery",
+        "emergency towing", "local towing", "flatbed towing",
+        "accident towing",
+    ],
+    "painters": [
+        "painting contractors", "house painters", "interior painters",
+        "exterior painting", "commercial painters", "local painters",
+        "residential painters", "painting services",
+    ],
+    "tree services": [
+        "tree removal", "tree trimming", "arborist", "tree cutting",
+        "stump removal", "tree care", "tree pruning", "local arborists",
+    ],
+    "water damage restoration": [
+        "flood restoration", "water damage repair", "mold remediation",
+        "water damage cleanup", "emergency restoration", "flood cleanup",
+        "basement flooding repair",
+    ],
+    "emergency services": [
+        "24 hour emergency services", "emergency repair contractors",
+        "urgent home repair", "emergency plumbers", "emergency electricians",
+    ],
+    "moving companies": [
+        "movers", "local movers", "residential moving", "commercial moving",
+        "moving services", "furniture movers", "long distance movers",
+    ],
+    "gyms": [
+        "fitness centres", "fitness clubs", "workout gyms", "local gyms",
+        "personal training", "health clubs", "crossfit gyms",
+    ],
+    "massage therapy": [
+        "massage therapists", "therapeutic massage", "sports massage",
+        "relaxation massage", "local massage therapy", "deep tissue massage",
+        "registered massage therapists",
+    ],
+}
+
 
 class GoogleMapsScraper(BaseScraper):
     """
@@ -57,78 +207,123 @@ class GoogleMapsScraper(BaseScraper):
         """
         Search Google Maps for *niche* in *location* and return all leads.
 
+        Searches the canonical niche term first, then keyword expansions from
+        NICHE_EXPANSIONS in order until max_results_per_niche unique listings
+        are collected.  This overcomes Google Maps' ~60-result cap per query
+        and ensures enough raw leads to hit the user's --limit target.
+
         Parameters
         ----------
-        niche       : e.g. "plumbers"
+        niche       : e.g. "restaurants"
         location    : dict with keys city, state (from config.yaml → location)
-        on_progress : optional callable(current: int, total: int) — called after
-                      each listing so the caller can update a progress bar.
+        on_progress : optional callable(current: int, total: int)
         """
-        query = f"{niche} in {location['city']}, {location['state']}"
-        url   = self.BASE_URL.format(query=quote_plus(query))
+        max_results  = self.config["scraping"].get("max_results_per_niche", 60)
+        city_state   = f"{location['city']}, {location['state']}"
 
-        self.logger.info(f"Searching Google Maps: '{query}'")
+        # Build ordered list of search terms: canonical niche first, then expansions
+        expansions   = NICHE_EXPANSIONS.get(niche.lower().strip(), [])
+        search_terms = [niche] + expansions
 
-        if not self._safe_get(url):
-            self.logger.error(f"Could not load Google Maps for '{niche}'")
-            return []
+        # Phase A: collect profile URLs across all search term variants
+        global_seen: set[str]  = set()
+        all_urls:    list[str] = []
 
-        # Collect all business profile URLs from the results sidebar
-        profile_urls = self._collect_result_urls()
+        for term in search_terms:
+            remaining = max_results - len(all_urls)
+            if remaining <= 0:
+                break
+
+            query = f"{term} in {city_state}"
+            url   = self.BASE_URL.format(query=quote_plus(query))
+            self.logger.info(f"Searching Google Maps: '{query}'")
+
+            if not self._safe_get(url):
+                self.logger.warning(f"Could not load Google Maps for '{term}' — skipping")
+                continue
+
+            new_urls = self._collect_result_urls(
+                max_collect=remaining,
+                exclude_urls=global_seen,
+            )
+            for u in new_urls:
+                global_seen.add(u)
+                all_urls.append(u)
+
+            self.logger.info(
+                f"  '{term}': +{len(new_urls)} listings "
+                f"(total unique: {len(all_urls)}/{max_results})"
+            )
+
+            if len(all_urls) >= max_results:
+                break
+
         self.logger.info(
-            f"Found {len(profile_urls)} listings for '{niche}'"
+            f"Collected {len(all_urls)} unique listings for '{niche}' "
+            f"across {len(search_terms)} search terms"
         )
 
+        # Phase B: extract business data from each profile URL
         leads = []
-        for i, profile_url in enumerate(profile_urls, start=1):
-            self.logger.info(f"  [{i}/{len(profile_urls)}] Extracting: {profile_url[:80]}…")
+        for i, profile_url in enumerate(all_urls, start=1):
+            self.logger.info(f"  [{i}/{len(all_urls)}] Extracting: {profile_url[:80]}…")
             try:
                 lead = self._extract_business(profile_url, niche)
                 if lead:
                     leads.append(lead)
             except Exception as exc:
                 self.logger.warning(f"  Skipping listing {i}: {exc}")
-            # Report per-listing progress so callers can animate a progress bar
             if on_progress:
                 try:
-                    on_progress(i, len(profile_urls))
+                    on_progress(i, len(all_urls))
                 except Exception:
                     pass
-            # Polite delay between individual listings
             self.rate_limiter.wait()
 
         return leads
 
     # ── Step 1: collect profile URLs from the search results feed ─────
 
-    def _collect_result_urls(self) -> list[str]:
+    def _collect_result_urls(
+        self,
+        max_collect: int = None,
+        exclude_urls: set = None,
+    ) -> list[str]:
         """
-        Scroll the Google Maps sidebar and collect all business profile URLs.
+        Scroll the Google Maps sidebar and collect business profile URLs.
 
-        Uses `a.hfpxzc` elements whose href contains '/maps/place/'.
-        Returns a deduplicated, ordered list capped at max_results_per_niche.
+        Parameters
+        ----------
+        max_collect  : stop after this many NEW (non-excluded) URLs.
+                       Defaults to max_results_per_niche from config.
+        exclude_urls : set of URLs already collected — skipped here so
+                       callers can merge results across multiple searches
+                       without duplicates.
+
+        Returns a list of new, deduplicated URLs up to max_collect.
         """
-        max_results    = self.config["scraping"].get("max_results_per_niche", 60)
+        if max_collect is None:
+            max_collect = self.config["scraping"].get("max_results_per_niche", 60)
         pause          = self.config["scraping"].get("scroll_pause_time", 2.0)
         max_scroll_att = self.config["scraping"].get("max_scroll_attempts", 20)
+
+        # seen includes already-collected URLs so we skip them transparently
+        seen: set[str] = set(exclude_urls) if exclude_urls else set()
 
         # Wait for the results feed container to appear
         feed = self._wait_for('div[role="feed"]', timeout=10)
         if not feed:
-            # Sometimes results appear without the feed wrapper
             feed = self._wait_for("div.m6QErb", timeout=5)
         if not feed:
             self.logger.error("Results feed did not load — possible CAPTCHA or rate-limit")
             return []
 
-        urls: list[str]  = []
-        seen: set[str]   = set()
-        no_new_count     = 0
-        scroll_attempts  = 0
+        urls: list[str] = []   # only NEW (non-excluded) URLs
+        no_new_count    = 0
+        scroll_attempts = 0
 
         while scroll_attempts < max_scroll_att and no_new_count < 3:
-            # Gather all business links currently rendered
-            links = self.driver.find_elements(By.CSS_SELECTOR, "a.hfpxzc")
+            links    = self.driver.find_elements(By.CSS_SELECTOR, "a.hfpxzc")
             prev_len = len(urls)
 
             for link in links:
@@ -145,27 +340,24 @@ class GoogleMapsScraper(BaseScraper):
             else:
                 no_new_count = 0
 
-            # Check for "end of results" sentinel text
             if self._end_of_results_reached():
                 self.logger.info("Reached end of Google Maps results")
                 break
 
-            if len(urls) >= max_results:
-                self.logger.info(f"Reached max_results_per_niche ({max_results})")
+            if len(urls) >= max_collect:
+                self.logger.info(f"Collected {max_collect} new listings — stopping scroll")
                 break
 
-            # Scroll the feed
             try:
                 self._scroll_element(feed, pixels=random.randint(700, 1000))
             except Exception:
-                # Feed element went stale — re-find it
                 feed = self._wait_for('div[role="feed"]', timeout=5)
 
             time.sleep(pause + random.uniform(0, 1.0))
             scroll_attempts += 1
 
-        self.logger.debug(f"Collected {len(urls)} URLs after {scroll_attempts} scrolls")
-        return urls[:max_results]
+        self.logger.debug(f"Collected {len(urls)} new URLs after {scroll_attempts} scrolls")
+        return urls[:max_collect]
 
     def _end_of_results_reached(self) -> bool:
         """Detect the "You've reached the end of the list" notice."""

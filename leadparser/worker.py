@@ -154,7 +154,8 @@ def run_job(job: dict) -> tuple[int, str]:
         cmd += ['--exclude-website']
     elif wf == 'yes':
         cmd += ['--require-website']
-    cmd += ['--require-phone']   # phone always required
+    if job.get('require_phone', False):
+        cmd += ['--require-phone']
     if job.get('min_score', 0) > 0:
         cmd += ['--min-score', str(job['min_score'])]
 
