@@ -9,6 +9,7 @@ export default defineConfig({
     globals: true,
     setupFiles: ['./test-setup.ts'],
     include: ['./__tests__/**/*.{test,spec}.{ts,tsx}'],
+    tsconfig: './tsconfig.test.json',
     alias: {
       '@': path.resolve(__dirname, '.'),
     },
