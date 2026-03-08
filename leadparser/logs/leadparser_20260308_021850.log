@@ -1,0 +1,55 @@
+2026-03-08 02:18:50,840 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_021850.log
+2026-03-08 02:18:51,604 | leadparser.main      | INFO     | Live log streaming active — job 90cff6ef
+2026-03-08 02:18:52,407 | utils.proxy_manager  | INFO     | Parsed 497 proxies from https://api.proxyscrape.com/v2/?request=getproxies&protocol=
+2026-03-08 02:18:53,928 | utils.proxy_manager  | INFO     | Parsed 379 proxies from Geonode API
+2026-03-08 02:18:54,607 | utils.proxy_manager  | INFO     | Parsed 2989 proxies from https://raw.githubusercontent.com/TheSpeedX/PROXY-List/maste
+2026-03-08 02:18:55,963 | utils.proxy_manager  | INFO     | Parsed 300 proxies from https://free-proxy-list.net/
+2026-03-08 02:18:55,965 | utils.proxy_manager  | INFO     | Fetched 4165 raw proxies; testing…
+2026-03-08 02:18:55,965 | utils.proxy_manager  | INFO     | Proxy pool ready: 4165 working proxies
+2026-03-08 02:18:56,556 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 02:18:56,557 | leadparser.supabase  | INFO     | Session 20260308_021856 | niches: ['food', 'barber shops', 'automotive'] | city: Edmonton
+2026-03-08 02:18:56,557 | leadparser.main      | INFO     | Session #20260308_021856 | 3 niche(s) | location: Edmonton, Alberta | target: 50 filtered leads
+2026-03-08 02:18:57,707 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'food'
+2026-03-08 02:18:57,977 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food in Edmonton, Alberta'
+2026-03-08 02:18:58,456 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food': Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.google.com/maps/search/food+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:19:08,466 | PlaywrightGoogleMapsScraper | WARNING  |   Results feed not found — possible CAPTCHA
+2026-03-08 02:19:09,140 | PlaywrightGoogleMapsScraper | INFO     |   'food': +0 (total: 0/500)
+2026-03-08 02:19:09,140 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'restaurants in Edmonton, Alberta'
+2026-03-08 02:19:09,544 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'restaurants': Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.google.com/maps/search/restaurants+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/restaurants+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:19:19,581 | PlaywrightGoogleMapsScraper | WARNING  |   Results feed not found — possible CAPTCHA
+2026-03-08 02:19:19,786 | PlaywrightGoogleMapsScraper | INFO     |   'restaurants': +0 (total: 0/500)
+2026-03-08 02:19:19,786 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'diners in Edmonton, Alberta'
+2026-03-08 02:19:20,133 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'diners': Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.google.com/maps/search/diners+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/diners+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:19:20,134 | PlaywrightGoogleMapsScraper | WARNING  |   3 consecutive proxy failures — switching to direct connection
+2026-03-08 02:20:36,672 | PlaywrightGoogleMapsScraper | INFO     |   'diners': +63 (total: 63/500)
+2026-03-08 02:20:36,896 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'eateries in Edmonton, Alberta'
+2026-03-08 02:21:17,515 | PlaywrightGoogleMapsScraper | INFO     |   'eateries': +43 (total: 106/500)
+2026-03-08 02:21:17,718 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food shops in Edmonton, Alberta'
+2026-03-08 02:21:55,178 | PlaywrightGoogleMapsScraper | INFO     |   'food shops': +56 (total: 162/500)
+2026-03-08 02:21:55,388 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'cafes in Edmonton, Alberta'
+2026-03-08 02:22:40,219 | PlaywrightGoogleMapsScraper | INFO     |   'cafes': +54 (total: 216/500)
+2026-03-08 02:22:40,466 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'bistros in Edmonton, Alberta'
+2026-03-08 02:23:46,111 | PlaywrightGoogleMapsScraper | INFO     |   'bistros': +28 (total: 244/500)
+2026-03-08 02:23:46,350 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'takeout food in Edmonton, Alberta'
+2026-03-08 02:25:01,754 | PlaywrightGoogleMapsScraper | INFO     |   'takeout food': +34 (total: 278/500)
+2026-03-08 02:25:01,980 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local food spots in Edmonton, Alberta'
+2026-03-08 02:25:39,441 | PlaywrightGoogleMapsScraper | INFO     |   'local food spots': +3 (total: 281/500)
+2026-03-08 02:25:39,687 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'places to eat in Edmonton, Alberta'
+2026-03-08 02:25:53,876 | PlaywrightGoogleMapsScraper | INFO     |   'places to eat': +1 (total: 282/500)
+2026-03-08 02:25:54,119 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local eats in Edmonton, Alberta'
+2026-03-08 02:26:02,645 | PlaywrightGoogleMapsScraper | INFO     |   'local eats': +2 (total: 284/500)
+2026-03-08 02:26:02,892 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food near me in Edmonton, Alberta'
+2026-03-08 02:26:08,923 | PlaywrightGoogleMapsScraper | INFO     |   'food near me': +0 (total: 284/500)
+2026-03-08 02:26:09,269 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'dining near me in Edmonton, Alberta'
+2026-03-08 02:26:15,359 | PlaywrightGoogleMapsScraper | INFO     |   'dining near me': +0 (total: 284/500)
+2026-03-08 02:26:16,162 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 284 unique URLs
+2026-03-08 02:26:16,162 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase B: 284 profiles across 4 parallel worker(s)

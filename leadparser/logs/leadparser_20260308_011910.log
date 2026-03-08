@@ -1,0 +1,7 @@
+2026-03-08 01:19:10,112 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_011910.log
+2026-03-08 01:19:11,629 | leadparser.main      | INFO     | Live log streaming active — job 3dcc597d
+2026-03-08 01:19:12,546 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 01:19:12,547 | leadparser.supabase  | INFO     | Session 20260308_011912 | niches: ['barber shops'] | city: Calgary
+2026-03-08 01:19:12,547 | leadparser.main      | INFO     | Session #20260308_011912 | 1 niche(s) | location: Calgary, Alberta | target: 25 filtered leads
+2026-03-08 01:19:29,262 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 01:19:29,954 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Calgary, Alberta'

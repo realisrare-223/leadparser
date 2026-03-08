@@ -1,0 +1,55 @@
+2026-03-08 02:18:51,085 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_021851.log
+2026-03-08 02:18:51,822 | leadparser.main      | INFO     | Live log streaming active — job d6d95565
+2026-03-08 02:18:52,429 | utils.proxy_manager  | INFO     | Parsed 497 proxies from https://api.proxyscrape.com/v2/?request=getproxies&protocol=
+2026-03-08 02:18:53,980 | utils.proxy_manager  | INFO     | Parsed 379 proxies from Geonode API
+2026-03-08 02:18:54,606 | utils.proxy_manager  | INFO     | Parsed 2989 proxies from https://raw.githubusercontent.com/TheSpeedX/PROXY-List/maste
+2026-03-08 02:18:55,313 | utils.proxy_manager  | INFO     | Parsed 300 proxies from https://free-proxy-list.net/
+2026-03-08 02:18:55,970 | utils.proxy_manager  | INFO     | Fetched 4165 raw proxies; testing…
+2026-03-08 02:18:55,970 | utils.proxy_manager  | INFO     | Proxy pool ready: 4165 working proxies
+2026-03-08 02:18:56,575 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 02:18:56,575 | leadparser.supabase  | INFO     | Session 20260308_021856 | niches: ['food', 'barber shops', 'automotive'] | city: Calgary
+2026-03-08 02:18:56,575 | leadparser.main      | INFO     | Session #20260308_021856 | 3 niche(s) | location: Calgary, Alberta | target: 50 filtered leads
+2026-03-08 02:18:57,751 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'food'
+2026-03-08 02:18:58,017 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food in Calgary, Alberta'
+2026-03-08 02:18:58,356 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food': Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.google.com/maps/search/food+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:19:08,512 | PlaywrightGoogleMapsScraper | WARNING  |   Results feed not found — possible CAPTCHA
+2026-03-08 02:19:09,120 | PlaywrightGoogleMapsScraper | INFO     |   'food': +0 (total: 0/500)
+2026-03-08 02:19:09,120 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'restaurants in Calgary, Alberta'
+2026-03-08 02:19:09,540 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'restaurants': Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.google.com/maps/search/restaurants+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/restaurants+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:19:19,581 | PlaywrightGoogleMapsScraper | WARNING  |   Results feed not found — possible CAPTCHA
+2026-03-08 02:19:19,785 | PlaywrightGoogleMapsScraper | INFO     |   'restaurants': +0 (total: 0/500)
+2026-03-08 02:19:19,786 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'diners in Calgary, Alberta'
+2026-03-08 02:19:20,134 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'diners': Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.google.com/maps/search/diners+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/diners+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:19:20,135 | PlaywrightGoogleMapsScraper | WARNING  |   3 consecutive proxy failures — switching to direct connection
+2026-03-08 02:20:37,247 | PlaywrightGoogleMapsScraper | INFO     |   'diners': +64 (total: 64/500)
+2026-03-08 02:20:37,434 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'eateries in Calgary, Alberta'
+2026-03-08 02:21:29,419 | PlaywrightGoogleMapsScraper | INFO     |   'eateries': +34 (total: 98/500)
+2026-03-08 02:21:29,638 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food shops in Calgary, Alberta'
+2026-03-08 02:22:20,617 | PlaywrightGoogleMapsScraper | INFO     |   'food shops': +54 (total: 152/500)
+2026-03-08 02:22:20,901 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'cafes in Calgary, Alberta'
+2026-03-08 02:24:22,787 | PlaywrightGoogleMapsScraper | INFO     |   'cafes': +52 (total: 204/500)
+2026-03-08 02:24:23,014 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'bistros in Calgary, Alberta'
+2026-03-08 02:26:12,960 | PlaywrightGoogleMapsScraper | INFO     |   'bistros': +34 (total: 238/500)
+2026-03-08 02:26:13,324 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'takeout food in Calgary, Alberta'
+2026-03-08 02:27:00,146 | PlaywrightGoogleMapsScraper | INFO     |   'takeout food': +36 (total: 274/500)
+2026-03-08 02:27:00,342 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local food spots in Calgary, Alberta'
+2026-03-08 02:27:16,648 | PlaywrightGoogleMapsScraper | INFO     |   'local food spots': +0 (total: 274/500)
+2026-03-08 02:27:16,868 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'places to eat in Calgary, Alberta'
+2026-03-08 02:28:08,629 | PlaywrightGoogleMapsScraper | INFO     |   'places to eat': +2 (total: 276/500)
+2026-03-08 02:28:08,878 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local eats in Calgary, Alberta'
+2026-03-08 02:28:23,597 | PlaywrightGoogleMapsScraper | INFO     |   'local eats': +1 (total: 277/500)
+2026-03-08 02:28:23,833 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food near me in Calgary, Alberta'
+2026-03-08 02:28:57,784 | PlaywrightGoogleMapsScraper | INFO     |   'food near me': +18 (total: 295/500)
+2026-03-08 02:28:58,002 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'dining near me in Calgary, Alberta'
+2026-03-08 02:29:11,493 | PlaywrightGoogleMapsScraper | INFO     |   'dining near me': +4 (total: 299/500)
+2026-03-08 02:29:11,744 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 299 unique URLs
+2026-03-08 02:29:11,745 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase B: 299 profiles across 4 parallel worker(s)

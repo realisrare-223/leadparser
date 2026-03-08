@@ -1,0 +1,1477 @@
+2026-03-08 02:06:06,198 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_020606.log
+2026-03-08 02:06:06,205 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_020606.log
+2026-03-08 02:06:07,153 | leadparser.main      | INFO     | Live log streaming active — job 1232712d
+2026-03-08 02:06:07,154 | leadparser.main      | INFO     | Live log streaming active — job e7bdd165
+2026-03-08 02:06:08,599 | utils.proxy_manager  | INFO     | Parsed 520 proxies from https://api.proxyscrape.com/v2/?request=getproxies&protocol=
+2026-03-08 02:06:08,599 | utils.proxy_manager  | INFO     | Parsed 520 proxies from https://api.proxyscrape.com/v2/?request=getproxies&protocol=
+2026-03-08 02:06:10,292 | utils.proxy_manager  | INFO     | Parsed 379 proxies from Geonode API
+2026-03-08 02:06:10,315 | utils.proxy_manager  | INFO     | Parsed 379 proxies from Geonode API
+2026-03-08 02:06:11,622 | utils.proxy_manager  | INFO     | Parsed 2989 proxies from https://raw.githubusercontent.com/TheSpeedX/PROXY-List/maste
+2026-03-08 02:06:11,635 | utils.proxy_manager  | INFO     | Parsed 2989 proxies from https://raw.githubusercontent.com/TheSpeedX/PROXY-List/maste
+2026-03-08 02:06:12,953 | utils.proxy_manager  | INFO     | Parsed 300 proxies from https://free-proxy-list.net/
+2026-03-08 02:06:12,954 | utils.proxy_manager  | INFO     | Fetched 4188 raw proxies; testing…
+2026-03-08 02:06:12,954 | utils.proxy_manager  | INFO     | Proxy pool ready: 4188 working proxies
+2026-03-08 02:06:12,955 | utils.proxy_manager  | INFO     | Parsed 300 proxies from https://free-proxy-list.net/
+2026-03-08 02:06:12,956 | utils.proxy_manager  | INFO     | Fetched 4188 raw proxies; testing…
+2026-03-08 02:06:12,956 | utils.proxy_manager  | INFO     | Proxy pool ready: 4188 working proxies
+2026-03-08 02:06:13,506 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 02:06:13,506 | leadparser.supabase  | INFO     | Session 20260308_020613 | niches: ['barber shops', 'food', 'automotive'] | city: Calgary
+2026-03-08 02:06:13,506 | leadparser.main      | INFO     | Session #20260308_020613 | 3 niche(s) | location: Calgary, Alberta | target: 100 filtered leads
+2026-03-08 02:06:13,507 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 02:06:13,507 | leadparser.supabase  | INFO     | Session 20260308_020613 | niches: ['barber shops', 'food', 'automotive'] | city: Edmonton
+2026-03-08 02:06:13,507 | leadparser.main      | INFO     | Session #20260308_020613 | 3 niche(s) | location: Edmonton, Alberta | target: 100 filtered leads
+2026-03-08 02:06:19,765 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:06:19,775 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:06:20,750 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Calgary, Alberta'
+2026-03-08 02:06:20,872 | leadparser.main      | ERROR    | Scraping failed for 'barber shops': BrowserContext.new_page: Invalid timezone ID: America/Seattle
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 466, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\playwright_scraper.py", line 138, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\playwright_scraper.py", line 166, in _scrape_async
+    all_urls = await self._collect_all_urls(browser, niche, location)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\playwright_scraper.py", line 239, in _collect_all_urls
+    page = await ctx.new_page()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\async_api\_generated.py", line 12880, in new_page
+    return mapping.from_impl(await self._impl_obj.new_page())
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\_impl\_browser_context.py", line 331, in new_page
+    return from_channel(await self._channel.send("newPage", None))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\_impl\_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: BrowserContext.new_page: Invalid timezone ID: America/Seattle
+2026-03-08 02:06:21,194 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:21,194 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local barber in Calgary, Alberta'
+2026-03-08 02:06:21,383 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:21,384 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'fade haircut in Calgary, Alberta'
+2026-03-08 02:06:21,574 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/fade+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/fade+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:21,575 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'beard trim in Calgary, Alberta'
+2026-03-08 02:06:21,772 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'beard trim': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/beard+trim+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/beard+trim+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:21,794 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'food'
+2026-03-08 02:06:21,877 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food in Edmonton, Alberta'
+2026-03-08 02:06:21,906 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'traditional hot towel shave in Calgary, Alberta'
+2026-03-08 02:06:22,053 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:22,053 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'restaurants in Edmonton, Alberta'
+2026-03-08 02:06:22,088 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'traditional hot towel shave': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/traditional+hot+towel+shave+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/traditional+hot+towel+shave+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:22,088 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming in Calgary, Alberta'
+2026-03-08 02:06:22,239 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'restaurants': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/restaurants+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/restaurants+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:22,239 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'diners in Edmonton, Alberta'
+2026-03-08 02:06:22,266 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:22,267 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbers in Calgary, Alberta'
+2026-03-08 02:06:22,422 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'diners': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/diners+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/diners+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:22,447 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbers': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbers+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbers+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:22,448 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's hair salons in Calgary, Alberta'
+2026-03-08 02:06:22,536 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'eateries in Edmonton, Alberta'
+2026-03-08 02:06:22,621 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's hair salons': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+hair+salons+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+hair+salons+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:22,703 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'eateries': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/eateries+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/eateries+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:22,703 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food shops in Edmonton, Alberta'
+2026-03-08 02:06:22,756 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershops in Calgary, Alberta'
+2026-03-08 02:06:22,883 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:22,884 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'cafes in Edmonton, Alberta'
+2026-03-08 02:06:22,941 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:22,942 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cut shops in Calgary, Alberta'
+2026-03-08 02:06:23,066 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'cafes': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/cafes+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/cafes+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:23,066 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'bistros in Edmonton, Alberta'
+2026-03-08 02:06:23,103 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cut shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cut+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cut+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:23,103 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber in Calgary, Alberta'
+2026-03-08 02:06:23,246 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'bistros': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/bistros+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/bistros+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:23,292 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:23,293 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershop in Calgary, Alberta'
+2026-03-08 02:06:23,354 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'takeout food in Edmonton, Alberta'
+2026-03-08 02:06:23,467 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershop+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershop+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:23,539 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'takeout food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/takeout+food+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/takeout+food+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:23,539 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local food spots in Edmonton, Alberta'
+2026-03-08 02:06:23,586 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair barber in Calgary, Alberta'
+2026-03-08 02:06:23,717 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local food spots': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+food+spots+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+food+spots+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:23,718 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'places to eat in Edmonton, Alberta'
+2026-03-08 02:06:23,759 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:23,759 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircut in Calgary, Alberta'
+2026-03-08 02:06:23,906 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'places to eat': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/places+to+eat+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/places+to+eat+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:23,907 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local eats in Edmonton, Alberta'
+2026-03-08 02:06:23,943 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:23,944 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cutting salon in Calgary, Alberta'
+2026-03-08 02:06:24,095 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local eats': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+eats+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+eats+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:24,122 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cutting salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cutting+salon+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cutting+salon+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:24,122 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircut near me in Calgary, Alberta'
+2026-03-08 02:06:24,230 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food near me in Edmonton, Alberta'
+2026-03-08 02:06:24,301 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircut near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircut+near+me+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircut+near+me+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:24,404 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+near+me+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+near+me+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:24,405 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'dining near me in Edmonton, Alberta'
+2026-03-08 02:06:24,449 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircuts for men in Calgary, Alberta'
+2026-03-08 02:06:24,571 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'dining near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/dining+near+me+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/dining+near+me+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:24,605 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:24,608 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircuts for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircuts+for+men+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircuts+for+men+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:24,608 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircutting in Calgary, Alberta'
+2026-03-08 02:06:24,670 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food'; running total: 0
+2026-03-08 02:06:24,797 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircutting': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircutting+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircutting+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:24,797 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'low fade haircut in Calgary, Alberta'
+2026-03-08 02:06:24,964 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'low fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/low+fade+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/low+fade+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:24,965 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'taper fade in Calgary, Alberta'
+2026-03-08 02:06:25,136 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'taper fade': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/taper+fade+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/taper+fade+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:25,269 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'shape up haircut in Calgary, Alberta'
+2026-03-08 02:06:25,455 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'shape up haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/shape+up+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/shape+up+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:25,456 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'classic barber in Calgary, Alberta'
+2026-03-08 02:06:25,560 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'automotive'
+2026-03-08 02:06:25,658 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'classic barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/classic+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/classic+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:25,658 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'old school barber in Calgary, Alberta'
+2026-03-08 02:06:25,693 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'automotive in Edmonton, Alberta'
+2026-03-08 02:06:25,840 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'old school barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/old+school+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/old+school+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:25,840 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'master barber in Calgary, Alberta'
+2026-03-08 02:06:25,992 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'automotive': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/automotive+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/automotive+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:25,993 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto repair shops in Edmonton, Alberta'
+2026-03-08 02:06:26,009 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'master barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/master+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/master+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:26,139 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair clipper shop in Calgary, Alberta'
+2026-03-08 02:06:26,166 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto repair shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+repair+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+repair+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:26,167 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto detailing in Edmonton, Alberta'
+2026-03-08 02:06:26,323 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair clipper shop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+clipper+shop+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+clipper+shop+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:26,324 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'grooming salon in Calgary, Alberta'
+2026-03-08 02:06:26,349 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto detailing': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+detailing+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+detailing+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:26,349 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto body shops in Edmonton, Alberta'
+2026-03-08 02:06:26,493 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'grooming salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/grooming+salon+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/grooming+salon+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:26,493 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming lounge in Calgary, Alberta'
+2026-03-08 02:06:26,539 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto body shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+body+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+body+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:26,539 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'tire shops in Edmonton, Alberta'
+2026-03-08 02:06:26,673 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming lounge': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+lounge+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+lounge+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:26,673 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair salon for men in Calgary, Alberta'
+2026-03-08 02:06:26,848 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'tire shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/tire+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/tire+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:26,848 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car wash in Edmonton, Alberta'
+2026-03-08 02:06:26,850 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair salon for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+salon+for+men+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+salon+for+men+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:27,001 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:27,034 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car wash': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+wash+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+wash+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:27,034 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'towing services in Edmonton, Alberta'
+2026-03-08 02:06:27,128 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops'; running total: 0
+2026-03-08 02:06:27,206 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'towing services': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/towing+services+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/towing+services+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:27,206 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto glass repair in Edmonton, Alberta'
+2026-03-08 02:06:27,392 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto glass repair': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+glass+repair+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+glass+repair+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:27,392 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car dealerships in Edmonton, Alberta'
+2026-03-08 02:06:27,707 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car dealerships': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+dealerships+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+dealerships+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:27,720 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:27,817 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive'; running total: 0
+2026-03-08 02:06:27,817 | leadparser.main      | INFO     |   Pass 1 result: 0/100 leads pass filters
+2026-03-08 02:06:27,817 | leadparser.main      | INFO     |   Retry pass 2/3: raising raw ceiling to 2000 to collect more matches
+2026-03-08 02:06:27,954 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'food'
+2026-03-08 02:06:28,076 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food in Calgary, Alberta'
+2026-03-08 02:06:28,270 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:28,271 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'restaurants in Calgary, Alberta'
+2026-03-08 02:06:28,444 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'restaurants': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/restaurants+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/restaurants+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:28,444 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'diners in Calgary, Alberta'
+2026-03-08 02:06:28,730 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:06:28,775 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'diners': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/diners+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/diners+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:28,776 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'eateries in Calgary, Alberta'
+2026-03-08 02:06:28,828 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Edmonton, Alberta'
+2026-03-08 02:06:28,968 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'eateries': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/eateries+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/eateries+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:28,968 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food shops in Calgary, Alberta'
+2026-03-08 02:06:29,020 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:29,143 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local barber in Edmonton, Alberta'
+2026-03-08 02:06:29,144 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:29,144 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'cafes in Calgary, Alberta'
+2026-03-08 02:06:29,329 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'cafes': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/cafes+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/cafes+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:29,329 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'bistros in Calgary, Alberta'
+2026-03-08 02:06:29,330 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:29,330 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'fade haircut in Edmonton, Alberta'
+2026-03-08 02:06:29,500 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/fade+haircut+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/fade+haircut+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:29,501 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'beard trim in Edmonton, Alberta'
+2026-03-08 02:06:29,623 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'bistros': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/bistros+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/bistros+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:29,624 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'takeout food in Calgary, Alberta'
+2026-03-08 02:06:29,682 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'beard trim': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/beard+trim+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/beard+trim+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:29,682 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'traditional hot towel shave in Edmonton, Alberta'
+2026-03-08 02:06:29,796 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'takeout food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/takeout+food+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/takeout+food+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:29,798 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local food spots in Calgary, Alberta'
+2026-03-08 02:06:29,861 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'traditional hot towel shave': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/traditional+hot+towel+shave+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/traditional+hot+towel+shave+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:29,977 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local food spots': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+food+spots+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+food+spots+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:29,978 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'places to eat in Calgary, Alberta'
+2026-03-08 02:06:29,993 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming in Edmonton, Alberta'
+2026-03-08 02:06:30,140 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'places to eat': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/places+to+eat+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/places+to+eat+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:30,140 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local eats in Calgary, Alberta'
+2026-03-08 02:06:30,189 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:30,190 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbers in Edmonton, Alberta'
+2026-03-08 02:06:30,361 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbers': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbers+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbers+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:30,361 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's hair salons in Edmonton, Alberta'
+2026-03-08 02:06:30,440 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local eats': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+eats+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+eats+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:30,440 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food near me in Calgary, Alberta'
+2026-03-08 02:06:30,539 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's hair salons': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+hair+salons+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+hair+salons+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:30,540 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershops in Edmonton, Alberta'
+2026-03-08 02:06:30,629 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+near+me+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+near+me+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:30,630 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'dining near me in Calgary, Alberta'
+2026-03-08 02:06:30,709 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:30,817 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'dining near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/dining+near+me+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/dining+near+me+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:30,829 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:30,835 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cut shops in Edmonton, Alberta'
+2026-03-08 02:06:30,886 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food'; running total: 0
+2026-03-08 02:06:31,026 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cut shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cut+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cut+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:31,027 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber in Edmonton, Alberta'
+2026-03-08 02:06:31,180 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:31,180 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershop in Edmonton, Alberta'
+2026-03-08 02:06:31,369 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershop+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershop+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:31,369 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair barber in Edmonton, Alberta'
+2026-03-08 02:06:31,540 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:31,664 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircut in Edmonton, Alberta'
+2026-03-08 02:06:31,709 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'automotive'
+2026-03-08 02:06:31,824 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircut+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircut+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:31,825 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cutting salon in Edmonton, Alberta'
+2026-03-08 02:06:31,910 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'automotive in Calgary, Alberta'
+2026-03-08 02:06:32,005 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cutting salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cutting+salon+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cutting+salon+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:32,005 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircut near me in Edmonton, Alberta'
+2026-03-08 02:06:32,081 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'automotive': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/automotive+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/automotive+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:32,081 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto repair shops in Calgary, Alberta'
+2026-03-08 02:06:32,168 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircut near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircut+near+me+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircut+near+me+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:32,168 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircuts for men in Edmonton, Alberta'
+2026-03-08 02:06:32,238 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto repair shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+repair+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+repair+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:32,239 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto detailing in Calgary, Alberta'
+2026-03-08 02:06:32,341 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircuts for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircuts+for+men+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircuts+for+men+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:32,408 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto detailing': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+detailing+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+detailing+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:32,409 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto body shops in Calgary, Alberta'
+2026-03-08 02:06:32,464 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircutting in Edmonton, Alberta'
+2026-03-08 02:06:32,584 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto body shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+body+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+body+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:32,625 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircutting': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircutting+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircutting+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:32,625 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'low fade haircut in Edmonton, Alberta'
+2026-03-08 02:06:32,704 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'tire shops in Calgary, Alberta'
+2026-03-08 02:06:32,790 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'low fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/low+fade+haircut+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/low+fade+haircut+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:32,790 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'taper fade in Edmonton, Alberta'
+2026-03-08 02:06:32,865 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'tire shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/tire+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/tire+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:32,865 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car wash in Calgary, Alberta'
+2026-03-08 02:06:32,987 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'taper fade': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/taper+fade+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/taper+fade+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:32,988 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'shape up haircut in Edmonton, Alberta'
+2026-03-08 02:06:33,037 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car wash': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+wash+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+wash+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:33,037 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'towing services in Calgary, Alberta'
+2026-03-08 02:06:33,170 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'shape up haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/shape+up+haircut+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/shape+up+haircut+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:33,215 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'towing services': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/towing+services+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/towing+services+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:33,215 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto glass repair in Calgary, Alberta'
+2026-03-08 02:06:33,298 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'classic barber in Edmonton, Alberta'
+2026-03-08 02:06:33,385 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto glass repair': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+glass+repair+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+glass+repair+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:33,461 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'classic barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/classic+barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/classic+barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:33,462 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'old school barber in Edmonton, Alberta'
+2026-03-08 02:06:33,512 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car dealerships in Calgary, Alberta'
+2026-03-08 02:06:33,647 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'old school barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/old+school+barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/old+school+barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:33,647 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'master barber in Edmonton, Alberta'
+2026-03-08 02:06:33,677 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car dealerships': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+dealerships+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+dealerships+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:33,691 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:33,745 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive'; running total: 0
+2026-03-08 02:06:33,745 | leadparser.main      | INFO     |   Pass 1 result: 0/100 leads pass filters
+2026-03-08 02:06:33,745 | leadparser.main      | INFO     |   Retry pass 2/3: raising raw ceiling to 2000 to collect more matches
+2026-03-08 02:06:33,841 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'master barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/master+barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/master+barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:33,842 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair clipper shop in Edmonton, Alberta'
+2026-03-08 02:06:34,006 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair clipper shop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+clipper+shop+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+clipper+shop+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:34,129 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'grooming salon in Edmonton, Alberta'
+2026-03-08 02:06:34,308 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'grooming salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/grooming+salon+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/grooming+salon+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:34,309 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming lounge in Edmonton, Alberta'
+2026-03-08 02:06:34,469 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming lounge': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+lounge+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+lounge+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:34,470 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair salon for men in Edmonton, Alberta'
+2026-03-08 02:06:34,518 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:06:34,615 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Calgary, Alberta'
+2026-03-08 02:06:34,643 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair salon for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+salon+for+men+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+salon+for+men+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:34,670 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:34,745 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops'; running total: 0
+2026-03-08 02:06:34,929 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:34,929 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local barber in Calgary, Alberta'
+2026-03-08 02:06:35,108 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:35,109 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'fade haircut in Calgary, Alberta'
+2026-03-08 02:06:35,289 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/fade+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/fade+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:35,289 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'beard trim in Calgary, Alberta'
+2026-03-08 02:06:35,460 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'beard trim': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/beard+trim+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/beard+trim+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:35,461 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'traditional hot towel shave in Calgary, Alberta'
+2026-03-08 02:06:35,745 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'food'
+2026-03-08 02:06:35,775 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'traditional hot towel shave': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/traditional+hot+towel+shave+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/traditional+hot+towel+shave+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:35,775 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming in Calgary, Alberta'
+2026-03-08 02:06:35,894 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food in Edmonton, Alberta'
+2026-03-08 02:06:35,946 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:35,946 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbers in Calgary, Alberta'
+2026-03-08 02:06:36,084 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:36,084 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'restaurants in Edmonton, Alberta'
+2026-03-08 02:06:36,126 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbers': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbers+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbers+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:36,126 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's hair salons in Calgary, Alberta'
+2026-03-08 02:06:36,264 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'restaurants': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/restaurants+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/restaurants+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:36,264 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'diners in Edmonton, Alberta'
+2026-03-08 02:06:36,308 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's hair salons': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+hair+salons+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+hair+salons+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:36,308 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershops in Calgary, Alberta'
+2026-03-08 02:06:36,447 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'diners': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/diners+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/diners+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:36,447 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'eateries in Edmonton, Alberta'
+2026-03-08 02:06:36,626 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:36,626 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cut shops in Calgary, Alberta'
+2026-03-08 02:06:36,750 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'eateries': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/eateries+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/eateries+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:36,750 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food shops in Edmonton, Alberta'
+2026-03-08 02:06:36,820 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cut shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cut+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cut+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:36,821 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber in Calgary, Alberta'
+2026-03-08 02:06:36,928 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:36,928 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'cafes in Edmonton, Alberta'
+2026-03-08 02:06:36,994 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:36,994 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershop in Calgary, Alberta'
+2026-03-08 02:06:37,093 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'cafes': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/cafes+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/cafes+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:37,093 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'bistros in Edmonton, Alberta'
+2026-03-08 02:06:37,182 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershop+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershop+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:37,182 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair barber in Calgary, Alberta'
+2026-03-08 02:06:37,264 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'bistros': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/bistros+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/bistros+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:37,264 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'takeout food in Edmonton, Alberta'
+2026-03-08 02:06:37,496 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:37,496 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircut in Calgary, Alberta'
+2026-03-08 02:06:37,559 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'takeout food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/takeout+food+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/takeout+food+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:37,560 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local food spots in Edmonton, Alberta'
+2026-03-08 02:06:37,674 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:37,675 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cutting salon in Calgary, Alberta'
+2026-03-08 02:06:37,719 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local food spots': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+food+spots+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+food+spots+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:37,719 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'places to eat in Edmonton, Alberta'
+2026-03-08 02:06:37,841 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cutting salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cutting+salon+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cutting+salon+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:37,842 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircut near me in Calgary, Alberta'
+2026-03-08 02:06:37,896 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'places to eat': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/places+to+eat+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/places+to+eat+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:37,896 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local eats in Edmonton, Alberta'
+2026-03-08 02:06:38,063 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local eats': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+eats+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+eats+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+ntloaded"
+
+2026-03-08 02:06:38,101 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircuts for men in Calgary, Alberta'
+2026-03-08 02:06:38,101 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food near me in Edmonton, Alberta'
+2026-03-08 02:06:38,383 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircuts for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircuts+for+men+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircuts+for+men+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:38,383 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircutting in Calgary, Alberta'
+2026-03-08 02:06:38,421 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+near+me+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+near+me+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:38,421 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'dining near me in Edmonton, Alberta'
+2026-03-08 02:06:38,544 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircutting': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircutting+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircutting+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:38,544 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'low fade haircut in Calgary, Alberta'
+2026-03-08 02:06:38,611 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'dining near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/dining+near+me+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/dining+near+me+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:38,625 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:38,696 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food'; running total: 0
+2026-03-08 02:06:38,709 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'low fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/low+fade+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/low+fade+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:38,709 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'taper fade in Calgary, Alberta'
+2026-03-08 02:06:38,888 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'taper fade': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/taper+fade+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/taper+fade+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:38,888 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'shape up haircut in Calgary, Alberta'
+2026-03-08 02:06:39,204 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'shape up haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/shape+up+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/shape+up+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:39,204 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'classic barber in Calgary, Alberta'
+2026-03-08 02:06:39,383 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'classic barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/classic+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/classic+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:39,383 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'old school barber in Calgary, Alberta'
+2026-03-08 02:06:39,601 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'old school barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/old+school+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/old+school+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:39,601 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'master barber in Calgary, Alberta'
+2026-03-08 02:06:39,704 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'automotive'
+2026-03-08 02:06:39,777 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'master barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/master+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/master+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:39,777 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair clipper shop in Calgary, Alberta'
+2026-03-08 02:06:40,078 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair clipper shop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+clipper+shop+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+clipper+shop+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:40,079 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'grooming salon in Calgary, Alberta'
+2026-03-08 02:06:40,126 | leadparser.main      | ERROR    | Scraping failed for 'automotive': BrowserContext.new_page: Invalid timezone ID: America/Seattle
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 466, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\playwright_scraper.py", line 138, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\playwright_scraper.py", line 166, in _scrape_async
+    all_urls = await self._collect_all_urls(browser, niche, location)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\playwright_scraper.py", line 239, in _collect_all_urls
+    page = await ctx.new_page()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\async_api\_generated.py", line 12880, in new_page
+    return mapping.from_impl(await self._impl_obj.new_page())
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\_impl\_browser_context.py", line 331, in new_page
+    return from_channel(await self._channel.send("newPage", None))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\_impl\_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: BrowserContext.new_page: Invalid timezone ID: America/Seattle
+2026-03-08 02:06:40,128 | leadparser.main      | INFO     |   Pass 2 result: 0/100 leads pass filters
+2026-03-08 02:06:40,263 | leadparser.main      | INFO     |   Retry pass 3/3: raising raw ceiling to 2000 to collect more matches
+2026-03-08 02:06:40,263 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'grooming salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/grooming+salon+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/grooming+salon+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:40,263 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming lounge in Calgary, Alberta'
+2026-03-08 02:06:40,448 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming lounge': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+lounge+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+lounge+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:40,448 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair salon for men in Calgary, Alberta'
+2026-03-08 02:06:40,639 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair salon for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+salon+for+men+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+salon+for+men+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:40,659 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:40,863 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops'; running total: 0
+2026-03-08 02:06:41,173 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:06:41,275 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Edmonton, Alberta'
+2026-03-08 02:06:41,454 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:41,454 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local barber in Edmonton, Alberta'
+2026-03-08 02:06:41,652 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:41,653 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'fade haircut in Edmonton, Alberta'
+2026-03-08 02:06:41,805 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'food'
+2026-03-08 02:06:41,840 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/fade+haircut+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/fade+haircut+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:41,921 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food in Calgary, Alberta'
+2026-03-08 02:06:41,978 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'beard trim in Edmonton, Alberta'
+2026-03-08 02:06:42,098 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:42,098 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'restaurants in Calgary, Alberta'
+2026-03-08 02:06:42,174 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'beard trim': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/beard+trim+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/beard+trim+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:42,174 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'traditional hot towel shave in Edmonton, Alberta'
+2026-03-08 02:06:42,279 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'restaurants': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/restaurants+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/restaurants+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:42,279 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'diners in Calgary, Alberta'
+2026-03-08 02:06:42,345 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'traditional hot towel shave': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/traditional+hot+towel+shave+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/traditional+hot+towel+shave+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:42,345 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming in Edmonton, Alberta'
+2026-03-08 02:06:42,457 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'diners': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/diners+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/diners+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:42,532 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:42,532 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbers in Edmonton, Alberta'
+2026-03-08 02:06:42,605 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'eateries in Calgary, Alberta'
+2026-03-08 02:06:42,711 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbers': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbers+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbers+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:42,781 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'eateries': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/eateries+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/eateries+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:42,781 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food shops in Calgary, Alberta'
+2026-03-08 02:06:42,841 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's hair salons in Edmonton, Alberta'
+2026-03-08 02:06:42,962 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:42,963 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'cafes in Calgary, Alberta'
+2026-03-08 02:06:43,032 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's hair salons': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+hair+salons+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+hair+salons+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:43,033 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershops in Edmonton, Alberta'
+2026-03-08 02:06:43,150 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'cafes': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/cafes+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/cafes+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:43,151 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'bistros in Calgary, Alberta'
+2026-03-08 02:06:43,206 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:43,206 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cut shops in Edmonton, Alberta'
+2026-03-08 02:06:43,327 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'bistros': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/bistros+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/bistros+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:43,385 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cut shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cut+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cut+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:43,385 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber in Edmonton, Alberta'
+2026-03-08 02:06:43,458 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'takeout food in Calgary, Alberta'
+2026-03-08 02:06:43,574 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:43,634 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'takeout food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/takeout+food+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/takeout+food+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:43,635 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local food spots in Calgary, Alberta'
+2026-03-08 02:06:43,699 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershop in Edmonton, Alberta'
+2026-03-08 02:06:43,827 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local food spots': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+food+spots+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+food+spots+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:43,827 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'places to eat in Calgary, Alberta'
+2026-03-08 02:06:43,884 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershop+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershop+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:43,885 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair barber in Edmonton, Alberta'
+2026-03-08 02:06:44,029 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'places to eat': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/places+to+eat+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/places+to+eat+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:44,029 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local eats in Calgary, Alberta'
+2026-03-08 02:06:44,050 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:44,050 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircut in Edmonton, Alberta'
+2026-03-08 02:06:44,208 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local eats': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+eats+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+eats+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:44,233 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircut+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircut+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:44,233 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cutting salon in Edmonton, Alberta'
+2026-03-08 02:06:44,341 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food near me in Calgary, Alberta'
+2026-03-08 02:06:44,415 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cutting salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cutting+salon+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cutting+salon+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:44,528 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+near+me+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+near+me+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:44,528 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'dining near me in Calgary, Alberta'
+2026-03-08 02:06:44,542 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircut near me in Edmonton, Alberta'
+2026-03-08 02:06:44,708 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'dining near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/dining+near+me+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/dining+near+me+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:44,720 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:44,732 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircut near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircut+near+me+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircut+near+me+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:44,733 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircuts for men in Edmonton, Alberta'
+2026-03-08 02:06:44,822 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food'; running total: 0
+2026-03-08 02:06:44,923 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircuts for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircuts+for+men+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircuts+for+men+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:44,923 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircutting in Edmonton, Alberta'
+2026-03-08 02:06:45,099 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircutting': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircutting+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircutting+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:45,099 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'low fade haircut in Edmonton, Alberta'
+2026-03-08 02:06:45,298 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'low fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/low+fade+haircut+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/low+fade+haircut+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:45,424 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'taper fade in Edmonton, Alberta'
+2026-03-08 02:06:45,597 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'taper fade': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/taper+fade+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/taper+fade+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:45,597 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'shape up haircut in Edmonton, Alberta'
+2026-03-08 02:06:45,760 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'automotive'
+2026-03-08 02:06:45,784 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'shape up haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/shape+up+haircut+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/shape+up+haircut+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:45,785 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'classic barber in Edmonton, Alberta'
+2026-03-08 02:06:45,865 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'automotive in Calgary, Alberta'
+2026-03-08 02:06:45,973 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'classic barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/classic+barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/classic+barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:45,974 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'old school barber in Edmonton, Alberta'
+2026-03-08 02:06:46,167 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'old school barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/old+school+barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/old+school+barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:46,185 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'automotive': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/automotive+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/automotive+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:46,185 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto repair shops in Calgary, Alberta'
+2026-03-08 02:06:46,299 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'master barber in Edmonton, Alberta'
+2026-03-08 02:06:46,367 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto repair shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+repair+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+repair+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:46,367 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto detailing in Calgary, Alberta'
+2026-03-08 02:06:46,461 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'master barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/master+barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/master+barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:46,461 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair clipper shop in Edmonton, Alberta'
+2026-03-08 02:06:46,540 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto detailing': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+detailing+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+detailing+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:46,540 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto body shops in Calgary, Alberta'
+2026-03-08 02:06:46,646 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair clipper shop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+clipper+shop+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+clipper+shop+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:46,646 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'grooming salon in Edmonton, Alberta'
+2026-03-08 02:06:46,704 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto body shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+body+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+body+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:46,704 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'tire shops in Calgary, Alberta'
+2026-03-08 02:06:46,824 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'grooming salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/grooming+salon+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/grooming+salon+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:46,824 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming lounge in Edmonton, Alberta'
+2026-03-08 02:06:46,999 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'tire shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/tire+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/tire+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:47,000 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car wash in Calgary, Alberta'
+2026-03-08 02:06:47,000 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming lounge': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+lounge+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+lounge+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:47,136 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair salon for men in Edmonton, Alberta'
+2026-03-08 02:06:47,192 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car wash': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+wash+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+wash+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:47,192 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'towing services in Calgary, Alberta'
+2026-03-08 02:06:47,320 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair salon for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+salon+for+men+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+salon+for+men+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:47,334 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:47,387 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops'; running total: 0
+2026-03-08 02:06:47,390 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'towing services': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/towing+services+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/towing+services+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:47,390 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto glass repair in Calgary, Alberta'
+2026-03-08 02:06:47,569 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto glass repair': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+glass+repair+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+glass+repair+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:47,569 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car dealerships in Calgary, Alberta'
+2026-03-08 02:06:47,935 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car dealerships': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+dealerships+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+dealerships+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:47,950 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:48,034 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive'; running total: 0
+2026-03-08 02:06:48,034 | leadparser.main      | INFO     |   Pass 2 result: 0/100 leads pass filters
+2026-03-08 02:06:48,034 | leadparser.main      | INFO     |   Retry pass 3/3: raising raw ceiling to 2000 to collect more matches
+2026-03-08 02:06:48,416 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'food'
+2026-03-08 02:06:48,530 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food in Edmonton, Alberta'
+2026-03-08 02:06:48,712 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:48,713 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'restaurants in Edmonton, Alberta'
+2026-03-08 02:06:49,020 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'restaurants': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/restaurants+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/restaurants+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:49,020 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'diners in Edmonton, Alberta'
+2026-03-08 02:06:49,041 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:06:49,153 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Calgary, Alberta'
+2026-03-08 02:06:49,195 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'diners': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/diners+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/diners+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:49,196 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'eateries in Edmonton, Alberta'
+2026-03-08 02:06:49,345 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:49,371 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'eateries': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/eateries+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/eateries+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:49,371 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food shops in Edmonton, Alberta'
+2026-03-08 02:06:49,479 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local barber in Calgary, Alberta'
+2026-03-08 02:06:49,542 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:49,543 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'cafes in Edmonton, Alberta'
+2026-03-08 02:06:49,660 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:49,660 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'fade haircut in Calgary, Alberta'
+2026-03-08 02:06:49,825 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'cafes': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/cafes+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/cafes+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:49,826 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'bistros in Edmonton, Alberta'
+2026-03-08 02:06:49,827 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/fade+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/fade+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:49,827 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'beard trim in Calgary, Alberta'
+2026-03-08 02:06:50,011 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'bistros': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/bistros+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/bistros+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:50,011 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'takeout food in Edmonton, Alberta'
+2026-03-08 02:06:50,011 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'beard trim': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/beard+trim+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/beard+trim+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:50,011 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'traditional hot towel shave in Calgary, Alberta'
+2026-03-08 02:06:50,189 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'takeout food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/takeout+food+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/takeout+food+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:50,189 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local food spots in Edmonton, Alberta'
+2026-03-08 02:06:50,192 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'traditional hot towel shave': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/traditional+hot+towel+shave+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/traditional+hot+towel+shave+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:50,326 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming in Calgary, Alberta'
+2026-03-08 02:06:50,379 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local food spots': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+food+spots+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+food+spots+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:50,380 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'places to eat in Edmonton, Alberta'
+2026-03-08 02:06:50,503 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:50,504 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbers in Calgary, Alberta'
+2026-03-08 02:06:50,707 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'places to eat': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/places+to+eat+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/places+to+eat+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:50,708 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local eats in Edmonton, Alberta'
+2026-03-08 02:06:50,727 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbers': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbers+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbers+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:50,727 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's hair salons in Calgary, Alberta'
+2026-03-08 02:06:50,890 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local eats': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+eats+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+eats+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:50,890 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food near me in Edmonton, Alberta'
+2026-03-08 02:06:50,915 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's hair salons': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+hair+salons+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+hair+salons+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:50,915 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershops in Calgary, Alberta'
+2026-03-08 02:06:51,084 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+near+me+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+near+me+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:51,085 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'dining near me in Edmonton, Alberta'
+2026-03-08 02:06:51,100 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:51,231 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cut shops in Calgary, Alberta'
+2026-03-08 02:06:51,272 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'dining near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/dining+near+me+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/dining+near+me+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:51,285 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:51,391 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cut shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cut+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cut+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:51,391 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber in Calgary, Alberta'
+2026-03-08 02:06:51,474 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food'; running total: 0
+2026-03-08 02:06:51,579 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:51,579 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershop in Calgary, Alberta'
+2026-03-08 02:06:51,748 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershop+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershop+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:51,749 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair barber in Calgary, Alberta'
+2026-03-08 02:06:51,933 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:52,060 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircut in Calgary, Alberta'
+2026-03-08 02:06:52,232 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:52,232 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cutting salon in Calgary, Alberta'
+2026-03-08 02:06:52,388 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'automotive'
+2026-03-08 02:06:52,413 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cutting salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cutting+salon+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cutting+salon+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:52,413 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircut near me in Calgary, Alberta'
+2026-03-08 02:06:52,470 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'automotive in Edmonton, Alberta'
+2026-03-08 02:06:52,599 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircut near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircut+near+me+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircut+near+me+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:52,599 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircuts for men in Calgary, Alberta'
+2026-03-08 02:06:52,655 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'automotive': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/automotive+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/automotive+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:52,656 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto repair shops in Edmonton, Alberta'
+2026-03-08 02:06:52,770 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircuts for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircuts+for+men+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircuts+for+men+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:52,840 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto repair shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+repair+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+repair+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:52,840 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto detailing in Edmonton, Alberta'
+2026-03-08 02:06:52,905 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircutting in Calgary, Alberta'
+2026-03-08 02:06:53,031 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto detailing': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+detailing+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+detailing+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:53,084 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircutting': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircutting+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircutting+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:53,084 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'low fade haircut in Calgary, Alberta'
+2026-03-08 02:06:53,159 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto body shops in Edmonton, Alberta'
+2026-03-08 02:06:53,250 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'low fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/low+fade+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/low+fade+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:53,251 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'taper fade in Calgary, Alberta'
+2026-03-08 02:06:53,336 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto body shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+body+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+body+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:53,336 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'tire shops in Edmonton, Alberta'
+2026-03-08 02:06:53,421 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'taper fade': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/taper+fade+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/taper+fade+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:53,422 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'shape up haircut in Calgary, Alberta'
+2026-03-08 02:06:53,507 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'tire shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/tire+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/tire+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:53,508 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car wash in Edmonton, Alberta'
+2026-03-08 02:06:53,610 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'shape up haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/shape+up+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/shape+up+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:53,704 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car wash': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+wash+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+wash+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:53,705 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'towing services in Edmonton, Alberta'
+2026-03-08 02:06:53,735 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'classic barber in Calgary, Alberta'
+2026-03-08 02:06:53,900 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'towing services': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/towing+services+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/towing+services+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:53,925 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'classic barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/classic+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/classic+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:53,925 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'old school barber in Calgary, Alberta'
+2026-03-08 02:06:54,032 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto glass repair in Edmonton, Alberta'
+2026-03-08 02:06:54,083 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'old school barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/old+school+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/old+school+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:54,083 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'master barber in Calgary, Alberta'
+2026-03-08 02:06:54,218 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto glass repair': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+glass+repair+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+glass+repair+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:54,218 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car dealerships in Edmonton, Alberta'
+2026-03-08 02:06:54,261 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'master barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/master+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/master+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:54,261 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair clipper shop in Calgary, Alberta'
+2026-03-08 02:06:54,405 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car dealerships': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+dealerships+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+dealerships+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:54,417 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:54,437 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair clipper shop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+clipper+shop+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+clipper+shop+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:54,493 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive'; running total: 0
+2026-03-08 02:06:54,493 | leadparser.main      | INFO     |   Pass 3 result: 0/100 leads pass filters
+2026-03-08 02:06:54,493 | leadparser.main      | WARNING  | Exhausted 3 passes — 0/100 filtered leads available in this niche/city.
+2026-03-08 02:06:54,582 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'grooming salon in Calgary, Alberta'
+2026-03-08 02:06:54,744 | leadparser.main      | INFO     | Filters applied: 0 raw -> 0 passed
+2026-03-08 02:06:54,764 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'grooming salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/grooming+salon+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/grooming+salon+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:54,764 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming lounge in Calgary, Alberta'
+2026-03-08 02:06:54,935 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming lounge': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+lounge+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+lounge+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:54,935 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair salon for men in Calgary, Alberta'
+2026-03-08 02:06:54,987 | leadparser.main      | INFO     | Supabase insert: 0 new, 0 dupes, 0 errors
+2026-03-08 02:06:55,112 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair salon for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+salon+for+men+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+salon+for+men+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:55,125 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:55,201 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops'; running total: 0
+2026-03-08 02:06:55,714 | leadparser.main      | INFO     | CSV export: 57 leads -> data\leads_20260308_020655.csv
+2026-03-08 02:06:55,714 | leadparser.supabase  | INFO     | Session complete | stats: {'niches': 3, 'raw_total': 0, 'total': 0, 'new': 0, 'duplicates': 0, 'errors': 2, 'csv_path': 'data\\leads_20260308_020655.csv'}
+2026-03-08 02:06:55,845 | leadparser.main      | INFO     | Total runtime: 49s
+2026-03-08 02:06:56,060 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'food'
+2026-03-08 02:06:56,144 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food in Calgary, Alberta'
+2026-03-08 02:06:56,327 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:56,327 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'restaurants in Calgary, Alberta'
+2026-03-08 02:06:56,525 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'restaurants': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/restaurants+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/restaurants+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:56,526 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'diners in Calgary, Alberta'
+2026-03-08 02:06:56,756 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'diners': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/diners+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/diners+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:56,756 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'eateries in Calgary, Alberta'
+2026-03-08 02:06:57,058 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'eateries': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/eateries+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/eateries+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:57,058 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food shops in Calgary, Alberta'
+2026-03-08 02:06:57,251 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:57,251 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'cafes in Calgary, Alberta'
+2026-03-08 02:06:57,426 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'cafes': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/cafes+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/cafes+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:57,427 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'bistros in Calgary, Alberta'
+2026-03-08 02:06:57,601 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'bistros': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/bistros+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/bistros+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:57,601 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'takeout food in Calgary, Alberta'
+2026-03-08 02:06:57,908 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'takeout food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/takeout+food+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/takeout+food+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:57,908 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local food spots in Calgary, Alberta'
+2026-03-08 02:06:58,106 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local food spots': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+food+spots+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+food+spots+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:58,106 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'places to eat in Calgary, Alberta'
+2026-03-08 02:06:58,284 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'places to eat': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/places+to+eat+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/places+to+eat+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:58,285 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local eats in Calgary, Alberta'
+2026-03-08 02:06:58,473 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local eats': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+eats+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+eats+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:58,474 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food near me in Calgary, Alberta'
+2026-03-08 02:06:58,803 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+near+me+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+near+me+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:58,803 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'dining near me in Calgary, Alberta'
+2026-03-08 02:06:58,998 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'dining near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/dining+near+me+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/dining+near+me+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:06:59,013 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:06:59,101 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food'; running total: 0
+2026-03-08 02:06:59,824 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'automotive'
+2026-03-08 02:06:59,927 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'automotive in Calgary, Alberta'
+2026-03-08 02:07:00,110 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'automotive': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/automotive+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/automotive+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:07:00,239 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto repair shops in Calgary, Alberta'
+2026-03-08 02:07:00,422 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto repair shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+repair+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+repair+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:07:00,422 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto detailing in Calgary, Alberta'
+2026-03-08 02:07:00,599 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto detailing': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+detailing+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+detailing+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:07:00,599 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto body shops in Calgary, Alberta'
+2026-03-08 02:07:00,789 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto body shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+body+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+body+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:07:00,789 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'tire shops in Calgary, Alberta'
+2026-03-08 02:07:00,977 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'tire shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/tire+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/tire+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:07:01,113 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car wash in Calgary, Alberta'
+2026-03-08 02:07:01,289 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car wash': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+wash+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+wash+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:07:01,289 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'towing services in Calgary, Alberta'
+2026-03-08 02:07:01,461 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'towing services': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/towing+services+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/towing+services+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:07:01,461 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto glass repair in Calgary, Alberta'
+2026-03-08 02:07:01,644 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto glass repair': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+glass+repair+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+glass+repair+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:07:01,644 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car dealerships in Calgary, Alberta'
+2026-03-08 02:07:01,820 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car dealerships': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+dealerships+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+dealerships+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:07:01,963 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:07:02,029 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive'; running total: 0
+2026-03-08 02:07:02,030 | leadparser.main      | INFO     |   Pass 3 result: 0/100 leads pass filters
+2026-03-08 02:07:02,030 | leadparser.main      | WARNING  | Exhausted 3 passes — 0/100 filtered leads available in this niche/city.
+2026-03-08 02:07:02,178 | leadparser.main      | INFO     | Filters applied: 0 raw -> 0 passed
+2026-03-08 02:07:02,441 | leadparser.main      | INFO     | Supabase insert: 0 new, 0 dupes, 0 errors
+2026-03-08 02:07:03,173 | leadparser.main      | INFO     | CSV export: 57 leads -> data\leads_20260308_020703.csv
+2026-03-08 02:07:03,174 | leadparser.supabase  | INFO     | Session complete | stats: {'niches': 3, 'raw_total': 0, 'total': 0, 'new': 0, 'duplicates': 0, 'errors': 0, 'csv_path': 'data\\leads_20260308_020703.csv'}
+2026-03-08 02:07:03,439 | leadparser.main      | INFO     | Total runtime: 56s

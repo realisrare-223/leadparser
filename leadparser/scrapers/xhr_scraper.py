@@ -190,47 +190,72 @@ class XHRGoogleMapsScraper:
         on_progress: Optional[Callable],
     ) -> list[dict]:
         fingerprint = _make_fingerprint()
-        proxy_url   = self._get_proxy_url()
+        
+        # Try with proxy first, fall back to direct if needed
+        proxy_attempts = []
+        if self.proxy_manager and self.proxy_manager.enabled:
+            proxy_url = self._get_proxy_url()
+            if proxy_url:
+                proxy_attempts.append({"http://": proxy_url, "https://": proxy_url})
+        # Always add direct connection as fallback
+        proxy_attempts.append(None)
 
-        proxy_map = (
-            {"http://": proxy_url, "https://": proxy_url}
-            if proxy_url else None
-        )
+        last_error = None
+        for proxy_map in proxy_attempts:
+            try:
+                async with httpx.AsyncClient(
+                    headers          = fingerprint["headers"],
+                    proxies          = proxy_map,
+                    timeout          = httpx.Timeout(30.0, connect=10.0),
+                    follow_redirects = True,
+                    http2            = True,
+                ) as client:
+                    # ── Phase A: URL collection ──────────────────────────────────────
+                    self.logger.info(f"XHR Phase A: collecting URLs for '{niche}'")
+                    if proxy_map:
+                        self.logger.debug(f"  Using proxy: {proxy_map['http://'][:30]}...")
+                    else:
+                        self.logger.debug("  Using direct connection (no proxy)")
+                    
+                    all_urls = await self._collect_all_urls(
+                        client, niche, location, fingerprint
+                    )
+                    self.logger.info(f"  Phase A complete — {len(all_urls)} unique URLs")
 
-        async with httpx.AsyncClient(
-            headers          = fingerprint["headers"],
-            proxies          = proxy_map,
-            timeout          = httpx.Timeout(30.0),
-            follow_redirects = True,
-        ) as client:
-            # ── Phase A: URL collection ──────────────────────────────────────
-            self.logger.info(f"XHR Phase A: collecting URLs for '{niche}'")
-            all_urls = await self._collect_all_urls(
-                client, niche, location, fingerprint
-            )
-            self.logger.info(f"  Phase A complete — {len(all_urls)} unique URLs")
+                    if not all_urls:
+                        return []
 
-            if not all_urls:
-                return []
+                    # ── Phase B: parallel extraction ─────────────────────────────────
+                    self.logger.info(
+                        f"XHR Phase B: {len(all_urls)} profiles "
+                        f"(concurrency={self._concurrency})"
+                    )
+                    sem      = asyncio.Semaphore(self._concurrency)
+                    progress = {"done": 0, "total": len(all_urls)}
+                    tasks    = [
+                        self._fetch_business(
+                            client, url, niche, sem, fingerprint, progress, on_progress
+                        )
+                        for url in all_urls
+                    ]
+                    results = await asyncio.gather(*tasks)
 
-            # ── Phase B: parallel extraction ─────────────────────────────────
-            self.logger.info(
-                f"XHR Phase B: {len(all_urls)} profiles "
-                f"(concurrency={self._concurrency})"
-            )
-            sem      = asyncio.Semaphore(self._concurrency)
-            progress = {"done": 0, "total": len(all_urls)}
-            tasks    = [
-                self._fetch_business(
-                    client, url, niche, sem, fingerprint, progress, on_progress
-                )
-                for url in all_urls
-            ]
-            results = await asyncio.gather(*tasks)
-
-        leads = [r for r in results if r is not None]
-        self.logger.info(f"  Phase B complete — {len(leads)} leads with phones")
-        return leads
+                leads = [r for r in results if r is not None]
+                self.logger.info(f"  Phase B complete — {len(leads)} leads with phones")
+                return leads
+                
+            except (httpx.ConnectError, httpx.TimeoutException, httpx.ProxyError) as exc:
+                proxy_str = proxy_map['http://'] if proxy_map else 'direct'
+                self.logger.warning(f"  Connection failed with {proxy_str}: {exc}")
+                last_error = exc
+                if proxy_map and self.proxy_manager:
+                    # Mark this proxy as bad
+                    self.proxy_manager.mark_bad({"http": proxy_map["http://"]})
+                continue  # Try next proxy or direct
+        
+        # All attempts failed
+        self.logger.error(f"XHR scraping failed for '{niche}': {last_error}")
+        return []
 
     # ── Phase A: URL collection ───────────────────────────────────────────────
 
@@ -278,7 +303,16 @@ class XHRGoogleMapsScraper:
                         f"  Blocked on search for '{term}' — rotating identity"
                     )
                     fingerprint = _make_fingerprint()
+                    if self.proxy_manager and proxy_map:
+                        self.proxy_manager.mark_bad({"http": proxy_map["http://"]})
                     await asyncio.sleep(random.uniform(5, 15))
+                    continue
+                
+                # Handle non-200 responses
+                if resp.status_code != 200:
+                    self.logger.warning(
+                        f"  HTTP {resp.status_code} for '{term}'"
+                    )
                     continue
 
                 new_urls = self._extract_urls_from_html(resp.text, global_seen)
@@ -291,6 +325,10 @@ class XHRGoogleMapsScraper:
                     f"(total: {len(all_urls)}/{max_results})"
                 )
 
+            except (httpx.ConnectError, httpx.TimeoutException, httpx.ProxyError) as exc:
+                self.logger.warning(f"  Connection error for '{term}': {exc}")
+                # Don't let one failed term stop the whole scrape
+                continue
             except Exception as exc:
                 self.logger.warning(f"  XHR search failed for '{term}': {exc}")
 

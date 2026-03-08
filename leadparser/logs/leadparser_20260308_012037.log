@@ -1,0 +1,21 @@
+2026-03-08 01:20:37,155 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_012037.log
+2026-03-08 01:20:37,762 | leadparser.main      | INFO     | Live log streaming active — job 7161778f
+2026-03-08 01:20:38,619 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 01:20:38,619 | leadparser.supabase  | INFO     | Session 20260308_012038 | niches: ['barber shops'] | city: Calgary
+2026-03-08 01:20:38,619 | leadparser.main      | INFO     | Session #20260308_012038 | 1 niche(s) | location: Calgary, Alberta | target: 25 filtered leads
+2026-03-08 01:20:39,540 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 01:20:39,621 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Calgary, Alberta'
+2026-03-08 01:21:17,693 | PlaywrightGoogleMapsScraper | INFO     |   'barber shops': +82 (total: 82/100)
+2026-03-08 01:21:17,944 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local barber in Calgary, Alberta'
+2026-03-08 01:21:30,228 | PlaywrightGoogleMapsScraper | INFO     |   'local barber': +18 (total: 100/100)
+2026-03-08 01:21:30,478 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 100 unique URLs
+2026-03-08 01:21:30,478 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase B: 100 profiles across 4 parallel worker(s)
+2026-03-08 01:26:01,808 | PlaywrightGoogleMapsScraper | INFO     |   Phase B complete — 100 leads with phones
+2026-03-08 01:26:03,819 | leadparser.main      | INFO     |   -> 100 raw leads for 'barber shops'; running total: 100
+2026-03-08 01:26:03,947 | leadparser.main      | INFO     | Filters applied: 100 raw -> 15 passed
+2026-03-08 01:26:04,094 | leadparser.main      | WARNING  | Only 15/25 leads available after filters — Google Maps may have fewer listings for this niche/city.
+2026-03-08 01:26:04,841 | leadparser.supabase  | INFO     | Chunk 1: 15 new, 0 dupes
+2026-03-08 01:26:04,841 | leadparser.main      | INFO     | Supabase insert: 15 new, 0 dupes, 0 errors
+2026-03-08 01:26:05,132 | leadparser.main      | INFO     | CSV export: 57 leads -> data\leads_20260308_012605.csv
+2026-03-08 01:26:05,285 | leadparser.supabase  | INFO     | Session complete | stats: {'niches': 1, 'raw_total': 100, 'total': 15, 'new': 15, 'duplicates': 0, 'errors': 0, 'csv_path': 'data\\leads_20260308_012605.csv'}
+2026-03-08 01:26:05,416 | leadparser.main      | INFO     | Total runtime: 328s

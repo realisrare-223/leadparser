@@ -1,0 +1,680 @@
+2026-03-08 02:07:05,836 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_020705.log
+2026-03-08 02:07:06,472 | leadparser.main      | INFO     | Live log streaming active — job eb30607f
+2026-03-08 02:07:06,991 | utils.proxy_manager  | INFO     | Parsed 520 proxies from https://api.proxyscrape.com/v2/?request=getproxies&protocol=
+2026-03-08 02:07:08,370 | utils.proxy_manager  | INFO     | Parsed 379 proxies from Geonode API
+2026-03-08 02:07:08,913 | utils.proxy_manager  | INFO     | Parsed 2989 proxies from https://raw.githubusercontent.com/TheSpeedX/PROXY-List/maste
+2026-03-08 02:07:09,535 | utils.proxy_manager  | INFO     | Parsed 300 proxies from https://free-proxy-list.net/
+2026-03-08 02:07:10,103 | utils.proxy_manager  | INFO     | Fetched 4188 raw proxies; testing…
+2026-03-08 02:07:10,103 | utils.proxy_manager  | INFO     | Proxy pool ready: 4188 working proxies
+2026-03-08 02:07:10,592 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 02:07:10,592 | leadparser.supabase  | INFO     | Session 20260308_020710 | niches: ['barber shops', 'food', 'automotive'] | city: Vancouver
+2026-03-08 02:07:10,592 | leadparser.main      | INFO     | Session #20260308_020710 | 3 niche(s) | location: Vancouver, British Columbia | target: 100 filtered leads
+2026-03-08 02:07:11,590 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:07:11,695 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Vancouver, British Columbia'
+2026-03-08 02:07:11,898 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:12,035 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local barber in Vancouver, British Columbia'
+2026-03-08 02:07:12,219 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+barber+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+barber+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:12,219 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'fade haircut in Vancouver, British Columbia'
+2026-03-08 02:07:12,397 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/fade+haircut+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/fade+haircut+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:12,398 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'beard trim in Vancouver, British Columbia'
+2026-03-08 02:07:12,570 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'beard trim': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/beard+trim+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/beard+trim+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:12,571 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'traditional hot towel shave in Vancouver, British Columbia'
+2026-03-08 02:07:12,755 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'traditional hot towel shave': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/traditional+hot+towel+shave+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/traditional+hot+towel+shave+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:12,881 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming in Vancouver, British Columbia'
+2026-03-08 02:07:13,067 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:13,067 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbers in Vancouver, British Columbia'
+2026-03-08 02:07:13,255 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbers': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbers+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbers+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:13,256 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's hair salons in Vancouver, British Columbia'
+2026-03-08 02:07:13,425 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's hair salons': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+hair+salons+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+hair+salons+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:13,426 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershops in Vancouver, British Columbia'
+2026-03-08 02:07:13,600 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:13,734 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cut shops in Vancouver, British Columbia'
+2026-03-08 02:07:13,924 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cut shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cut+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cut+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:13,925 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber in Vancouver, British Columbia'
+2026-03-08 02:07:14,110 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:14,111 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershop in Vancouver, British Columbia'
+2026-03-08 02:07:14,290 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershop+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershop+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:14,290 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair barber in Vancouver, British Columbia'
+2026-03-08 02:07:14,459 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+barber+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+barber+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:14,603 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircut in Vancouver, British Columbia'
+2026-03-08 02:07:14,780 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircut+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircut+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:14,780 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cutting salon in Vancouver, British Columbia'
+2026-03-08 02:07:14,969 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cutting salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cutting+salon+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cutting+salon+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:14,969 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircut near me in Vancouver, British Columbia'
+2026-03-08 02:07:15,152 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircut near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircut+near+me+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircut+near+me+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:15,152 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircuts for men in Vancouver, British Columbia'
+2026-03-08 02:07:15,349 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircuts for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircuts+for+men+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircuts+for+men+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:15,484 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircutting in Vancouver, British Columbia'
+2026-03-08 02:07:15,655 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircutting': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircutting+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircutting+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:15,655 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'low fade haircut in Vancouver, British Columbia'
+2026-03-08 02:07:15,828 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'low fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/low+fade+haircut+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/low+fade+haircut+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:15,829 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'taper fade in Vancouver, British Columbia'
+2026-03-08 02:07:16,000 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'taper fade': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/taper+fade+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/taper+fade+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:16,000 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'shape up haircut in Vancouver, British Columbia'
+2026-03-08 02:07:16,178 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'shape up haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/shape+up+haircut+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/shape+up+haircut+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:16,307 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'classic barber in Vancouver, British Columbia'
+2026-03-08 02:07:16,484 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'classic barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/classic+barber+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/classic+barber+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:16,485 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'old school barber in Vancouver, British Columbia'
+2026-03-08 02:07:16,664 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'old school barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/old+school+barber+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/old+school+barber+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:16,664 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'master barber in Vancouver, British Columbia'
+2026-03-08 02:07:16,845 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'master barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/master+barber+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/master+barber+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:16,845 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair clipper shop in Vancouver, British Columbia'
+2026-03-08 02:07:17,015 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair clipper shop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+clipper+shop+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+clipper+shop+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:17,153 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'grooming salon in Vancouver, British Columbia'
+2026-03-08 02:07:17,347 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'grooming salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/grooming+salon+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/grooming+salon+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:17,347 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming lounge in Vancouver, British Columbia'
+2026-03-08 02:07:17,531 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming lounge': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+lounge+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+lounge+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:17,532 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair salon for men in Vancouver, British Columbia'
+2026-03-08 02:07:17,719 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair salon for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+salon+for+men+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+salon+for+men+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:17,733 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:07:17,809 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops'; running total: 0
+2026-03-08 02:07:18,651 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'food'
+2026-03-08 02:07:18,738 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food in Vancouver, British Columbia'
+2026-03-08 02:07:18,926 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:18,926 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'restaurants in Vancouver, British Columbia'
+2026-03-08 02:07:19,117 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'restaurants': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/restaurants+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/restaurants+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:19,118 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'diners in Vancouver, British Columbia'
+2026-03-08 02:07:19,297 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'diners': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/diners+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/diners+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:19,297 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'eateries in Vancouver, British Columbia'
+2026-03-08 02:07:19,595 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'eateries': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/eateries+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/eateries+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:19,595 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food shops in Vancouver, British Columbia'
+2026-03-08 02:07:19,774 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:19,775 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'cafes in Vancouver, British Columbia'
+2026-03-08 02:07:19,946 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'cafes': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/cafes+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/cafes+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:19,946 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'bistros in Vancouver, British Columbia'
+2026-03-08 02:07:20,118 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'bistros': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/bistros+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/bistros+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:20,118 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'takeout food in Vancouver, British Columbia'
+2026-03-08 02:07:20,439 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'takeout food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/takeout+food+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/takeout+food+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:20,440 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local food spots in Vancouver, British Columbia'
+2026-03-08 02:07:20,626 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local food spots': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+food+spots+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+food+spots+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:20,626 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'places to eat in Vancouver, British Columbia'
+2026-03-08 02:07:20,807 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'places to eat': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/places+to+eat+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/places+to+eat+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:20,808 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local eats in Vancouver, British Columbia'
+2026-03-08 02:07:20,984 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local eats': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+eats+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+eats+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:20,985 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food near me in Vancouver, British Columbia'
+2026-03-08 02:07:21,298 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+near+me+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+near+me+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:21,298 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'dining near me in Vancouver, British Columbia'
+2026-03-08 02:07:21,484 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'dining near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/dining+near+me+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/dining+near+me+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:21,498 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:07:21,570 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food'; running total: 0
+2026-03-08 02:07:22,298 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'automotive'
+2026-03-08 02:07:22,747 | leadparser.main      | ERROR    | Scraping failed for 'automotive': BrowserContext.new_page: Invalid timezone ID: America/Seattle
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 466, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\playwright_scraper.py", line 138, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\playwright_scraper.py", line 166, in _scrape_async
+    all_urls = await self._collect_all_urls(browser, niche, location)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\playwright_scraper.py", line 239, in _collect_all_urls
+    page = await ctx.new_page()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\async_api\_generated.py", line 12880, in new_page
+    return mapping.from_impl(await self._impl_obj.new_page())
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\_impl\_browser_context.py", line 331, in new_page
+    return from_channel(await self._channel.send("newPage", None))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\_impl\_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: BrowserContext.new_page: Invalid timezone ID: America/Seattle
+2026-03-08 02:07:22,749 | leadparser.main      | INFO     |   Pass 1 result: 0/100 leads pass filters
+2026-03-08 02:07:22,877 | leadparser.main      | INFO     |   Retry pass 2/3: raising raw ceiling to 2000 to collect more matches
+2026-03-08 02:07:23,649 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:07:24,043 | leadparser.main      | ERROR    | Scraping failed for 'barber shops': BrowserContext.new_page: Invalid timezone ID: America/Seattle
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 466, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\playwright_scraper.py", line 138, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\playwright_scraper.py", line 166, in _scrape_async
+    all_urls = await self._collect_all_urls(browser, niche, location)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\playwright_scraper.py", line 239, in _collect_all_urls
+    page = await ctx.new_page()
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\async_api\_generated.py", line 12880, in new_page
+    return mapping.from_impl(await self._impl_obj.new_page())
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\_impl\_browser_context.py", line 331, in new_page
+    return from_channel(await self._channel.send("newPage", None))
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\_impl\_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\site-packages\playwright\_impl\_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.Error: BrowserContext.new_page: Invalid timezone ID: America/Seattle
+2026-03-08 02:07:24,810 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'food'
+2026-03-08 02:07:24,892 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food in Vancouver, British Columbia'
+2026-03-08 02:07:25,071 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:25,071 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'restaurants in Vancouver, British Columbia'
+2026-03-08 02:07:25,241 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'restaurants': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/restaurants+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/restaurants+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:25,375 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'diners in Vancouver, British Columbia'
+2026-03-08 02:07:25,546 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'diners': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/diners+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/diners+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:25,547 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'eateries in Vancouver, British Columbia'
+2026-03-08 02:07:25,737 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'eateries': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/eateries+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/eateries+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:25,737 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food shops in Vancouver, British Columbia'
+2026-03-08 02:07:25,911 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:25,911 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'cafes in Vancouver, British Columbia'
+2026-03-08 02:07:26,087 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'cafes': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/cafes+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/cafes+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:26,221 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'bistros in Vancouver, British Columbia'
+2026-03-08 02:07:26,396 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'bistros': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/bistros+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/bistros+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:26,396 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'takeout food in Vancouver, British Columbia'
+2026-03-08 02:07:26,573 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'takeout food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/takeout+food+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/takeout+food+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:26,573 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local food spots in Vancouver, British Columbia'
+2026-03-08 02:07:26,790 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local food spots': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+food+spots+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+food+spots+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:26,791 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'places to eat in Vancouver, British Columbia'
+2026-03-08 02:07:26,965 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'places to eat': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/places+to+eat+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/places+to+eat+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:27,106 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local eats in Vancouver, British Columbia'
+2026-03-08 02:07:27,282 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local eats': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+eats+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+eats+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:27,282 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food near me in Vancouver, British Columbia'
+2026-03-08 02:07:27,440 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+near+me+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+near+me+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:27,440 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'dining near me in Vancouver, British Columbia'
+2026-03-08 02:07:27,608 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'dining near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/dining+near+me+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/dining+near+me+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:27,618 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:07:27,672 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food'; running total: 0
+2026-03-08 02:07:28,583 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'automotive'
+2026-03-08 02:07:28,750 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'automotive in Vancouver, British Columbia'
+2026-03-08 02:07:28,943 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'automotive': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/automotive+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/automotive+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:28,943 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto repair shops in Vancouver, British Columbia'
+2026-03-08 02:07:29,120 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto repair shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+repair+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+repair+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:29,120 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto detailing in Vancouver, British Columbia'
+2026-03-08 02:07:29,297 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto detailing': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+detailing+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+detailing+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:29,298 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto body shops in Vancouver, British Columbia'
+2026-03-08 02:07:29,617 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto body shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+body+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+body+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:29,617 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'tire shops in Vancouver, British Columbia'
+2026-03-08 02:07:29,803 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'tire shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/tire+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/tire+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:29,804 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car wash in Vancouver, British Columbia'
+2026-03-08 02:07:30,000 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car wash': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+wash+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+wash+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:30,001 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'towing services in Vancouver, British Columbia'
+2026-03-08 02:07:30,164 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'towing services': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/towing+services+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/towing+services+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:30,164 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto glass repair in Vancouver, British Columbia'
+2026-03-08 02:07:30,484 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto glass repair': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+glass+repair+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+glass+repair+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:30,484 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car dealerships in Vancouver, British Columbia'
+2026-03-08 02:07:30,679 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car dealerships': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+dealerships+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+dealerships+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:30,691 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:07:30,760 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive'; running total: 0
+2026-03-08 02:07:30,760 | leadparser.main      | INFO     |   Pass 2 result: 0/100 leads pass filters
+2026-03-08 02:07:30,760 | leadparser.main      | INFO     |   Retry pass 3/3: raising raw ceiling to 2000 to collect more matches
+2026-03-08 02:07:31,518 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:07:31,725 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Vancouver, British Columbia'
+2026-03-08 02:07:31,892 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:31,892 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local barber in Vancouver, British Columbia'
+2026-03-08 02:07:32,069 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+barber+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+barber+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:32,070 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'fade haircut in Vancouver, British Columbia'
+2026-03-08 02:07:32,258 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/fade+haircut+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/fade+haircut+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:32,259 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'beard trim in Vancouver, British Columbia'
+2026-03-08 02:07:32,452 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'beard trim': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/beard+trim+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/beard+trim+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:32,587 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'traditional hot towel shave in Vancouver, British Columbia'
+2026-03-08 02:07:32,766 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'traditional hot towel shave': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/traditional+hot+towel+shave+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/traditional+hot+towel+shave+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:32,767 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming in Vancouver, British Columbia'
+2026-03-08 02:07:32,948 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:32,949 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbers in Vancouver, British Columbia'
+2026-03-08 02:07:33,128 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbers': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbers+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbers+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:33,129 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's hair salons in Vancouver, British Columbia'
+2026-03-08 02:07:33,422 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's hair salons': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+hair+salons+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+hair+salons+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:33,551 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershops in Vancouver, British Columbia'
+2026-03-08 02:07:33,722 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:33,723 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cut shops in Vancouver, British Columbia'
+2026-03-08 02:07:33,920 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cut shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cut+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cut+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:33,920 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber in Vancouver, British Columbia'
+2026-03-08 02:07:34,092 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barber+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:34,093 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershop in Vancouver, British Columbia'
+2026-03-08 02:07:34,241 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barbershop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/barbershop+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/barbershop+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:34,373 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair barber in Vancouver, British Columbia'
+2026-03-08 02:07:34,530 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+barber+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+barber+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:34,531 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircut in Vancouver, British Columbia'
+2026-03-08 02:07:34,718 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircut+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircut+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:34,719 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cutting salon in Vancouver, British Columbia'
+2026-03-08 02:07:34,889 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair cutting salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+cutting+salon+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+cutting+salon+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:34,889 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircut near me in Vancouver, British Columbia'
+2026-03-08 02:07:35,074 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircut near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircut+near+me+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircut+near+me+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:35,206 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'haircuts for men in Vancouver, British Columbia'
+2026-03-08 02:07:35,384 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'haircuts for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/haircuts+for+men+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/haircuts+for+men+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:35,384 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's haircutting in Vancouver, British Columbia'
+2026-03-08 02:07:35,560 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's haircutting': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+haircutting+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+haircutting+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:35,561 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'low fade haircut in Vancouver, British Columbia'
+2026-03-08 02:07:35,724 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'low fade haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/low+fade+haircut+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/low+fade+haircut+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:35,725 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'taper fade in Vancouver, British Columbia'
+2026-03-08 02:07:35,930 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'taper fade': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/taper+fade+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/taper+fade+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:36,061 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'shape up haircut in Vancouver, British Columbia'
+2026-03-08 02:07:36,249 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'shape up haircut': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/shape+up+haircut+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/shape+up+haircut+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:36,249 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'classic barber in Vancouver, British Columbia'
+2026-03-08 02:07:36,422 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'classic barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/classic+barber+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/classic+barber+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:36,423 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'old school barber in Vancouver, British Columbia'
+2026-03-08 02:07:36,589 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'old school barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/old+school+barber+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/old+school+barber+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:36,589 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'master barber in Vancouver, British Columbia'
+2026-03-08 02:07:36,780 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'master barber': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/master+barber+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/master+barber+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:36,902 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair clipper shop in Vancouver, British Columbia'
+2026-03-08 02:07:37,095 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair clipper shop': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+clipper+shop+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+clipper+shop+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:37,096 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'grooming salon in Vancouver, British Columbia'
+2026-03-08 02:07:37,286 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'grooming salon': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/grooming+salon+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/grooming+salon+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:37,286 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming lounge in Vancouver, British Columbia'
+2026-03-08 02:07:37,462 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'men's grooming lounge': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/men%27s+grooming+lounge+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/men%27s+grooming+lounge+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:37,462 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair salon for men in Vancouver, British Columbia'
+2026-03-08 02:07:37,639 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'hair salon for men': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/hair+salon+for+men+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/hair+salon+for+men+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:37,778 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:07:37,830 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops'; running total: 0
+2026-03-08 02:07:38,628 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'food'
+2026-03-08 02:07:38,719 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food in Vancouver, British Columbia'
+2026-03-08 02:07:38,903 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:38,903 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'restaurants in Vancouver, British Columbia'
+2026-03-08 02:07:39,071 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'restaurants': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/restaurants+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/restaurants+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:39,071 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'diners in Vancouver, British Columbia'
+2026-03-08 02:07:39,386 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'diners': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/diners+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/diners+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:39,387 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'eateries in Vancouver, British Columbia'
+2026-03-08 02:07:39,556 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'eateries': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/eateries+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/eateries+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:39,556 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food shops in Vancouver, British Columbia'
+2026-03-08 02:07:39,742 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:39,743 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'cafes in Vancouver, British Columbia'
+2026-03-08 02:07:39,936 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'cafes': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/cafes+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/cafes+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:39,936 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'bistros in Vancouver, British Columbia'
+2026-03-08 02:07:40,254 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'bistros': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/bistros+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/bistros+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:40,254 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'takeout food in Vancouver, British Columbia'
+2026-03-08 02:07:40,450 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'takeout food': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/takeout+food+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/takeout+food+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:40,450 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local food spots in Vancouver, British Columbia'
+2026-03-08 02:07:40,620 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local food spots': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+food+spots+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+food+spots+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:40,621 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'places to eat in Vancouver, British Columbia'
+2026-03-08 02:07:40,839 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'places to eat': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/places+to+eat+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/places+to+eat+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:40,840 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local eats in Vancouver, British Columbia'
+2026-03-08 02:07:41,152 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local eats': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/local+eats+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+eats+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:41,153 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'food near me in Vancouver, British Columbia'
+2026-03-08 02:07:41,322 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'food near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/food+near+me+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/food+near+me+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:41,323 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'dining near me in Vancouver, British Columbia'
+2026-03-08 02:07:41,502 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'dining near me': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/dining+near+me+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/dining+near+me+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:41,516 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:07:41,594 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food'; running total: 0
+2026-03-08 02:07:42,338 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'automotive'
+2026-03-08 02:07:42,551 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'automotive in Vancouver, British Columbia'
+2026-03-08 02:07:42,749 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'automotive': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/automotive+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/automotive+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:42,749 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto repair shops in Vancouver, British Columbia'
+2026-03-08 02:07:42,927 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto repair shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+repair+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+repair+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:42,928 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto detailing in Vancouver, British Columbia'
+2026-03-08 02:07:43,102 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto detailing': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+detailing+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+detailing+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:43,102 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto body shops in Vancouver, British Columbia'
+2026-03-08 02:07:43,273 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto body shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+body+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+body+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:43,401 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'tire shops in Vancouver, British Columbia'
+2026-03-08 02:07:43,571 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'tire shops': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/tire+shops+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/tire+shops+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:43,572 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car wash in Vancouver, British Columbia'
+2026-03-08 02:07:43,769 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car wash': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+wash+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+wash+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:43,769 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'towing services in Vancouver, British Columbia'
+2026-03-08 02:07:43,958 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'towing services': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/towing+services+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/towing+services+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:43,959 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'auto glass repair in Vancouver, British Columbia'
+2026-03-08 02:07:44,143 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'auto glass repair': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/auto+glass+repair+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/auto+glass+repair+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:44,269 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'car dealerships in Vancouver, British Columbia'
+2026-03-08 02:07:44,442 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'car dealerships': Page.goto: net::ERR_CONNECTION_RESET at https://www.google.com/maps/search/car+dealerships+in+Vancouver%2C+British+Columbia
+Call log:
+  - navigating to "https://www.google.com/maps/search/car+dealerships+in+Vancouver%2C+British+Columbia", waiting until "domcontentloaded"
+
+2026-03-08 02:07:44,459 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 02:07:44,536 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive'; running total: 0
+2026-03-08 02:07:44,536 | leadparser.main      | INFO     |   Pass 3 result: 0/100 leads pass filters
+2026-03-08 02:07:44,537 | leadparser.main      | WARNING  | Exhausted 3 passes — 0/100 filtered leads available in this niche/city.
+2026-03-08 02:07:44,667 | leadparser.main      | INFO     | Filters applied: 0 raw -> 0 passed
+2026-03-08 02:07:44,914 | leadparser.main      | INFO     | Supabase insert: 0 new, 0 dupes, 0 errors
+2026-03-08 02:07:45,768 | leadparser.main      | INFO     | CSV export: 57 leads -> data\leads_20260308_020745.csv
+2026-03-08 02:07:45,768 | leadparser.supabase  | INFO     | Session complete | stats: {'niches': 3, 'raw_total': 0, 'total': 0, 'new': 0, 'duplicates': 0, 'errors': 2, 'csv_path': 'data\\leads_20260308_020745.csv'}
+2026-03-08 02:07:45,905 | leadparser.main      | INFO     | Total runtime: 39s

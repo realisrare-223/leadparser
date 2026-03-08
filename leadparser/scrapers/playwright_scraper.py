@@ -94,8 +94,24 @@ USER_AGENTS = [
 TIMEZONES = [
     "America/New_York", "America/Chicago", "America/Denver",
     "America/Los_Angeles", "America/Phoenix", "America/Detroit",
-    "America/Toronto", "America/Vancouver", "America/Seattle",
+    "America/Toronto", "America/Vancouver", "America/Edmonton",
+    "America/Calgary", "America/Montreal", "America/Boston",
+    "America/Atlanta", "America/Dallas", "America/Houston",
+    "America/Miami", "America/Denver", "America/Seattle",
+    # Note: America/Seattle is mapped to America/Los_Angeles in _get_timezone()
 ]
+
+# Valid IANA timezone IDs (Seattle uses Los Angeles)
+_IANA_TIMEZONE_MAP = {
+    "America/Seattle": "America/Los_Angeles",
+}
+
+
+def _get_timezone() -> str:
+    """Return a valid IANA timezone ID."""
+    tz = random.choice(TIMEZONES)
+    # Map invalid/legacy IDs to valid IANA IDs
+    return _IANA_TIMEZONE_MAP.get(tz, tz)
 
 _BASE_URL = "https://www.google.com/maps/search/{query}"
 
@@ -147,16 +163,14 @@ class PlaywrightGoogleMapsScraper:
     ) -> list[dict]:
         from playwright.async_api import async_playwright
 
-        headless   = self.config["scraping"].get("headless", True)
-        proxy_dict = self.proxy_manager.get_proxy() if self.proxy_manager else None
+        headless = self.config["scraping"].get("headless", True)
 
         launch_kwargs: dict = {
             "headless": headless,
+            # Proxy is applied per-context, not at browser level, so a dead
+            # proxy only kills one context and we can fall back to direct.
             "args": ["--no-sandbox", "--disable-dev-shm-usage", "--disable-gpu"],
         }
-        if proxy_dict:
-            proxy_host = proxy_dict.get("http", "").replace("http://", "")
-            launch_kwargs["proxy"] = {"server": f"http://{proxy_host}"}
 
         async with async_playwright() as pw:
             browser = await pw.chromium.launch(**launch_kwargs)
@@ -202,20 +216,30 @@ class PlaywrightGoogleMapsScraper:
 
     # ── Browser context factory ───────────────────────────────────────────────
 
-    async def _new_context(self, browser):
-        """Create a new browser context with a unique randomised fingerprint."""
+    async def _new_context(self, browser, use_proxy: bool = True):
+        """Create a new browser context with a unique randomised fingerprint.
+
+        Proxy is applied at context level (not browser level) so a dead proxy
+        only affects this context and the caller can fall back to direct.
+        """
         ua  = random.choice(USER_AGENTS)
-        tz  = random.choice(TIMEZONES)
-        ctx = await browser.new_context(
-            user_agent   = ua,
-            viewport     = {
+        tz  = _get_timezone()
+        ctx_kwargs: dict = {
+            "user_agent":   ua,
+            "viewport": {
                 "width":  random.randint(1280, 1920),
                 "height": random.randint(720,  1080),
             },
-            locale       = "en-US",
-            timezone_id  = tz,
-            extra_http_headers = {"Referer": "https://www.google.com/"},
-        )
+            "locale":       "en-US",
+            "timezone_id":  tz,
+            "extra_http_headers": {"Referer": "https://www.google.com/"},
+        }
+        if use_proxy and self.proxy_manager:
+            proxy_dict = self.proxy_manager.get_proxy()
+            if proxy_dict:
+                proxy_host = proxy_dict.get("http", "").replace("http://", "")
+                ctx_kwargs["proxy"] = {"server": f"http://{proxy_host}"}
+        ctx = await browser.new_context(**ctx_kwargs)
         return ctx
 
     # ── Phase A: URL collection ───────────────────────────────────────────────
@@ -235,9 +259,13 @@ class PlaywrightGoogleMapsScraper:
         global_seen: set[str] = set()
         all_urls:    list[str] = []
 
-        ctx  = await self._new_context(browser)
+        # Start with a proxied context; fall back to direct after repeated resets.
+        use_proxy   = True
+        ctx  = await self._new_context(browser, use_proxy=use_proxy)
         page = await ctx.new_page()
         await _apply_stealth(page)
+        consecutive_resets = 0
+        _RESET_THRESHOLD   = 3  # switch to direct connection after this many resets
 
         try:
             for term in search_terms:
@@ -252,9 +280,42 @@ class PlaywrightGoogleMapsScraper:
                 try:
                     await page.goto(url, wait_until="domcontentloaded", timeout=30_000)
                     await page.wait_for_timeout(2_000)
+                    consecutive_resets = 0  # successful load resets the counter
                 except Exception as exc:
+                    err_str = str(exc)
                     self.logger.warning(f"  Could not load '{term}': {exc}")
-                    continue
+
+                    # Detect dead-proxy symptoms and fall back to direct connection
+                    if use_proxy and any(
+                        marker in err_str
+                        for marker in ("ERR_CONNECTION_RESET", "ERR_EMPTY_RESPONSE",
+                                       "ERR_TUNNEL_CONNECTION_FAILED",
+                                       "ERR_PROXY_CONNECTION_FAILED")
+                    ):
+                        consecutive_resets += 1
+                        if consecutive_resets >= _RESET_THRESHOLD:
+                            self.logger.warning(
+                                f"  {consecutive_resets} consecutive proxy failures — "
+                                "switching to direct connection"
+                            )
+                            await ctx.close()
+                            use_proxy = False
+                            ctx  = await self._new_context(browser, use_proxy=False)
+                            page = await ctx.new_page()
+                            await _apply_stealth(page)
+                            consecutive_resets = 0
+                            # Retry the current term with the new context
+                            try:
+                                await page.goto(url, wait_until="domcontentloaded",
+                                                timeout=30_000)
+                                await page.wait_for_timeout(2_000)
+                            except Exception as exc2:
+                                self.logger.warning(
+                                    f"  Direct connection also failed for '{term}': {exc2}"
+                                )
+                                continue
+                    else:
+                        continue
 
                 new_urls = await self._scroll_and_collect(page, remaining, global_seen)
                 for u in new_urls:
