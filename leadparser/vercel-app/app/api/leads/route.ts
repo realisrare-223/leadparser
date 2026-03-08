@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     .from('leads')
     .select('*')
     .eq('assigned_to', user.id)
-    .order('lead_score', { ascending: false })
+    .order('created_at', { ascending: false })  // newest leads first
 
   if (status && status !== 'all') query = query.eq('status', status as LeadStatus)
   if (niche  && niche  !== 'all') query = query.eq('niche', niche)

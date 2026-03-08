@@ -24,6 +24,7 @@ export async function POST(request: NextRequest) {
     max_rating      = 5,
     website_filter  = 'any',   // 'any' | 'yes' | 'no'
     min_score       = 0,
+    parser          = 'playwright',  // 'playwright' | 'xhr' | 'selenium'
   } = await request.json()
 
   if (!city) return NextResponse.json({ error: 'city is required' }, { status: 400 })
@@ -44,6 +45,7 @@ export async function POST(request: NextRequest) {
       website_filter,
       require_phone:  true,
       min_score,
+      parser,
     })
     .select()
     .single()

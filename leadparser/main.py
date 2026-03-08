@@ -376,14 +376,19 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
     scorer       = LeadScorer(config)
     pitcher      = PitchEngine(config)
 
-    if config["proxies"].get("enabled"):
-        proxy_mgr.refresh()
+    # Always refresh proxy pool — proxies are now always enabled by default.
+    # ProxyManager.refresh() is a no-op when enabled=False (legacy config support).
+    proxy_mgr.refresh()
 
-    niches       = [args.niche] if args.niche else config["niches"]
+    # Support comma-separated niches from CLI (e.g. --niche "plumbers,electricians")
+    if args.niche:
+        niches = [n.strip() for n in args.niche.split(",") if n.strip()]
+    else:
+        niches = config["niches"]
+
     location     = config["location"]
     target_count = config["scraping"].get("target_leads")
 
-    all_leads: list[dict] = []
     run_stats: dict = {
         "niches": len(niches), "raw_total": 0, "total": 0,
         "new": 0, "duplicates": 0, "errors": 0,
@@ -400,7 +405,7 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
             + (f" | target: {target_count} filtered leads" if target_count else "")
         )
 
-        # ── Phase 1: Scraping ─────────────────────────────────────────
+        # ── Phase 1: Scraping (with retry until target count met) ─────────────
         _parser_name = config["scraping"].get("parser", "playwright").upper()
         print(
             f"\n{Fore.YELLOW}Phase 1: Scraping Google Maps "
@@ -414,62 +419,121 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
         # Context-manager support: Selenium/Playwright scrapers may need __enter__
         if hasattr(scraper, "__enter__"):
             scraper.__enter__()
+
+        # seen_gmb: dedup across retry passes so we never count a lead twice
+        seen_gmb: set[str] = set()
+        raw_bucket: list[dict] = []   # all unique pre-filter leads accumulated so far
+        all_leads: list[dict] = []
+
+        MAX_PASSES = 3  # up to 3 passes; each doubles the raw-results ceiling
+
         try:
-            for niche_i, niche in enumerate(niches, start=1):
-                print(
-                    f"  [{niche_i}/{len(niches)}] {Fore.CYAN}{niche}{Style.RESET_ALL} "
-                    f"in {location['city']}, {location['state']}"
-                )
-
-                # Per-listing progress: Phase 1 spans 10%→75%, spread across niches
-                _niche_count = len(niches)
-                _niche_start = 10 + int(((niche_i - 1) / _niche_count) * 65)
-                _niche_end   = 10 + int((niche_i        / _niche_count) * 65)
-                _niche_width = max(_niche_end - _niche_start, 1)
-
-                def _listing_progress(current: int, total: int,
-                                      _s=_niche_start, _w=_niche_width) -> None:
-                    frac = current / max(total, 1)
-                    update_job_progress(_s + int(frac * _w))
-
-                try:
-                    raw_leads = scraper.scrape_niche(
-                        niche, location, on_progress=_listing_progress
+            for pass_num in range(MAX_PASSES):
+                if pass_num > 0:
+                    # Increase raw ceiling 2× for the retry — the scraper will
+                    # explore more search-expansion terms it skipped first time.
+                    new_raw = min(
+                        config["scraping"]["max_results_per_niche"] * 2, 2000
                     )
-                except Exception as exc:
-                    logger.error(f"Scraping failed for '{niche}': {exc}", exc_info=True)
-                    run_stats["errors"] += 1
-                    continue
+                    config["scraping"]["max_results_per_niche"] = new_raw
+                    logger.info(
+                        f"  Retry pass {pass_num + 1}/{MAX_PASSES}: "
+                        f"raising raw ceiling to {new_raw} to collect more matches"
+                    )
+                    print(
+                        f"\n{Fore.YELLOW}  Retry pass {pass_num + 1}: "
+                        f"collecting up to {new_raw} raw results...{Style.RESET_ALL}"
+                    )
 
-                for raw in raw_leads:
+                for niche_i, niche in enumerate(niches, start=1):
+                    print(
+                        f"  [{niche_i}/{len(niches)}] {Fore.CYAN}{niche}{Style.RESET_ALL} "
+                        f"in {location['city']}, {location['state']}"
+                    )
+
+                    # Per-listing progress: spans 10%→70% across niches × passes
+                    _niche_count = len(niches)
+                    _niche_start = 10 + int(((niche_i - 1) / _niche_count) * 60)
+                    _niche_end   = 10 + int((niche_i        / _niche_count) * 60)
+                    _niche_width = max(_niche_end - _niche_start, 1)
+
+                    def _listing_progress(current: int, total: int,
+                                          _s=_niche_start, _w=_niche_width) -> None:
+                        frac = current / max(total, 1)
+                        update_job_progress(_s + int(frac * _w))
+
                     try:
-                        lead = build_lead(
-                            raw, niche, config,
-                            scorer, pitcher, validator, addr_parser
+                        raw_leads = scraper.scrape_niche(
+                            niche, location, on_progress=_listing_progress
                         )
-                        if lead:           # None = no phone — skip
-                            all_leads.append(lead)
-                            run_stats["raw_total"] += 1
                     except Exception as exc:
-                        logger.warning(f"Lead build failed: {exc}", exc_info=True)
+                        logger.error(f"Scraping failed for '{niche}': {exc}", exc_info=True)
                         run_stats["errors"] += 1
+                        continue
 
-                logger.info(
-                    f"  -> {len(raw_leads)} raw leads for '{niche}'; "
-                    f"running total: {run_stats['raw_total']}"
-                )
+                    new_this_pass = 0
+                    for raw in raw_leads:
+                        gmb = (raw.get("gmb_link") or "").strip()
+                        if gmb in seen_gmb:
+                            continue   # already processed in an earlier pass
+                        seen_gmb.add(gmb)
+                        try:
+                            lead = build_lead(
+                                raw, niche, config,
+                                scorer, pitcher, validator, addr_parser
+                            )
+                            if lead:
+                                raw_bucket.append(lead)
+                                run_stats["raw_total"] += 1
+                                new_this_pass += 1
+                        except Exception as exc:
+                            logger.warning(f"Lead build failed: {exc}", exc_info=True)
+                            run_stats["errors"] += 1
+
+                    logger.info(
+                        f"  -> {len(raw_leads)} raw scraped, "
+                        f"{new_this_pass} new unique leads for '{niche}'; "
+                        f"running total: {run_stats['raw_total']}"
+                    )
+
+                # ── Check after each full niche-pass whether target is met ──
+                filtered_so_far = apply_filters(raw_bucket, config)
+                have  = len(filtered_so_far)
+                need  = target_count or 0
+
+                if need and have < need:
+                    logger.info(
+                        f"  Pass {pass_num + 1} result: {have}/{need} leads pass filters"
+                    )
+                    if pass_num < MAX_PASSES - 1:
+                        continue   # do another pass with higher ceiling
+                    else:
+                        logger.warning(
+                            f"Exhausted {MAX_PASSES} passes — "
+                            f"{have}/{need} filtered leads available in this niche/city."
+                        )
+                        print(
+                            f"{Fore.YELLOW}Note:{Style.RESET_ALL} "
+                            f"Only {Fore.GREEN}{have}{Style.RESET_ALL}/{need} leads "
+                            f"available after {MAX_PASSES} passes — "
+                            f"Google Maps may be exhausted for this niche/city."
+                        )
+                else:
+                    # Target met (or no target) — stop early
+                    if need:
+                        logger.info(f"  Target reached: {have}/{need} leads pass filters")
+                    break
+
+            # Collapse to final filtered set
+            all_leads = apply_filters(raw_bucket, config)
+
         finally:
             if hasattr(scraper, "__exit__"):
                 scraper.__exit__(None, None, None)
 
-        # Phase 2 (supplementary enrichment) removed:
-        # Leads without a phone in their Google Business profile are
-        # skipped at scrape time. No Yelp / Yellow Pages / BBB lookup.
-
         # ── Phase 3: Filter ────────────────────────────────────────────
         update_job_progress(75)
-        before_filter = len(all_leads)
-        all_leads     = apply_filters(all_leads, config)
+        before_filter = run_stats["raw_total"]
         logger.info(f"Filters applied: {before_filter} raw -> {len(all_leads)} passed")
         print(
             f"\n{Fore.YELLOW}Phase 3: Filtering...{Style.RESET_ALL} "
@@ -477,8 +541,6 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
         )
 
         # ── Phase 4: Trim to target count ─────────────────────────────
-        # --limit N guarantees N leads after filters by over-collecting 4x raw.
-        # Here we trim down if more passed than requested.
         update_job_progress(85)
         if target_count:
             if len(all_leads) > target_count:
@@ -487,16 +549,6 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
                 print(
                     f"{Fore.YELLOW}Trimming to target:{Style.RESET_ALL} "
                     f"keeping {Fore.GREEN}{target_count}{Style.RESET_ALL}"
-                )
-            elif len(all_leads) < target_count:
-                logger.warning(
-                    f"Only {len(all_leads)}/{target_count} leads available after filters — "
-                    f"Google Maps may have fewer listings for this niche/city."
-                )
-                print(
-                    f"{Fore.YELLOW}Note:{Style.RESET_ALL} "
-                    f"Only {Fore.GREEN}{len(all_leads)}{Style.RESET_ALL}/{target_count} "
-                    f"leads available — Google Maps exhausted for this search."
                 )
 
         run_stats["total"] = len(all_leads)
@@ -582,7 +634,13 @@ def parse_args() -> argparse.Namespace:
         help="TARGET number of leads after all filters. "
              "The scraper over-collects raw results (4x) to guarantee this.",
     )
-    parser.add_argument("--niche",       default=None)
+    parser.add_argument("--niche",       default=None,
+        help="Niche to scrape; comma-separated for multiple (e.g. 'plumbers,electricians')")
+    parser.add_argument(
+        "--parser", default=None, dest="parser",
+        choices=["playwright", "xhr", "selenium"],
+        help="Override scraper parser (playwright/xhr/selenium)",
+    )
     parser.add_argument(
         "--job-id", default=None, dest="job_id",
         help="Supabase scraper_jobs UUID — enables live log streaming to dashboard",
@@ -622,15 +680,20 @@ def _apply_cli_overrides(config: dict, args: argparse.Namespace):
         print(f"  {Fore.CYAN}State:{Style.RESET_ALL} {args.state}")
 
     if args.limit is not None:
-        # Over-collect 4x raw listings so filters still leave us with the target.
-        # Cap at 500 to keep run times reasonable.
-        raw_limit = min(args.limit * 4, 500)
+        # Over-collect 10x raw listings so filters still leave us with the target.
+        # The pipeline retries with a higher raw limit if the first pass falls short.
+        # Cap at 1000 to keep run times reasonable.
+        raw_limit = min(args.limit * 10, 1000)
         config["scraping"]["max_results_per_niche"] = raw_limit
         config["scraping"]["target_leads"]          = args.limit
         print(
             f"  {Fore.CYAN}Target:{Style.RESET_ALL} {args.limit} filtered leads "
-            f"(collecting up to {raw_limit} raw)"
+            f"(collecting up to {raw_limit} raw, retrying if needed)"
         )
+
+    if args.parser is not None:
+        config["scraping"]["parser"] = args.parser
+        print(f"  {Fore.CYAN}Parser:{Style.RESET_ALL} {args.parser}")
 
     # Apply per-job filter overrides from CLI (worker.py passes these)
     filters = config.setdefault("filters", {})

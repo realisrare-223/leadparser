@@ -71,7 +71,7 @@ scraping:
 
 # ── FREE PROXY SETTINGS ──────────────────────────────────────
 proxies:
-  enabled: false           # Set true to rotate through free proxies
+  enabled: true            # Always rotate through free proxies for anti-detection
   # Sources available:
   #   HTML-table sources (legacy): "free-proxy-list", "sslproxies", "us-proxy"
   #   API/raw-text sources (faster, more proxies):
@@ -84,8 +84,8 @@ proxies:
     - "geonode"
     - "github-theSpeedX"
     - "free-proxy-list"
-  # Test proxies before using them
-  test_before_use: true
+  # Test proxies before using them (slower startup but higher quality pool)
+  test_before_use: false
   # Timeout (seconds) when testing proxy connectivity
   test_timeout: 5
   # Rotate proxy every N requests

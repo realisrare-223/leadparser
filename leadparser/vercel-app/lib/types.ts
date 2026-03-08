@@ -97,4 +97,6 @@ export interface ScraperJob {
   website_filter: 'any' | 'yes' | 'no'   // 'any'=no filter | 'yes'=has website | 'no'=no website
   require_phone: boolean
   min_score: number
+  // Parser engine used for this job
+  parser: 'playwright' | 'xhr' | 'selenium'
 }

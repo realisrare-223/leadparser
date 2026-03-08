@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
   let query = supabase
     .from('leads')
     .select('*, callers(name)')
-    .order('lead_score', { ascending: false })
+    .order('created_at', { ascending: false })  // newest leads first
     .limit(limit)
 
   // ── String filters ───────────────────────────────────────────────────────

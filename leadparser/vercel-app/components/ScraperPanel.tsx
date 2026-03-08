@@ -2,8 +2,13 @@
 
 // ============================================================
 // ScraperPanel — queue scraper jobs, watch live logs, view history.
-// Supports parallel jobs with animated per-job progress bars
-// and advanced per-job filter options.
+// Supports:
+//   • Multi-select niches (chips)
+//   • Multi-select cities (one job queued per city)
+//   • Parser picker popup (Playwright vs XHR) on Generate click
+//   • Parallel jobs with animated per-job progress bars
+//   • Advanced per-job filter options
+//   • date_added shown in job history
 // ============================================================
 
 import { useState, useEffect, useCallback, useRef } from 'react'
@@ -22,6 +27,8 @@ interface LogEntry {
   level:   string
   message: string
 }
+
+type ParserChoice = 'playwright' | 'xhr'
 
 // ── Constants ──────────────────────────────────────────────────────────────
 
@@ -56,8 +63,91 @@ const REGION_OPTIONS: ComboOption[] = COUNTRY_ORDER.flatMap(country => {
 
 const NICHE_OPTIONS: ComboOption[] = NICHE_COMBO_OPTIONS
 
+// ── Multi-chip select ──────────────────────────────────────────────────────
+// Renders selected items as dismissible chips above a Combobox.
+
+function MultiChipSelect({
+  label,
+  values,
+  options,
+  placeholder,
+  allowFreeText,
+  onChange,
+}: {
+  label: string
+  values: string[]
+  options: ComboOption[]
+  placeholder: string
+  allowFreeText?: boolean
+  onChange: (values: string[]) => void
+}) {
+  const [pending, setPending] = useState('')
+
+  function addValue(v: string) {
+    const trimmed = v.trim()
+    if (!trimmed || values.includes(trimmed)) return
+    onChange([...values, trimmed])
+    setPending('')
+  }
+
+  function removeValue(v: string) {
+    onChange(values.filter(x => x !== v))
+  }
+
+  return (
+    <div>
+      <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
+        {label}
+      </label>
+
+      {/* Selected chips */}
+      {values.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mb-2">
+          {values.map(v => (
+            <span
+              key={v}
+              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30"
+            >
+              {v}
+              <button
+                type="button"
+                onClick={() => removeValue(v)}
+                className="text-blue-400 hover:text-red-400 transition leading-none"
+              >
+                ×
+              </button>
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* Input */}
+      <Combobox
+        value={pending}
+        onChange={v => {
+          // Auto-add when user selects from list
+          if (options.some(o => o.value === v || o.label === v)) {
+            addValue(v)
+          } else {
+            setPending(v)
+          }
+        }}
+        options={options.filter(o => !values.includes(o.value) && !values.includes(o.label))}
+        placeholder={values.length ? `Add another ${label.toLowerCase()}…` : placeholder}
+        allowFreeText={allowFreeText}
+      />
+
+      {/* Hint */}
+      {allowFreeText && (
+        <p className="text-slate-600 text-[10px] mt-1">
+          Type and press Enter to add any value, or pick from the list.
+        </p>
+      )}
+    </div>
+  )
+}
+
 // ── Progress bar ───────────────────────────────────────────────────────────
-// Receives smoothPct (already interpolated) so the bar never jumps.
 
 function JobProgressBar({ status, smoothPct }: { status: JobStatus; smoothPct: number }) {
   const pct = Math.min(100, Math.max(0, smoothPct))
@@ -89,9 +179,7 @@ function JobProgressBar({ status, smoothPct }: { status: JobStatus; smoothPct: n
     )
   }
 
-  // running — smoothPct drives a CSS-transitioned fill
   if (pct < 1) {
-    // indeterminate — no progress data yet
     return (
       <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden relative">
         <div className="progress-indeterminate bg-gradient-to-r from-transparent via-blue-500 to-transparent rounded-full" />
@@ -101,12 +189,10 @@ function JobProgressBar({ status, smoothPct }: { status: JobStatus; smoothPct: n
 
   return (
     <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden relative">
-      {/* filled portion — CSS transition makes micro-increments silky smooth */}
       <div
         className="h-full bg-gradient-to-r from-blue-600 to-violet-500 rounded-full"
         style={{ width: `${pct}%`, transition: 'width 0.25s linear' }}
       />
-      {/* shimmer overlay */}
       <div
         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent progress-shimmer"
         style={{ width: `${pct}%` }}
@@ -115,13 +201,82 @@ function JobProgressBar({ status, smoothPct }: { status: JobStatus; smoothPct: n
   )
 }
 
+// ── Parser picker modal ────────────────────────────────────────────────────
+
+function ParserModal({
+  onSelect,
+  onClose,
+}: {
+  onSelect: (parser: ParserChoice) => void
+  onClose: () => void
+}) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+      <div className="bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl p-6 max-w-sm w-full mx-4">
+        <h3 className="text-white font-semibold text-base mb-1">Choose Parser Engine</h3>
+        <p className="text-slate-400 text-xs mb-5">
+          Which scraper should collect leads for this job?
+        </p>
+
+        <div className="space-y-3">
+          {/* Playwright */}
+          <button
+            onClick={() => onSelect('playwright')}
+            className="w-full text-left p-4 rounded-xl border border-blue-500/40 bg-blue-500/10 hover:bg-blue-500/20 transition group"
+          >
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-blue-300 font-semibold text-sm">Playwright</span>
+              <span className="text-[10px] text-blue-400 bg-blue-500/20 px-2 py-0.5 rounded-full border border-blue-500/30 font-semibold">
+                Recommended
+              </span>
+            </div>
+            <p className="text-slate-400 text-xs leading-relaxed">
+              Real browser — 4× parallel workers. More accurate, better anti-bot evasion.
+              Best for detailed profiles and difficult-to-scrape cities.
+            </p>
+          </button>
+
+          {/* XHR */}
+          <button
+            onClick={() => onSelect('xhr')}
+            className="w-full text-left p-4 rounded-xl border border-violet-500/40 bg-violet-500/10 hover:bg-violet-500/20 transition"
+          >
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-violet-300 font-semibold text-sm">XHR / HTTP</span>
+              <span className="text-[10px] text-violet-400 bg-violet-500/20 px-2 py-0.5 rounded-full border border-violet-500/30 font-semibold">
+                Fastest
+              </span>
+            </div>
+            <p className="text-slate-400 text-xs leading-relaxed">
+              No browser — pure async HTTP requests. Up to 100× faster.
+              Ideal for large volume runs. May yield fewer results per niche.
+            </p>
+          </button>
+        </div>
+
+        <button
+          onClick={onClose}
+          className="mt-4 w-full text-center text-xs text-slate-500 hover:text-slate-300 transition py-1"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  )
+}
+
 // ── Component ──────────────────────────────────────────────────────────────
 
 export function ScraperPanel() {
-  // ── Core form fields ──
-  const [city,     setCity]     = useState('')
-  const [state,    setState]    = useState('')
-  const [niche,    setNiche]    = useState('')
+  // ── Multi-select: cities and niches ──
+  const [cities,  setCities]  = useState<string[]>([])
+  const [states,  setStates]  = useState<string[]>([])   // parallel to cities
+  const [niches,  setNiches]  = useState<string[]>([])
+
+  // ── Pending single-entry helpers (for the Combobox inputs) ──
+  const [cityInput,  setCityInput]  = useState('')
+  const [stateInput, setStateInput] = useState('')
+
   const [limitStr, setLimitStr] = useState('50')
 
   // ── Advanced filter state ──
@@ -132,6 +287,10 @@ export function ScraperPanel() {
   const [maxRating,     setMaxRating]     = useState('')
   const [websiteFilter, setWebsiteFilter] = useState<'any' | 'yes' | 'no'>('any')
   const [minScore,      setMinScore]      = useState('')
+
+  // ── Parser modal ──
+  const [showParserModal, setShowParserModal] = useState(false)
+  const [parser, setParser] = useState<ParserChoice>('playwright')
 
   // ── UI state ──
   const [queuing,      setQueuing]      = useState(false)
@@ -145,9 +304,7 @@ export function ScraperPanel() {
   const [selectedJob,   setSelectedJob]   = useState<string | null>(null)
   const [logs,          setLogs]          = useState<LogEntry[]>([])
   const [cancelling,    setCancelling]    = useState<Record<string, boolean>>({})
-  // smoothProgress: per-job displayed % that slowly interpolates toward the real value
   const [smoothProgress, setSmoothProgress] = useState<Record<string, number>>({})
-  // lastLogId tracked as a ref so fetchLogs closure stays stable
   const lastLogIdRef     = useRef(0)
   const logsContainerRef = useRef<HTMLDivElement>(null)
 
@@ -203,7 +360,6 @@ export function ScraperPanel() {
     }
   }, [selectedJob])
 
-  // Scroll within the log container only — never jumps the whole page
   useEffect(() => {
     const el = logsContainerRef.current
     if (el) el.scrollTop = el.scrollHeight
@@ -218,14 +374,11 @@ export function ScraperPanel() {
     checkWorker()
     fetchJobs()
     const wv = setInterval(checkWorker, 10_000)
-    const jv = setInterval(fetchJobs,   5_000)   // 5s refresh shows progress updates promptly
+    const jv = setInterval(fetchJobs,   5_000)
     return () => { clearInterval(wv); clearInterval(jv) }
   }, [checkWorker, fetchJobs])
 
   // ── Smooth progress animation ─────────────────────────────────────────
-  // Runs every 200 ms and slowly nudges each running job's displayed %
-  // toward the real backend value, so the bar creeps steadily rather than
-  // jumping on each 5-second poll.
   useEffect(() => {
     const ticker = setInterval(() => {
       setSmoothProgress(prev => {
@@ -234,19 +387,14 @@ export function ScraperPanel() {
           if (job.status === 'done') {
             next[job.id] = 100
           } else if (job.status !== 'running') {
-            // pending/failed/cancelled — keep at 0 or current
             next[job.id] = prev[job.id] ?? 0
           } else {
             const actual  = job.progress ?? 0
             const shown   = prev[job.id]  ?? 0
-
             if (shown < actual) {
-              // Catch-up: lerp toward actual at ~0.4 %/tick min, faster when far behind
               const step = Math.min(0.8, Math.max(0.4, (actual - shown) * 0.1))
               next[job.id] = Math.min(actual, shown + step)
             } else if (actual < 96) {
-              // Phantom creep: tiny tick so bar never looks frozen between polls
-              // Capped at actual+4 so we never mislead by more than 4 %
               next[job.id] = Math.min(actual + 4, shown + 0.06)
             }
           }
@@ -257,67 +405,105 @@ export function ScraperPanel() {
     return () => clearInterval(ticker)
   }, [jobs])
 
-  const selectedJobObj = jobs.find(j => j.id === selectedJob)
+  const selectedJobObj    = jobs.find(j => j.id === selectedJob)
   const selectedJobStatus = selectedJobObj?.status
 
   useEffect(() => {
     if (!selectedJob) return
-    // Only poll while the job is active; stop immediately when done/failed/cancelled
     if (selectedJobStatus && !['running', 'pending'].includes(selectedJobStatus)) return
     fetchLogs()
     const lv = setInterval(fetchLogs, 2_000)
     return () => clearInterval(lv)
   }, [selectedJob, selectedJobStatus, fetchLogs])
 
-  // ── Queue job ─────────────────────────────────────────────────────────
+  // ── Queue jobs ────────────────────────────────────────────────────────
+  // Queues one job per city (each with all selected niches comma-joined).
 
-  async function handleQueue(e: React.FormEvent) {
-    e.preventDefault()
+  async function queueJobs(chosenParser: ParserChoice) {
+    setShowParserModal(false)
+    setParser(chosenParser)
 
     const limit = parseInt(limitStr, 10) || 1
 
-    let resolvedState = state.trim()
-    const matched = resolveRegion(resolvedState)
-    if (matched) resolvedState = matched.name
+    // Build city list — support freetext city input too
+    let cityList = [...cities]
+    if (cityInput.trim() && !cityList.includes(cityInput.trim())) {
+      cityList.push(cityInput.trim())
+    }
+    if (!cityList.length) {
+      setResult('Error: Select at least one city.')
+      setResultOk(false)
+      return
+    }
+
+    const nicheStr = niches.length ? niches.join(',') : 'all'
 
     setQueuing(true)
     setResult(null)
 
-    try {
-      const res = await fetch('/api/scrape', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          city,
-          state:          resolvedState,
-          niche:          niche || 'all',
-          limit,
-          min_reviews:    parseInt(minReviews,  10) || 0,
-          max_reviews:    parseInt(maxReviews,  10) || 9999,
-          min_rating:     parseFloat(minRating) || 0,
-          max_rating:     parseFloat(maxRating) || 5,
-          website_filter: websiteFilter,
-          min_score:      parseInt(minScore, 10) || 0,
-        }),
-      })
-      const data = await res.json()
+    let queued = 0
+    let lastId: string | null = null
 
-      if (res.ok) {
-        setResult(`Queued — collecting up to ${limit} leads. The engine will start shortly.`)
-        setResultOk(true)
-        setCity(''); setState(''); setNiche('')
-        await fetchJobs()
-        if (data?.id) setSelectedJob(data.id)
-      } else {
-        setResult(`Error: ${data.error ?? 'Unknown error'}`)
+    for (const city of cityList) {
+      // Auto-resolve state from city map or use the stateInput
+      let resolvedState = CITY_STATE_MAP[city.toLowerCase()] || stateInput.trim()
+      const matched = resolveRegion(resolvedState)
+      if (matched) resolvedState = matched.name
+
+      try {
+        const res = await fetch('/api/scrape', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            city,
+            state:          resolvedState,
+            niche:          nicheStr,
+            limit,
+            min_reviews:    parseInt(minReviews,  10) || 0,
+            max_reviews:    parseInt(maxReviews,  10) || 9999,
+            min_rating:     parseFloat(minRating) || 0,
+            max_rating:     parseFloat(maxRating) || 5,
+            website_filter: websiteFilter,
+            min_score:      parseInt(minScore, 10) || 0,
+            parser:         chosenParser,
+          }),
+        })
+        const data = await res.json()
+        if (res.ok) {
+          queued++
+          lastId = data?.id ?? null
+        } else {
+          setResult(`Error queuing ${city}: ${data.error ?? 'Unknown error'}`)
+          setResultOk(false)
+        }
+      } catch (err: any) {
+        setResult(`Error: ${err?.message ?? 'Network error'}`)
         setResultOk(false)
       }
-    } catch (err: any) {
-      setResult(`Error: ${err?.message ?? 'Network error'}`)
-      setResultOk(false)
-    } finally {
-      setQueuing(false)
     }
+
+    if (queued > 0) {
+      const cityLabel = cityList.length > 1 ? `${cityList.length} cities` : cityList[0]
+      const nicheLabel = niches.length > 1 ? `${niches.length} niches` : (niches[0] || 'all')
+      setResult(
+        `Queued ${queued} job${queued > 1 ? 's' : ''} — ${cityLabel} × ${nicheLabel} [${chosenParser}]. Engine starting shortly.`
+      )
+      setResultOk(true)
+      setCities([])
+      setNiches([])
+      setCityInput('')
+      setStateInput('')
+      await fetchJobs()
+      if (lastId) setSelectedJob(lastId)
+    }
+
+    setQueuing(false)
+  }
+
+  function handleGenerateClick(e: React.FormEvent) {
+    e.preventDefault()
+    // Show parser selection modal before queuing
+    setShowParserModal(true)
   }
 
   // ── Cancel job ───────────────────────────────────────────────────────
@@ -330,12 +516,10 @@ export function ScraperPanel() {
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify({ id: jobId }),
       })
-      // Optimistically remove from UI immediately — don't wait for next poll
       setJobs(prev => prev.filter(j => j.id !== jobId))
       setSmoothProgress(prev => { const n = { ...prev }; delete n[jobId]; return n })
       setSelectedJob(prev => {
         if (prev !== jobId) return prev
-        // Auto-select the next available job
         const remaining = jobs.filter(j => j.id !== jobId)
         return remaining[0]?.id ?? null
       })
@@ -345,11 +529,6 @@ export function ScraperPanel() {
   }
 
   // ── Helpers ───────────────────────────────────────────────────────────
-
-  function fmt(ts: string | null) {
-    if (!ts) return '—'
-    return new Date(ts).toLocaleString()
-  }
 
   function duration(job: ScraperJob) {
     if (!job.started_at) return '—'
@@ -378,6 +557,14 @@ export function ScraperPanel() {
 
   return (
     <div className="space-y-6">
+
+      {/* Parser modal */}
+      {showParserModal && (
+        <ParserModal
+          onSelect={queueJobs}
+          onClose={() => setShowParserModal(false)}
+        />
+      )}
 
       {/* ── Engine status ── */}
       <div className={`rounded-2xl border p-5 flex items-center justify-between ${
@@ -423,62 +610,55 @@ export function ScraperPanel() {
           )}
         </div>
         <p className="text-slate-400 text-xs mb-5">
-          The <strong>Limit</strong> is your <em>target</em> — the scraper collects up to 4× raw
-          listings and filters down, so you always get that many leads (or all available if fewer exist).
+          Select multiple cities and niches. One job is queued per city.
+          The scraper will <strong>keep parsing</strong> until you hit your target — it retries
+          automatically with a wider search if filters are strict (e.g. No Website).
         </p>
 
-        <form onSubmit={handleQueue} className="space-y-4">
+        <form onSubmit={handleGenerateClick} className="space-y-4">
 
-          {/* ── Row 1: core params ── */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          {/* ── Row 1: Cities (multi) + State + Niches (multi) + Limit ── */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
-            <div>
-              <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-                City *
-              </label>
-              <Combobox
-                value={city}
-                onChange={val => {
-                  setCity(val)
-                  // Auto-fill the State field when a known city is selected
-                  const autoState = CITY_STATE_MAP[val.toLowerCase()]
-                  if (autoState && !state) setState(autoState)
-                }}
-                options={CITY_OPTIONS}
-                placeholder="Edmonton, Dallas…"
-                allowFreeText
-              />
-            </div>
+            {/* Cities multi-select */}
+            <MultiChipSelect
+              label="Cities *"
+              values={cities}
+              options={CITY_OPTIONS}
+              placeholder="Edmonton, Dallas, Calgary…"
+              allowFreeText
+              onChange={setCities}
+            />
 
+            {/* State / Province (used when city not in map) */}
             <div>
               <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
                 State / Province
+                <span className="ml-1 text-slate-600 normal-case font-normal">(auto-filled for known cities)</span>
               </label>
               <Combobox
-                value={state}
-                onChange={setState}
+                value={stateInput}
+                onChange={setStateInput}
                 options={REGION_OPTIONS}
-                placeholder="TX, Texas, Ontario…"
+                placeholder="AB, Alberta, Texas…"
                 allowFreeText
               />
             </div>
 
-            <div>
-              <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-                Niche
-              </label>
-              <Combobox
-                value={niche}
-                onChange={setNiche}
-                options={NICHE_OPTIONS}
-                placeholder="Plumbers, HVAC…"
-                allowFreeText
-              />
-            </div>
+            {/* Niches multi-select */}
+            <MultiChipSelect
+              label="Niches"
+              values={niches}
+              options={NICHE_OPTIONS}
+              placeholder="Plumbers, Restaurants, Barbershops…"
+              allowFreeText
+              onChange={setNiches}
+            />
 
+            {/* Target leads */}
             <div>
               <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-                Target Leads
+                Target Leads <span className="text-slate-600 normal-case font-normal">(per city)</span>
               </label>
               <input
                 type="text"
@@ -516,122 +696,70 @@ export function ScraperPanel() {
             {showFilters && (
               <div className="mt-3 p-4 bg-slate-800/60 border border-slate-700 rounded-xl space-y-4">
 
-                {/* Review count row */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                   <div>
-                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-                      Min Reviews
-                    </label>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      value={minReviews}
-                      onChange={e => setMinReviews(e.target.value.replace(/\D/g, ''))}
-                      placeholder="0"
-                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
-                    />
+                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">Min Reviews</label>
+                    <input type="text" inputMode="numeric" value={minReviews}
+                      onChange={e => setMinReviews(e.target.value.replace(/\D/g, ''))} placeholder="0"
+                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-                      Max Reviews
-                    </label>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      value={maxReviews}
-                      onChange={e => setMaxReviews(e.target.value.replace(/\D/g, ''))}
-                      placeholder="9999"
-                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
-                    />
+                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">Max Reviews</label>
+                    <input type="text" inputMode="numeric" value={maxReviews}
+                      onChange={e => setMaxReviews(e.target.value.replace(/\D/g, ''))} placeholder="9999"
+                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-                      Min Rating
-                    </label>
-                    <input
-                      type="text"
-                      inputMode="decimal"
-                      value={minRating}
-                      onChange={e => setMinRating(e.target.value.replace(/[^0-9.]/g, ''))}
-                      placeholder="0.0"
-                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
-                    />
+                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">Min Rating</label>
+                    <input type="text" inputMode="decimal" value={minRating}
+                      onChange={e => setMinRating(e.target.value.replace(/[^0-9.]/g, ''))} placeholder="0.0"
+                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
                   </div>
                   <div>
-                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-                      Max Rating
-                    </label>
-                    <input
-                      type="text"
-                      inputMode="decimal"
-                      value={maxRating}
-                      onChange={e => setMaxRating(e.target.value.replace(/[^0-9.]/g, ''))}
-                      placeholder="5.0"
-                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
-                    />
+                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">Max Rating</label>
+                    <input type="text" inputMode="decimal" value={maxRating}
+                      onChange={e => setMaxRating(e.target.value.replace(/[^0-9.]/g, ''))} placeholder="5.0"
+                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
                   </div>
                 </div>
 
-                {/* Min lead score + website toggle + require phone */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 items-end">
                   <div>
-                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-                      Min Lead Score
-                    </label>
-                    <input
-                      type="text"
-                      inputMode="numeric"
-                      value={minScore}
-                      onChange={e => setMinScore(e.target.value.replace(/\D/g, ''))}
-                      placeholder="0"
-                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
-                    />
+                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">Min Lead Score</label>
+                    <input type="text" inputMode="numeric" value={minScore}
+                      onChange={e => setMinScore(e.target.value.replace(/\D/g, ''))} placeholder="0"
+                      className="w-full bg-slate-900 border border-slate-600 rounded-xl px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500" />
                   </div>
 
-                  {/* 3-way website toggle */}
                   <div className="col-span-2">
-                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">
-                      Website
-                    </label>
+                    <label className="block text-xs uppercase tracking-wide text-slate-400 mb-1.5 font-semibold">Website</label>
                     <div className="flex rounded-xl overflow-hidden border border-slate-600 text-xs font-semibold">
                       {(['any', 'no', 'yes'] as const).map(opt => (
-                        <button
-                          key={opt}
-                          type="button"
-                          onClick={() => setWebsiteFilter(opt)}
+                        <button key={opt} type="button" onClick={() => setWebsiteFilter(opt)}
                           className={`flex-1 py-2 transition ${
                             websiteFilter === opt
-                              ? opt === 'no'
-                                ? 'bg-violet-500 text-white'
-                                : opt === 'yes'
-                                  ? 'bg-green-600 text-white'
-                                  : 'bg-blue-500 text-white'
+                              ? opt === 'no' ? 'bg-violet-500 text-white'
+                                : opt === 'yes' ? 'bg-green-600 text-white'
+                                : 'bg-blue-500 text-white'
                               : 'bg-slate-900 text-slate-400 hover:text-white'
-                          }`}
-                        >
+                          }`}>
                           {opt === 'any' ? 'Any' : opt === 'no' ? 'No Website' : 'Has Website'}
                         </button>
                       ))}
                     </div>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMinReviews(''); setMaxReviews(''); setMinRating(''); setMaxRating('')
-                      setWebsiteFilter('any'); setMinScore('')
-                    }}
-                    className="text-xs text-slate-500 hover:text-red-400 transition pt-5 text-left"
-                  >
+                  <button type="button"
+                    onClick={() => { setMinReviews(''); setMaxReviews(''); setMinRating(''); setMaxRating(''); setWebsiteFilter('any'); setMinScore('') }}
+                    className="text-xs text-slate-500 hover:text-red-400 transition pt-5 text-left">
                     Clear filters
                   </button>
                 </div>
 
                 <p className="text-slate-500 text-xs">
-                  Tip: <strong className="text-slate-400">Max Reviews</strong> targets under-reviewed
-                  businesses (easier cold-call wins). <strong className="text-slate-400">No Website</strong> focuses
-                  on businesses that need digital services most. Phone is optional — leads
-                  without one get flagged for manual research.
+                  Tip: <strong className="text-slate-400">No Website</strong> targets businesses
+                  that need digital services most. The engine retries with a wider search if
+                  fewer results pass your filters than your target count.
                 </p>
               </div>
             )}
@@ -645,7 +773,9 @@ export function ScraperPanel() {
               title={!workerOnline ? 'Start worker.py on your machine first' : ''}
               className="px-6 py-2.5 rounded-xl font-semibold text-sm bg-gradient-to-r from-violet-500 to-blue-500 hover:from-violet-600 hover:to-blue-600 disabled:opacity-40 disabled:cursor-not-allowed transition"
             >
-              {queuing ? 'Queuing…' : `Generate ${limitStr || '?'} Leads`}
+              {queuing
+                ? 'Queuing…'
+                : `Generate ${limitStr || '?'} Leads${cities.length > 1 ? ` × ${cities.length} cities` : ''}`}
             </button>
             {result && (
               <span className={`text-sm ${resultOk ? 'text-green-400' : 'text-red-400'}`}>
@@ -685,6 +815,7 @@ export function ScraperPanel() {
                   <th className="px-4 py-3 text-left">City / Niche</th>
                   <th className="px-4 py-3 text-left">Status</th>
                   <th className="px-4 py-3 text-left">Leads</th>
+                  <th className="px-4 py-3 text-left">Parser</th>
                   <th className="px-4 py-3 text-left">Time</th>
                   <th className="px-4 py-3" />
                 </tr>
@@ -706,7 +837,9 @@ export function ScraperPanel() {
                       >
                         <td className="px-4 pt-3 pb-1 font-medium">
                           <span className="block">{job.city}{job.state ? `, ${job.state}` : ''}</span>
-                          <span className="text-slate-400 text-xs font-normal">{job.niche}</span>
+                          <span className="text-slate-400 text-xs font-normal">
+                            {job.niche === 'all' ? 'All niches' : job.niche}
+                          </span>
                         </td>
                         <td className="px-4 pt-3 pb-1">
                           <span className={`px-2 py-0.5 rounded-full text-xs font-semibold border ${STATUS_STYLES[job.status]}`}>
@@ -722,6 +855,15 @@ export function ScraperPanel() {
                           )}
                         </td>
                         <td className="px-4 pt-3 pb-1 text-slate-300">{job.result_count || '—'}</td>
+                        <td className="px-4 pt-3 pb-1">
+                          <span className={`text-[10px] px-1.5 py-0.5 rounded font-semibold ${
+                            job.parser === 'xhr'
+                              ? 'bg-violet-500/20 text-violet-400'
+                              : 'bg-blue-500/20 text-blue-400'
+                          }`}>
+                            {job.parser ?? 'playwright'}
+                          </span>
+                        </td>
                         <td className="px-4 pt-3 pb-1 text-slate-400 text-xs">{duration(job)}</td>
                         <td className="px-4 pt-3 pb-1 text-right">
                           {canCancel && (
@@ -732,13 +874,11 @@ export function ScraperPanel() {
                               className="inline-flex items-center justify-center w-6 h-6 rounded-md text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition disabled:opacity-40"
                             >
                               {cancelling[job.id] ? (
-                                // tiny spinner
                                 <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
                                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
                                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                                 </svg>
                               ) : (
-                                // ✕ icon
                                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
@@ -752,7 +892,7 @@ export function ScraperPanel() {
                         key={`${job.id}-bar`}
                         className={`border-0 ${selectedJob === job.id ? 'bg-blue-500/5' : ''}`}
                       >
-                        <td colSpan={5} className="px-4 pb-2.5 pt-0">
+                        <td colSpan={6} className="px-4 pb-2.5 pt-0">
                           <JobProgressBar status={job.status} smoothPct={sp} />
                         </td>
                       </tr>
@@ -761,7 +901,7 @@ export function ScraperPanel() {
                 })}
                 {!jobs.length && (
                   <tr>
-                    <td colSpan={5} className="px-4 py-10 text-center text-slate-500">
+                    <td colSpan={6} className="px-4 py-10 text-center text-slate-500">
                       No runs yet. Start <code>worker.py</code> and click Generate Leads.
                     </td>
                   </tr>
@@ -795,10 +935,7 @@ export function ScraperPanel() {
                 </span>
               )}
               {logs.length > 0 && (
-                <button
-                  onClick={() => setLogs([])}
-                  className="text-slate-500 hover:text-red-400 text-xs transition"
-                >
+                <button onClick={() => setLogs([])} className="text-slate-500 hover:text-red-400 text-xs transition">
                   Clear
                 </button>
               )}

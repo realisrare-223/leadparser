@@ -158,6 +158,9 @@ def run_job(job: dict) -> tuple[int, str]:
         cmd += ['--require-phone']
     if job.get('min_score', 0) > 0:
         cmd += ['--min-score', str(job['min_score'])]
+    # Parser override: 'playwright' (default) | 'xhr' | 'selenium'
+    if job.get('parser') and job['parser'] not in ('', 'playwright'):
+        cmd += ['--parser', job['parser']]
 
     log.info(f'Running: {" ".join(cmd)}')
     try:
