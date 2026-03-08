@@ -552,6 +552,16 @@ export function ScraperPanel() {
   }
 
   const runningCount = jobs.filter(j => j.status === 'running').length
+  const pendingCount = jobs.filter(j => j.status === 'pending').length
+  
+  // Calculate resource allocation display
+  const totalActive = runningCount + pendingCount
+  const maxParallel = 4  // Matches MAX_PARALLEL in worker.py
+  const maxXhrWorkers = 4  // Matches MAX_XHR_WORKERS in worker.py
+  
+  // Same logic as worker.py calculate_resource_allocation()
+  const xhrPerJob = totalActive > 0 ? Math.max(1, Math.floor(maxXhrWorkers / totalActive)) : maxXhrWorkers
+  const actualXhrPerJob = Math.min(xhrPerJob, maxXhrWorkers)
 
   // ── Render ────────────────────────────────────────────────────────────
 
@@ -587,7 +597,7 @@ export function ScraperPanel() {
             </p>
             <p className="text-slate-500 text-xs mt-0.5">
               {workerOnline
-                ? `worker.py is running — last heartbeat ${lastSeenLabel()}${runningCount > 0 ? ` · ${runningCount} job${runningCount > 1 ? 's' : ''} running` : ''}`
+                ? `worker.py is running — last heartbeat ${lastSeenLabel()}${runningCount > 0 ? ` · ${runningCount} job${runningCount > 1 ? 's' : ''} running${pendingCount > 0 ? ` · ${pendingCount} pending` : ''}` : ''}${totalActive > 0 ? ` · ${actualXhrPerJob} XHR workers per job` : ''}`
                 : `Run python worker.py to go online (last seen: ${lastSeenLabel()})`}
             </p>
           </div>

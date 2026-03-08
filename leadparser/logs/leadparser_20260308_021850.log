@@ -53,3 +53,32 @@ Call log:
 2026-03-08 02:26:15,359 | PlaywrightGoogleMapsScraper | INFO     |   'dining near me': +0 (total: 284/500)
 2026-03-08 02:26:16,162 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 284 unique URLs
 2026-03-08 02:26:16,162 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase B: 284 profiles across 4 parallel worker(s)
+2026-03-08 02:34:03,970 | PlaywrightGoogleMapsScraper | INFO     |   Phase B complete — 0 leads with phones
+2026-03-08 02:34:04,575 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food'; running total: 0
+2026-03-08 02:34:05,483 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:34:05,571 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Edmonton, Alberta'
+2026-03-08 02:34:05,913 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber shops': Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.google.com/maps/search/barber+shops+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+shops+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:34:15,925 | PlaywrightGoogleMapsScraper | WARNING  |   Results feed not found — possible CAPTCHA
+2026-03-08 02:34:16,157 | PlaywrightGoogleMapsScraper | INFO     |   'barber shops': +0 (total: 0/500)
+2026-03-08 02:34:16,157 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local barber in Edmonton, Alberta'
+2026-03-08 02:34:16,500 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local barber': Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.google.com/maps/search/local+barber+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+barber+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:34:26,508 | PlaywrightGoogleMapsScraper | WARNING  |   Results feed not found — possible CAPTCHA
+2026-03-08 02:34:26,731 | PlaywrightGoogleMapsScraper | INFO     |   'local barber': +0 (total: 0/500)
+2026-03-08 02:34:26,731 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'fade haircut in Edmonton, Alberta'
+2026-03-08 02:34:27,056 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'fade haircut': Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.google.com/maps/search/fade+haircut+in+Edmonton%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/fade+haircut+in+Edmonton%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:34:27,056 | PlaywrightGoogleMapsScraper | WARNING  |   3 consecutive proxy failures — switching to direct connection
+2026-03-08 02:35:52,212 | PlaywrightGoogleMapsScraper | INFO     |   'fade haircut': +84 (total: 84/500)
+2026-03-08 02:35:52,417 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'beard trim in Edmonton, Alberta'
+2026-03-08 02:36:40,350 | PlaywrightGoogleMapsScraper | INFO     |   'beard trim': +1 (total: 85/500)
+2026-03-08 02:36:40,593 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'traditional hot towel shave in Edmonton, Alberta'
+2026-03-08 02:37:10,386 | PlaywrightGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 85/500)
+2026-03-08 02:37:10,695 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming in Edmonton, Alberta'

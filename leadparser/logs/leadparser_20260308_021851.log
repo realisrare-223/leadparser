@@ -53,3 +53,11 @@ Call log:
 2026-03-08 02:29:11,493 | PlaywrightGoogleMapsScraper | INFO     |   'dining near me': +4 (total: 299/500)
 2026-03-08 02:29:11,744 | PlaywrightGoogleMapsScraper | INFO     |   Phase A complete — 299 unique URLs
 2026-03-08 02:29:11,745 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase B: 299 profiles across 4 parallel worker(s)
+2026-03-08 02:37:25,148 | PlaywrightGoogleMapsScraper | INFO     |   Phase B complete — 0 leads with phones
+2026-03-08 02:37:25,499 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food'; running total: 0
+2026-03-08 02:37:27,240 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:37:27,490 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Calgary, Alberta'
+2026-03-08 02:37:27,836 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'barber shops': Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.google.com/maps/search/barber+shops+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/barber+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+

@@ -59,8 +59,44 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 POLL_INTERVAL      = 10   # seconds between job polls
 HEARTBEAT_INTERVAL = 10   # seconds between heartbeat updates
-MAX_PARALLEL       = 2    # max concurrent scrape jobs (increase if your machine allows)
+MAX_PARALLEL       = 4    # max concurrent scrape jobs (increase if your machine allows)
+MAX_XHR_WORKERS    = 4    # max XHR workers per job when running solo
 MAIN_PY            = Path(__file__).parent / 'main.py'
+
+
+def calculate_resource_allocation(active_jobs: int, total_slots: int = MAX_PARALLEL) -> dict:
+    """
+    Calculate how to distribute XHR workers across active jobs.
+    
+    Returns dict with:
+    - concurrent_xhr: XHR workers per job
+    - max_parallel: total parallel jobs allowed
+    - active_slots: currently active job count
+    
+    Strategy:
+    - 1 job running: use all 4 XHR workers on it
+    - 2 jobs running: split 2 XHR workers each
+    - 3 jobs running: split 1-2-1 or round-robin
+    - 4+ jobs: 1 XHR worker each (minimum)
+    """
+    if active_jobs <= 0:
+        return {'concurrent_xhr': MAX_XHR_WORKERS, 'max_parallel': total_slots}
+    
+    # Calculate XHR workers per job (distribute evenly, minimum 1)
+    xhr_per_job = max(1, MAX_XHR_WORKERS // active_jobs)
+    
+    # If we have more slots than jobs, we can increase per-job workers
+    available_slots = total_slots - active_jobs
+    if available_slots > 0 and xhr_per_job < MAX_XHR_WORKERS:
+        # Bonus workers for jobs that can use them
+        bonus = min(available_slots, MAX_XHR_WORKERS - xhr_per_job)
+        xhr_per_job += bonus // active_jobs
+    
+    return {
+        'concurrent_xhr': xhr_per_job,
+        'max_parallel': total_slots,
+        'active_slots': active_jobs,
+    }
 
 _stop = False  # shared flag for clean shutdown
 
@@ -123,12 +159,16 @@ def claim_job() -> dict | None:
 CANCEL_POLL = 5  # seconds between cancellation checks while subprocess is running
 
 
-def run_job(job: dict) -> tuple[int, str]:
+def run_job(job: dict, resource_allocation: dict = None) -> tuple[int, str]:
     """Run main.py for the given job. Returns (leads_count, error_msg).
 
     Uses Popen instead of subprocess.run so we can check for cancellation
     every CANCEL_POLL seconds without blocking the thread indefinitely.
     Returns (0, '__cancelled__') when the job is cancelled via the UI.
+    
+    Args:
+        job: The job dict from the database
+        resource_allocation: Dict with 'concurrent_xhr' key for worker distribution
     """
     cmd = [sys.executable, str(MAIN_PY)]
 
@@ -158,9 +198,18 @@ def run_job(job: dict) -> tuple[int, str]:
         cmd += ['--require-phone']
     if job.get('min_score', 0) > 0:
         cmd += ['--min-score', str(job['min_score'])]
-    # Parser override: 'playwright' (default) | 'xhr' | 'selenium'
-    if job.get('parser') and job['parser'] not in ('', 'playwright'):
-        cmd += ['--parser', job['parser']]
+    
+    # Parser override with automatic resource allocation
+    parser = job.get('parser', 'playwright')
+    if parser and parser not in ('', 'playwright'):
+        cmd += ['--parser', parser]
+        
+        # Apply concurrent XHR based on resource allocation
+        if parser == 'xhr' and resource_allocation:
+            concurrent_xhr = resource_allocation.get('concurrent_xhr', 1)
+            if concurrent_xhr > 1:
+                cmd += ['--concurrent-xhr', str(concurrent_xhr)]
+                log.info(f"Job {job['id'][:8]} using {concurrent_xhr} concurrent XHR workers")
 
     log.info(f'Running: {" ".join(cmd)}')
     try:
@@ -242,9 +291,9 @@ def finish_job(job_id: str, result_count: int, error_msg: str = '') -> None:
     log.info(f'Job {job_id[:8]} → {status}')
 
 
-def process_job(job: dict) -> None:
+def process_job(job: dict, resource_allocation: dict = None) -> None:
     """Full job lifecycle: run then finalize. Designed for thread pool use."""
-    count, err = run_job(job)
+    count, err = run_job(job, resource_allocation)
     finish_job(job['id'], count, err)
 
 
@@ -257,7 +306,8 @@ def main() -> None:
     hb = Thread(target=heartbeat_loop, daemon=True)
     hb.start()
     log.info(
-        f'LeadParser Worker online — up to {MAX_PARALLEL} parallel jobs. '
+        f'LeadParser Worker online — up to {MAX_PARALLEL} parallel jobs, '
+        f'{MAX_XHR_WORKERS} max XHR workers per job. '
         f'Site will show "Engine Online". Press Ctrl+C to stop.'
     )
 
@@ -272,12 +322,30 @@ def main() -> None:
                 for jid in done_ids:
                     del futures[jid]
 
+                # Calculate resource allocation based on current + pending jobs
+                active_jobs = len(futures)
+                slots = MAX_PARALLEL - active_jobs
+                
+                # Count pending jobs to estimate total load
+                pending_res = supabase.table('scraper_jobs').select('id').eq('status', 'pending').execute()
+                pending_count = len(pending_res.data) if pending_res.data else 0
+                total_estimated = active_jobs + min(pending_count, slots)
+                
+                # Calculate how to distribute XHR workers
+                resource_alloc = calculate_resource_allocation(total_estimated, MAX_PARALLEL)
+                
+                if pending_count > 0:
+                    log.info(
+                        f'Resource allocation: {active_jobs} active, {pending_count} pending, '
+                        f'{resource_alloc["concurrent_xhr"]} XHR workers per job'
+                    )
+
                 # Claim new jobs up to available slots
-                slots = MAX_PARALLEL - len(futures)
                 for _ in range(slots):
                     job = claim_job()
                     if job:
-                        futures[job['id']] = executor.submit(process_job, job)
+                        # Pass resource allocation so job knows how many XHR workers to use
+                        futures[job['id']] = executor.submit(process_job, job, resource_alloc)
                     else:
                         break   # no more pending jobs right now
 
