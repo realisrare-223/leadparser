@@ -1,0 +1,215 @@
+2026-03-08 02:51:40,218 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_025140.log
+2026-03-08 02:51:40,933 | leadparser.main      | INFO     | Live log streaming active — job 5aed69e6
+2026-03-08 02:51:40,933 | leadparser.main      | INFO     | Distributing 100 leads across 3 niche+city combinations (~33 per combination, remainder: 1)
+2026-03-08 02:51:41,987 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 02:51:41,987 | leadparser.supabase  | INFO     | Session 20260308_025141 | niches: ['food', 'barber shops', 'automotive'] | city: Calgary
+2026-03-08 02:51:42,607 | leadparser.main      | INFO     | Session #20260308_025141 | 3 niche(s) | 1 location(s) | 3 total combinations | target: 100 filtered leads
+2026-03-08 02:51:42,738 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 02:51:42,756 | leadparser.main      | ERROR    | Scraping failed for 'food' in Calgary: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 740, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 182, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 206, in _scrape_async
+    async with httpx.AsyncClient(
+               ^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2026-03-08 02:51:42,759 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 02:51:42,892 | leadparser.main      | ERROR    | Scraping failed for 'barber shops' in Calgary: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 740, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 182, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 206, in _scrape_async
+    async with httpx.AsyncClient(
+               ^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2026-03-08 02:51:42,894 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 02:51:42,894 | leadparser.main      | ERROR    | Scraping failed for 'automotive' in Calgary: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 740, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 182, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 206, in _scrape_async
+    async with httpx.AsyncClient(
+               ^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2026-03-08 02:51:42,895 | leadparser.main      | INFO     |   Pass 1 result: 0/100 leads pass filters
+2026-03-08 02:51:42,895 | leadparser.main      | INFO     |   Retry pass 2/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 02:51:42,896 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 02:51:42,896 | leadparser.main      | ERROR    | Scraping failed for 'food' in Calgary: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 740, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 182, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 206, in _scrape_async
+    async with httpx.AsyncClient(
+               ^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2026-03-08 02:51:42,898 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 02:51:43,038 | leadparser.main      | ERROR    | Scraping failed for 'barber shops' in Calgary: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 740, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 182, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 206, in _scrape_async
+    async with httpx.AsyncClient(
+               ^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2026-03-08 02:51:43,039 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 02:51:43,040 | leadparser.main      | ERROR    | Scraping failed for 'automotive' in Calgary: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 740, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 182, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 206, in _scrape_async
+    async with httpx.AsyncClient(
+               ^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2026-03-08 02:51:43,040 | leadparser.main      | INFO     |   Pass 2 result: 0/100 leads pass filters
+2026-03-08 02:51:43,041 | leadparser.main      | INFO     |   Retry pass 3/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 02:51:43,041 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 02:51:43,041 | leadparser.main      | ERROR    | Scraping failed for 'food' in Calgary: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 740, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 182, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 206, in _scrape_async
+    async with httpx.AsyncClient(
+               ^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2026-03-08 02:51:43,043 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 02:51:43,184 | leadparser.main      | ERROR    | Scraping failed for 'barber shops' in Calgary: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 740, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 182, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 206, in _scrape_async
+    async with httpx.AsyncClient(
+               ^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2026-03-08 02:51:43,186 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 02:51:43,187 | leadparser.main      | ERROR    | Scraping failed for 'automotive' in Calgary: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+Traceback (most recent call last):
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\main.py", line 740, in run_pipeline
+    raw_leads = scraper.scrape_niche(
+                ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 182, in scrape_niche
+    return asyncio.run(self._scrape_async(niche, location, on_progress))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\admin\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\admin\Documents\cursor projects\leadparser\leadparser\scrapers\xhr_scraper.py", line 206, in _scrape_async
+    async with httpx.AsyncClient(
+               ^^^^^^^^^^^^^^^^^^
+TypeError: AsyncClient.__init__() got an unexpected keyword argument 'proxies'
+2026-03-08 02:51:43,188 | leadparser.main      | INFO     |   Pass 3 result: 0/100 leads pass filters
+2026-03-08 02:51:43,188 | leadparser.main      | WARNING  | Exhausted 3 passes — 0/100 filtered leads available.
+2026-03-08 02:51:43,312 | leadparser.main      | INFO     | Filters applied: 0 raw -> 0 passed
+2026-03-08 02:51:43,560 | leadparser.main      | INFO     | Supabase insert: 0 new, 0 dupes, 0 errors
+2026-03-08 02:51:44,750 | leadparser.main      | INFO     | CSV export: 57 leads -> data\leads_20260308_025144.csv
+2026-03-08 02:51:44,881 | leadparser.supabase  | INFO     | Session complete | stats: {'niches': 3, 'cities': 1, 'combinations': 3, 'raw_total': 0, 'total': 0, 'new': 0, 'duplicates': 0, 'errors': 9, 'csv_path': 'data\\leads_20260308_025144.csv'}
+2026-03-08 02:51:45,006 | leadparser.main      | INFO     | Total runtime: 4s

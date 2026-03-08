@@ -183,6 +183,27 @@ def _xhr_worker(args) -> list[dict]:
         return []
 
 
+def _get_httpx_client_kwargs(proxy_map=None, **extra):
+    """Build httpx client kwargs with correct proxy parameter for installed version."""
+    kwargs = {
+        "timeout": httpx.Timeout(30.0, connect=10.0),
+        "follow_redirects": True,
+        "http2": True,
+        **extra
+    }
+    if proxy_map:
+        try:
+            import inspect
+            sig = inspect.signature(httpx.AsyncClient.__init__)
+            if 'proxy' in sig.parameters:
+                kwargs["proxy"] = proxy_map
+            else:
+                kwargs["proxies"] = proxy_map
+        except Exception:
+            kwargs["proxy"] = proxy_map
+    return kwargs
+
+
 async def _scrape_with_terms(scraper, terms: list[str], location: dict) -> list[dict]:
     """Async helper to scrape specific terms."""
     import httpx
@@ -200,13 +221,12 @@ async def _scrape_with_terms(scraper, terms: list[str], location: dict) -> list[
     all_urls = []
     seen = set()
     
-    async with httpx.AsyncClient(
-        headers=fingerprint["headers"],
-        proxies=proxy_map,
-        timeout=httpx.Timeout(30.0, connect=10.0),
-        follow_redirects=True,
-        http2=True,
-    ) as client:
+    client_kwargs = _get_httpx_client_kwargs(
+        proxy_map=proxy_map,
+        headers=fingerprint["headers"]
+    )
+    
+    async with httpx.AsyncClient(**client_kwargs) as client:
         # Phase A: Collect URLs for our assigned terms
         for term in terms:
             query = f"{term} in {city_state}"
@@ -239,13 +259,12 @@ async def _scrape_with_terms(scraper, terms: list[str], location: dict) -> list[
     if not all_urls:
         return []
     
-    async with httpx.AsyncClient(
-        headers=fingerprint["headers"],
-        proxies=proxy_map,
-        timeout=httpx.Timeout(30.0, connect=10.0),
-        follow_redirects=True,
-        http2=True,
-    ) as client:
+    client_kwargs_b = _get_httpx_client_kwargs(
+        proxy_map=proxy_map,
+        headers=fingerprint["headers"]
+    )
+    
+    async with httpx.AsyncClient(**client_kwargs_b) as client:
         sem = asyncio.Semaphore(scraper._concurrency)
         tasks = [
             _fetch_business_worker(scraper, client, url, sem, fingerprint)
@@ -671,11 +690,15 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
 
         ScraperClass = _load_scraper_class(config)
         
-        # Use concurrent XHR if specified and using XHR parser
-        if (config["scraping"].get("parser") == "xhr" and 
-            args.concurrent_xhr is not None and args.concurrent_xhr > 1):
-            scraper = ConcurrentXHRScraper(config, num_workers=args.concurrent_xhr)
-            logger.info(f"Using concurrent XHR scraper with {args.concurrent_xhr} workers")
+        # Use concurrent XHR by default when XHR parser is selected
+        # Default to 4 workers, can be overridden with --concurrent-xhr
+        if config["scraping"].get("parser") == "xhr":
+            concurrent_workers = args.concurrent_xhr if args.concurrent_xhr is not None else 4
+            if concurrent_workers > 1:
+                scraper = ConcurrentXHRScraper(config, num_workers=concurrent_workers)
+                logger.info(f"Using concurrent XHR scraper with {concurrent_workers} workers")
+            else:
+                scraper = ScraperClass(config, rate_limiter, proxy_mgr)
         else:
             scraper = ScraperClass(config, rate_limiter, proxy_mgr)
 

@@ -203,14 +203,31 @@ class XHRGoogleMapsScraper:
         if not proxy_map:
             self.logger.info("XHR using direct connection (no proxy)")
 
-        async with httpx.AsyncClient(
-            headers          = fingerprint["headers"],
-            proxies          = proxy_map,
-            timeout          = httpx.Timeout(15.0, connect=5.0),  # Faster timeouts
-            follow_redirects = True,
-            http2            = True,
-            limits           = httpx.Limits(max_connections=100, max_keepalive_connections=50),
-        ) as client:
+        # Build client kwargs - handle both old and new httpx versions
+        # httpx 0.28+ uses 'proxy', older versions use 'proxies'
+        client_kwargs = {
+            "headers": fingerprint["headers"],
+            "timeout": httpx.Timeout(15.0, connect=5.0),
+            "follow_redirects": True,
+            "http2": True,
+            "limits": httpx.Limits(max_connections=100, max_keepalive_connections=50),
+        }
+        
+        # Add proxy using correct parameter name for installed httpx version
+        if proxy_map:
+            # Try new API first, fall back to old
+            try:
+                import inspect
+                sig = inspect.signature(httpx.AsyncClient.__init__)
+                if 'proxy' in sig.parameters:
+                    client_kwargs["proxy"] = proxy_map
+                else:
+                    client_kwargs["proxies"] = proxy_map
+            except Exception:
+                # Default to new API
+                client_kwargs["proxy"] = proxy_map
+        
+        async with httpx.AsyncClient(**client_kwargs) as client:
             # ── Phase A: URL collection ──────────────────────────────────────
             self.logger.info(f"XHR Phase A: collecting URLs for '{niche}'")
             

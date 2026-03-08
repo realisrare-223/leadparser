@@ -39,10 +39,14 @@ filters:
 
 # ── SCRAPING SETTINGS ─────────────────────────────────────────
 scraping:
-  # Parser engine: "xhr"        (default — no browser, 100x faster, httpx async) |
+  # Parser engine: "xhr"        (default — no browser, 100x faster, httpx async,
+  #                               uses 4 concurrent workers automatically) |
   #                "playwright"  (real browser, 4 parallel workers, more accurate) |
   #                "selenium"    (legacy fallback)
   parser: "xhr"
+  
+  # Concurrent XHR workers (automatic when parser is "xhr")
+  concurrent_xhr: 4
 
   # Number of parallel browser contexts for Phase B extraction (playwright only)
   workers: 4
