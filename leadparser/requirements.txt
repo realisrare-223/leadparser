@@ -4,14 +4,22 @@
 # Install with: pip install -r requirements.txt
 
 # ── Web Scraping Core ────────────────────────────────────────
-selenium>=4.15.0                # Browser automation (free)
+selenium>=4.15.0                # Browser automation — legacy/fallback (free)
 webdriver-manager>=4.0.1        # Auto-manages ChromeDriver (free)
 beautifulsoup4>=4.12.2          # HTML parsing (free)
 requests>=2.31.0                # HTTP requests (free)
 lxml>=4.9.3                     # Fast XML/HTML parser (free)
 
+# ── Playwright (default parser — replaces Selenium as primary) ───────────
+playwright>=1.40.0              # Async browser automation — 4x parallel workers (free)
+playwright-stealth>=1.0.6       # Patches fingerprint leaks in Playwright (free)
+# After pip install, also run: playwright install chromium
+
+# ── Async HTTP (XHR parser v2 — 100x faster, no browser) ────────────────
+httpx[http2]>=0.27.0            # Async HTTP client for XHR scraper (free)
+
 # ── Anti-Detection ───────────────────────────────────────────
-undetected-chromedriver>=3.5.5  # Bypasses bot detection (free)
+undetected-chromedriver>=3.5.5  # Bypasses bot detection — Selenium fallback (free)
 fake-useragent>=1.4.0           # Random user agents (free)
 
 # ── Google Sheets Integration (FREE via Google Cloud Console) ─

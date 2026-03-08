@@ -40,8 +40,9 @@ from dotenv import load_dotenv
 from colorama import init as colorama_init, Fore, Style
 
 # -- Internal modules -------------------------------------------------
+# GoogleMapsScraper (Selenium) kept as legacy fallback; default is Playwright.
+# Parser selection is driven by config["scraping"]["parser"] at runtime.
 from scrapers.google_maps       import GoogleMapsScraper
-from scrapers.supplementary     import SupplementaryScraper
 from exporters.supabase_handler import SupabaseHandler
 from utils.rate_limiter         import RateLimiter
 from utils.proxy_manager        import ProxyManager
@@ -50,6 +51,25 @@ from utils.address_parser       import AddressParser
 from utils.lead_scorer          import LeadScorer
 from utils.pitch_engine         import PitchEngine
 from utils.sentiment_analyzer   import SentimentAnalyzer
+
+
+def _load_scraper_class(config: dict):
+    """
+    Return the scraper class to use based on config["scraping"]["parser"].
+
+    "playwright" (default) — async Playwright, 4 parallel workers
+    "xhr"                  — pure HTTP, no browser, 50 concurrent requests
+    "selenium"             — legacy Selenium / undetected-chromedriver
+    """
+    parser = config["scraping"].get("parser", "playwright").lower()
+    if parser == "xhr":
+        from scrapers.xhr_scraper import XHRGoogleMapsScraper
+        return XHRGoogleMapsScraper
+    elif parser == "selenium":
+        return GoogleMapsScraper
+    else:  # default: playwright
+        from scrapers.playwright_scraper import PlaywrightGoogleMapsScraper
+        return PlaywrightGoogleMapsScraper
 
 # ---------------------------------------------------------------------
 
@@ -196,7 +216,7 @@ def build_lead(
     pitcher:   PitchEngine,
     validator: PhoneValidator,
     parser:    AddressParser,
-) -> dict:
+) -> "dict | None":
     """Transform a raw scraped dict into the canonical lead dict."""
     addr_parts = parser.infer_city_state(
         raw.get("address", ""), config["location"]
@@ -232,12 +252,9 @@ def build_lead(
         "follow_up_date":   "",
     }
 
+    # Skip leads with no phone entirely — no supplementary lookup
     if not lead["phone"]:
-        flag = "Phone Number Needed - Manual Research Required"
-        if flag not in lead["additional_notes"]:
-            sep = " | " if lead["additional_notes"] else ""
-            lead["additional_notes"] += sep + flag
-        lead["phone"] = "NOT FOUND"
+        return None
 
     return lead
 
@@ -383,22 +400,32 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
             + (f" | target: {target_count} filtered leads" if target_count else "")
         )
 
-        # ── Phase 1: Google Maps ───────────────────────────────────────
-        print(f"\n{Fore.YELLOW}Phase 1: Scraping Google Maps...{Style.RESET_ALL}")
+        # ── Phase 1: Scraping ─────────────────────────────────────────
+        _parser_name = config["scraping"].get("parser", "playwright").upper()
+        print(
+            f"\n{Fore.YELLOW}Phase 1: Scraping Google Maps "
+            f"[{_parser_name}]...{Style.RESET_ALL}"
+        )
         update_job_progress(10)
 
-        with GoogleMapsScraper(config, rate_limiter, proxy_mgr) as gm_scraper:
+        ScraperClass = _load_scraper_class(config)
+        scraper      = ScraperClass(config, rate_limiter, proxy_mgr)
+
+        # Context-manager support: Selenium/Playwright scrapers may need __enter__
+        if hasattr(scraper, "__enter__"):
+            scraper.__enter__()
+        try:
             for niche_i, niche in enumerate(niches, start=1):
                 print(
                     f"  [{niche_i}/{len(niches)}] {Fore.CYAN}{niche}{Style.RESET_ALL} "
                     f"in {location['city']}, {location['state']}"
                 )
 
-                # Per-listing callback: Phase 1 spans 10%→55%, spread evenly across niches
-                _niche_count  = len(niches)
-                _niche_start  = 10 + int(((niche_i - 1) / _niche_count) * 45)
-                _niche_end    = 10 + int((niche_i        / _niche_count) * 45)
-                _niche_width  = max(_niche_end - _niche_start, 1)
+                # Per-listing progress: Phase 1 spans 10%→75%, spread across niches
+                _niche_count = len(niches)
+                _niche_start = 10 + int(((niche_i - 1) / _niche_count) * 65)
+                _niche_end   = 10 + int((niche_i        / _niche_count) * 65)
+                _niche_width = max(_niche_end - _niche_start, 1)
 
                 def _listing_progress(current: int, total: int,
                                       _s=_niche_start, _w=_niche_width) -> None:
@@ -406,7 +433,7 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
                     update_job_progress(_s + int(frac * _w))
 
                 try:
-                    raw_leads = gm_scraper.scrape_niche(
+                    raw_leads = scraper.scrape_niche(
                         niche, location, on_progress=_listing_progress
                     )
                 except Exception as exc:
@@ -420,8 +447,9 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
                             raw, niche, config,
                             scorer, pitcher, validator, addr_parser
                         )
-                        all_leads.append(lead)
-                        run_stats["raw_total"] += 1
+                        if lead:           # None = no phone — skip
+                            all_leads.append(lead)
+                            run_stats["raw_total"] += 1
                     except Exception as exc:
                         logger.warning(f"Lead build failed: {exc}", exc_info=True)
                         run_stats["errors"] += 1
@@ -430,19 +458,16 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
                     f"  -> {len(raw_leads)} raw leads for '{niche}'; "
                     f"running total: {run_stats['raw_total']}"
                 )
+        finally:
+            if hasattr(scraper, "__exit__"):
+                scraper.__exit__(None, None, None)
 
-        # ── Phase 2: Supplementary enrichment ─────────────────────────
-        if all_leads:
-            print(f"\n{Fore.YELLOW}Phase 2: Supplementary enrichment...{Style.RESET_ALL}")
-            update_job_progress(60)
-            try:
-                supp = SupplementaryScraper(config, rate_limiter)
-                supp.enrich_batch(all_leads)
-            except Exception as exc:
-                logger.error(f"Supplementary enrichment failed: {exc}", exc_info=True)
+        # Phase 2 (supplementary enrichment) removed:
+        # Leads without a phone in their Google Business profile are
+        # skipped at scrape time. No Yelp / Yellow Pages / BBB lookup.
 
         # ── Phase 3: Filter ────────────────────────────────────────────
-        update_job_progress(72)
+        update_job_progress(75)
         before_filter = len(all_leads)
         all_leads     = apply_filters(all_leads, config)
         logger.info(f"Filters applied: {before_filter} raw -> {len(all_leads)} passed")
@@ -454,7 +479,7 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
         # ── Phase 4: Trim to target count ─────────────────────────────
         # --limit N guarantees N leads after filters by over-collecting 4x raw.
         # Here we trim down if more passed than requested.
-        update_job_progress(80)
+        update_job_progress(85)
         if target_count:
             if len(all_leads) > target_count:
                 all_leads = all_leads[:target_count]
@@ -478,7 +503,7 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
 
         # ── Phase 5: Upsert into Supabase ─────────────────────────────
         print(f"\n{Fore.YELLOW}Saving to Supabase...{Style.RESET_ALL}")
-        update_job_progress(85)
+        update_job_progress(88)
         try:
             insert_stats            = db.bulk_insert(all_leads)
             run_stats["new"]        = insert_stats["new"]
@@ -494,7 +519,7 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
             run_stats["errors"] += 1
 
         # ── Phase 6: Optional CSV export ──────────────────────────────
-        update_job_progress(94)
+        update_job_progress(95)
         if not args.no_csv:
             try:
                 min_score_val = config["filters"].get("min_lead_score", 0)

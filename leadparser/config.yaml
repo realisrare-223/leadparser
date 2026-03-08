@@ -39,9 +39,20 @@ filters:
 
 # ── SCRAPING SETTINGS ─────────────────────────────────────────
 scraping:
-  # Delay between requests (seconds) — stay polite and avoid blocks
-  delay_min: 2.0
-  delay_max: 4.0
+  # Parser engine: "playwright" (default, 4 parallel workers) |
+  #                "xhr"        (v2 — no browser, 100x faster, httpx async) |
+  #                "selenium"   (legacy fallback)
+  parser: "playwright"
+
+  # Number of parallel browser contexts for Phase B extraction (playwright only)
+  workers: 4
+
+  # Max simultaneous httpx requests for the XHR parser (xhr only)
+  xhr_concurrency: 50
+
+  # Delay between requests (seconds) — halved from 2.0/4.0 for speed
+  delay_min: 1.0
+  delay_max: 2.0
   # Retry failed requests up to this many times
   max_retries: 3
   # true = hidden browser (faster); false = visible browser (easier debugging)
@@ -52,7 +63,7 @@ scraping:
   scroll_pause_time: 1.0
   # Give up scrolling after this many attempts with no new results
   max_scroll_attempts: 20
-  # Use undetected-chromedriver for better anti-bot evasion
+  # Use undetected-chromedriver for better anti-bot evasion (selenium only)
   use_undetected_chrome: true
   # Window size for the browser (ignored in headless mode)
   window_width: 1366
@@ -61,10 +72,18 @@ scraping:
 # ── FREE PROXY SETTINGS ──────────────────────────────────────
 proxies:
   enabled: false           # Set true to rotate through free proxies
-  # Sources: "free-proxy-list", "sslproxies", "us-proxy"
+  # Sources available:
+  #   HTML-table sources (legacy): "free-proxy-list", "sslproxies", "us-proxy"
+  #   API/raw-text sources (faster, more proxies):
+  #     "proxyscrape"      — plain-text API (100s of proxies instantly)
+  #     "geonode"          — JSON API with metadata + country filtering
+  #     "github-theSpeedX" — raw GitHub txt (http proxies)
+  #     "github-clarketm"  — raw GitHub txt (with status info)
   sources:
+    - "proxyscrape"
+    - "geonode"
+    - "github-theSpeedX"
     - "free-proxy-list"
-    - "sslproxies"
   # Test proxies before using them
   test_before_use: true
   # Timeout (seconds) when testing proxy connectivity
@@ -72,16 +91,17 @@ proxies:
   # Rotate proxy every N requests
   rotate_every: 10
 
-# ── SUPPLEMENTARY SCRAPERS (all free, no API keys) ────────────
-# Enabled scrapers are used to fill in missing phone numbers
-# and find social media profiles for leads lacking contact info.
+# ── SUPPLEMENTARY SCRAPERS ────────────────────────────────────
+# Disabled — leads without a phone number in their Google Business
+# profile are now skipped immediately (no Yelp/YP/BBB lookup).
+# This eliminates Phase 2 entirely and significantly speeds up runs.
 supplementary_scrapers:
-  yelp: true
-  yellow_pages: true
-  bbb: true                # Better Business Bureau
-  whitepages: true
-  facebook: false          # More restricted; enable with caution
-  linkedin: false          # Heavy rate-limiting; disabled by default
+  yelp: false
+  yellow_pages: false
+  bbb: false
+  whitepages: false
+  facebook: false
+  linkedin: false
 
 # ── GOOGLE SHEETS EXPORT ─────────────────────────────────────
 # See setup_guide.md for free setup instructions (takes ~10 min)
