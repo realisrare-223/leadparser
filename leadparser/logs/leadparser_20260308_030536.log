@@ -1,0 +1,134 @@
+2026-03-08 03:05:36,162 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_030536.log
+2026-03-08 03:05:36,303 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_030536.log
+2026-03-08 03:05:36,558 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_030536.log
+2026-03-08 03:05:36,888 | leadparser.main      | INFO     | Live log streaming active — job bdaf033e
+2026-03-08 03:05:36,888 | leadparser.main      | INFO     | Distributing 100 leads across 3 niche+city combinations (~33 per combination, remainder: 1)
+2026-03-08 03:05:36,995 | leadparser.main      | INFO     | Live log streaming active — job 94fad857
+2026-03-08 03:05:36,995 | leadparser.main      | INFO     | Distributing 100 leads across 3 niche+city combinations (~33 per combination, remainder: 1)
+2026-03-08 03:05:37,284 | leadparser.main      | INFO     | Live log streaming active — job 90ed88da
+2026-03-08 03:05:37,284 | leadparser.main      | INFO     | Distributing 100 leads across 3 niche+city combinations (~33 per combination, remainder: 1)
+2026-03-08 03:05:38,031 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 03:05:38,031 | leadparser.supabase  | INFO     | Session 20260308_030538 | niches: ['food', 'automotive', 'barber shops'] | city: Edmonton
+2026-03-08 03:05:38,031 | leadparser.main      | INFO     | Session #20260308_030538 | 3 niche(s) | 1 location(s) | 3 total combinations | target: 100 filtered leads
+2026-03-08 03:05:38,092 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 03:05:38,093 | leadparser.supabase  | INFO     | Session 20260308_030538 | niches: ['food', 'automotive', 'barber shops'] | city: Calgary
+2026-03-08 03:05:38,093 | leadparser.main      | INFO     | Session #20260308_030538 | 3 niche(s) | 1 location(s) | 3 total combinations | target: 100 filtered leads
+2026-03-08 03:05:38,166 | leadparser.main      | INFO     | Using concurrent XHR scraper with 4 workers
+2026-03-08 03:05:38,166 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 13 search terms across 4 workers for 'food' in Edmonton, Alberta
+2026-03-08 03:05:38,229 | leadparser.main      | INFO     | Using concurrent XHR scraper with 4 workers
+2026-03-08 03:05:38,230 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 13 search terms across 4 workers for 'food' in Calgary, Alberta
+2026-03-08 03:05:38,290 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 03:05:38,290 | leadparser.supabase  | INFO     | Session 20260308_030538 | niches: ['food', 'automotive', 'barber shops'] | city: Vancouver
+2026-03-08 03:05:38,290 | leadparser.main      | INFO     | Session #20260308_030538 | 3 niche(s) | 1 location(s) | 3 total combinations | target: 100 filtered leads
+2026-03-08 03:05:38,422 | leadparser.main      | INFO     | Using concurrent XHR scraper with 4 workers
+2026-03-08 03:05:38,422 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 13 search terms across 4 workers for 'food' in Vancouver, British Columbia
+2026-03-08 03:05:41,804 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'food' in Edmonton, Alberta
+2026-03-08 03:05:41,865 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'food' in Vancouver, British Columbia
+2026-03-08 03:05:41,894 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'food' in Calgary, Alberta
+2026-03-08 03:05:41,943 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Edmonton; running total: 0
+2026-03-08 03:05:41,943 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 9 search terms across 4 workers for 'automotive' in Edmonton, Alberta
+2026-03-08 03:05:42,029 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Calgary; running total: 0
+2026-03-08 03:05:42,029 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Vancouver; running total: 0
+2026-03-08 03:05:42,029 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 9 search terms across 4 workers for 'automotive' in Calgary, Alberta
+2026-03-08 03:05:42,029 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 9 search terms across 4 workers for 'automotive' in Vancouver, British Columbia
+2026-03-08 03:05:45,513 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'automotive' in Edmonton, Alberta
+2026-03-08 03:05:45,606 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'automotive' in Vancouver, British Columbia
+2026-03-08 03:05:45,646 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Edmonton; running total: 0
+2026-03-08 03:05:45,647 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 28 search terms across 4 workers for 'barber shops' in Edmonton, Alberta
+2026-03-08 03:05:45,744 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Vancouver; running total: 0
+2026-03-08 03:05:45,744 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 28 search terms across 4 workers for 'barber shops' in Vancouver, British Columbia
+2026-03-08 03:05:45,825 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'automotive' in Calgary, Alberta
+2026-03-08 03:05:45,955 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Calgary; running total: 0
+2026-03-08 03:05:45,955 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 28 search terms across 4 workers for 'barber shops' in Calgary, Alberta
+2026-03-08 03:05:49,156 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'barber shops' in Vancouver, British Columbia
+2026-03-08 03:05:49,171 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'barber shops' in Edmonton, Alberta
+2026-03-08 03:05:49,286 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Vancouver; running total: 0
+2026-03-08 03:05:49,286 | leadparser.main      | INFO     |   Pass 1 result: 0/100 leads pass filters
+2026-03-08 03:05:49,286 | leadparser.main      | INFO     |   Retry pass 2/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 03:05:49,286 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 13 search terms across 4 workers for 'food' in Vancouver, British Columbia
+2026-03-08 03:05:49,316 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Edmonton; running total: 0
+2026-03-08 03:05:49,316 | leadparser.main      | INFO     |   Pass 1 result: 0/100 leads pass filters
+2026-03-08 03:05:49,316 | leadparser.main      | INFO     |   Retry pass 2/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 03:05:49,316 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 13 search terms across 4 workers for 'food' in Edmonton, Alberta
+2026-03-08 03:05:49,496 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'barber shops' in Calgary, Alberta
+2026-03-08 03:05:49,642 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Calgary; running total: 0
+2026-03-08 03:05:49,642 | leadparser.main      | INFO     |   Pass 1 result: 0/100 leads pass filters
+2026-03-08 03:05:49,642 | leadparser.main      | INFO     |   Retry pass 2/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 03:05:49,642 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 13 search terms across 4 workers for 'food' in Calgary, Alberta
+2026-03-08 03:05:52,953 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'food' in Vancouver, British Columbia
+2026-03-08 03:05:53,004 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'food' in Edmonton, Alberta
+2026-03-08 03:05:53,052 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'food' in Calgary, Alberta
+2026-03-08 03:05:53,077 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Vancouver; running total: 0
+2026-03-08 03:05:53,077 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 9 search terms across 4 workers for 'automotive' in Vancouver, British Columbia
+2026-03-08 03:05:53,144 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Edmonton; running total: 0
+2026-03-08 03:05:53,144 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 9 search terms across 4 workers for 'automotive' in Edmonton, Alberta
+2026-03-08 03:05:53,185 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Calgary; running total: 0
+2026-03-08 03:05:53,186 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 9 search terms across 4 workers for 'automotive' in Calgary, Alberta
+2026-03-08 03:05:56,880 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'automotive' in Vancouver, British Columbia
+2026-03-08 03:05:56,924 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'automotive' in Edmonton, Alberta
+2026-03-08 03:05:56,976 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'automotive' in Calgary, Alberta
+2026-03-08 03:05:57,014 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Vancouver; running total: 0
+2026-03-08 03:05:57,014 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 28 search terms across 4 workers for 'barber shops' in Vancouver, British Columbia
+2026-03-08 03:05:57,072 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Edmonton; running total: 0
+2026-03-08 03:05:57,072 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 28 search terms across 4 workers for 'barber shops' in Edmonton, Alberta
+2026-03-08 03:05:57,134 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Calgary; running total: 0
+2026-03-08 03:05:57,134 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 28 search terms across 4 workers for 'barber shops' in Calgary, Alberta
+2026-03-08 03:06:00,708 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'barber shops' in Vancouver, British Columbia
+2026-03-08 03:06:00,737 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'barber shops' in Edmonton, Alberta
+2026-03-08 03:06:00,806 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'barber shops' in Calgary, Alberta
+2026-03-08 03:06:00,852 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Vancouver; running total: 0
+2026-03-08 03:06:00,852 | leadparser.main      | INFO     |   Pass 2 result: 0/100 leads pass filters
+2026-03-08 03:06:00,852 | leadparser.main      | INFO     |   Retry pass 3/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 03:06:00,852 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 13 search terms across 4 workers for 'food' in Vancouver, British Columbia
+2026-03-08 03:06:00,872 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Edmonton; running total: 0
+2026-03-08 03:06:00,872 | leadparser.main      | INFO     |   Pass 2 result: 0/100 leads pass filters
+2026-03-08 03:06:00,873 | leadparser.main      | INFO     |   Retry pass 3/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 03:06:00,873 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 13 search terms across 4 workers for 'food' in Edmonton, Alberta
+2026-03-08 03:06:00,944 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Calgary; running total: 0
+2026-03-08 03:06:00,944 | leadparser.main      | INFO     |   Pass 2 result: 0/100 leads pass filters
+2026-03-08 03:06:00,945 | leadparser.main      | INFO     |   Retry pass 3/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 03:06:00,945 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 13 search terms across 4 workers for 'food' in Calgary, Alberta
+2026-03-08 03:06:04,272 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'food' in Vancouver, British Columbia
+2026-03-08 03:06:04,306 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'food' in Edmonton, Alberta
+2026-03-08 03:06:04,330 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'food' in Calgary, Alberta
+2026-03-08 03:06:04,412 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Vancouver; running total: 0
+2026-03-08 03:06:04,413 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 9 search terms across 4 workers for 'automotive' in Vancouver, British Columbia
+2026-03-08 03:06:04,442 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Edmonton; running total: 0
+2026-03-08 03:06:04,442 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 9 search terms across 4 workers for 'automotive' in Edmonton, Alberta
+2026-03-08 03:06:04,462 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Calgary; running total: 0
+2026-03-08 03:06:04,463 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 9 search terms across 4 workers for 'automotive' in Calgary, Alberta
+2026-03-08 03:06:07,736 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'automotive' in Calgary, Alberta
+2026-03-08 03:06:07,772 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'automotive' in Edmonton, Alberta
+2026-03-08 03:06:07,832 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'automotive' in Vancouver, British Columbia
+2026-03-08 03:06:07,887 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Calgary; running total: 0
+2026-03-08 03:06:07,887 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 28 search terms across 4 workers for 'barber shops' in Calgary, Alberta
+2026-03-08 03:06:07,916 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Edmonton; running total: 0
+2026-03-08 03:06:07,916 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 28 search terms across 4 workers for 'barber shops' in Edmonton, Alberta
+2026-03-08 03:06:07,970 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Vancouver; running total: 0
+2026-03-08 03:06:07,971 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: distributing 28 search terms across 4 workers for 'barber shops' in Vancouver, British Columbia
+2026-03-08 03:06:11,226 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'barber shops' in Calgary, Alberta
+2026-03-08 03:06:11,243 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'barber shops' in Edmonton, Alberta
+2026-03-08 03:06:11,358 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Calgary; running total: 0
+2026-03-08 03:06:11,358 | leadparser.main      | INFO     |   Pass 3 result: 0/100 leads pass filters
+2026-03-08 03:06:11,358 | leadparser.main      | WARNING  | Exhausted 3 passes — 0/100 filtered leads available.
+2026-03-08 03:06:11,364 | ConcurrentXHRScraper | INFO     | ConcurrentXHR: collected 0 unique leads for 'barber shops' in Vancouver, British Columbia
+2026-03-08 03:06:11,381 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Edmonton; running total: 0
+2026-03-08 03:06:11,381 | leadparser.main      | INFO     |   Pass 3 result: 0/100 leads pass filters
+2026-03-08 03:06:11,381 | leadparser.main      | WARNING  | Exhausted 3 passes — 0/100 filtered leads available.
+2026-03-08 03:06:11,484 | leadparser.main      | INFO     | Filters applied: 0 raw -> 0 passed
+2026-03-08 03:06:11,485 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Vancouver; running total: 0
+2026-03-08 03:06:11,485 | leadparser.main      | INFO     |   Pass 3 result: 0/100 leads pass filters
+2026-03-08 03:06:11,485 | leadparser.main      | WARNING  | Exhausted 3 passes — 0/100 filtered leads available.
+2026-03-08 03:06:11,511 | leadparser.main      | INFO     | Filters applied: 0 raw -> 0 passed
+2026-03-08 03:06:11,611 | leadparser.main      | INFO     | Filters applied: 0 raw -> 0 passed
+2026-03-08 03:06:11,740 | leadparser.main      | INFO     | Supabase insert: 0 new, 0 dupes, 0 errors
+2026-03-08 03:06:11,764 | leadparser.main      | INFO     | Supabase insert: 0 new, 0 dupes, 0 errors
+2026-03-08 03:06:11,868 | leadparser.main      | INFO     | Supabase insert: 0 new, 0 dupes, 0 errors
+2026-03-08 03:06:12,644 | leadparser.main      | INFO     | CSV export: 57 leads -> data\leads_20260308_030612.csv
+2026-03-08 03:06:12,644 | leadparser.supabase  | INFO     | Session complete | stats: {'niches': 3, 'cities': 1, 'combinations': 3, 'raw_total': 0, 'total': 0, 'new': 0, 'duplicates': 0, 'errors': 0, 'csv_path': 'data\\leads_20260308_030612.csv'}
+2026-03-08 03:06:12,647 | leadparser.main      | INFO     | CSV export: 57 leads -> data\leads_20260308_030612.csv
+2026-03-08 03:06:12,647 | leadparser.supabase  | INFO     | Session complete | stats: {'niches': 3, 'cities': 1, 'combinations': 3, 'raw_total': 0, 'total': 0, 'new': 0, 'duplicates': 0, 'errors': 0, 'csv_path': 'data\\leads_20260308_030612.csv'}
+2026-03-08 03:06:12,742 | leadparser.main      | INFO     | CSV export: 57 leads -> data\leads_20260308_030612.csv
+2026-03-08 03:06:12,742 | leadparser.supabase  | INFO     | Session complete | stats: {'niches': 3, 'cities': 1, 'combinations': 3, 'raw_total': 0, 'total': 0, 'new': 0, 'duplicates': 0, 'errors': 0, 'csv_path': 'data\\leads_20260308_030612.csv'}
+2026-03-08 03:06:12,766 | leadparser.main      | INFO     | Total runtime: 36s
+2026-03-08 03:06:12,884 | leadparser.main      | INFO     | Total runtime: 36s

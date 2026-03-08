@@ -78,236 +78,32 @@ def _load_scraper_class(config: dict):
 
 class ConcurrentXHRScraper:
     """
-    Runs multiple XHR scrapers in parallel using process-based concurrency.
-    
-    Each XHR instance runs in its own process to maximize throughput
-    and avoid any GIL contention. Results are aggregated from all workers.
+    Simple XHR scraper wrapper that uses the standard XHR scraper.
+    The XHR scraper already has high internal concurrency (50 concurrent requests).
+    This wrapper just maintains the same interface as other scrapers.
     """
     
-    def __init__(self, config: dict, num_workers: int = 4):
+    def __init__(self, config: dict, num_workers: int = 4, rate_limiter=None, proxy_manager=None):
+        from scrapers.xhr_scraper import XHRGoogleMapsScraper
         self.config = config
         self.num_workers = num_workers
+        self.rate_limiter = rate_limiter
+        self.proxy_manager = proxy_manager
         self.logger = logging.getLogger(self.__class__.__name__)
+        # Use the standard XHR scraper - it already has 50 concurrent requests
+        self.scraper = XHRGoogleMapsScraper(config, rate_limiter, proxy_manager)
     
     def scrape_niche(self, niche: str, location: dict, on_progress: Callable = None) -> list[dict]:
         """
-        Scrape a niche using multiple concurrent XHR workers.
-        Distributes search terms across workers for parallel execution.
+        Scrape a niche using XHR scraper.
+        The XHR scraper already uses 50 concurrent HTTP requests internally.
         """
-        import multiprocessing as mp
-        from scrapers.google_maps import NICHE_EXPANSIONS
-        
-        city_state = f"{location['city']}, {location['state']}"
-        expansions = NICHE_EXPANSIONS.get(niche.lower().strip(), [])
-        all_terms = [niche] + expansions
-        
-        # Split terms across workers
-        term_chunks = self._split_chunks(all_terms, self.num_workers)
-        self.logger.info(
-            f"ConcurrentXHR: distributing {len(all_terms)} search terms "
-            f"across {len(term_chunks)} workers for '{niche}' in {city_state}"
-        )
-        
-        # Create work items
-        work_items = [
-            (chunk, location, self.config, i) 
-            for i, chunk in enumerate(term_chunks) if chunk
-        ]
-        
-        if not work_items:
-            return []
-        
-        # Run workers in parallel
-        with mp.Pool(processes=min(len(work_items), self.num_workers)) as pool:
-            results = pool.map(_xhr_worker, work_items)
-        
-        # Aggregate results
-        all_leads = []
-        seen_gmb = set()
-        for worker_leads in results:
-            for lead in worker_leads:
-                gmb = lead.get("gmb_link", "").strip()
-                if gmb and gmb not in seen_gmb:
-                    seen_gmb.add(gmb)
-                    all_leads.append(lead)
-        
-        self.logger.info(
-            f"ConcurrentXHR: collected {len(all_leads)} unique leads "
-            f"for '{niche}' in {city_state}"
-        )
-        return all_leads
-    
-    def _split_chunks(self, lst: list, n: int) -> list[list]:
-        """Split list into n roughly equal chunks."""
-        if not lst or n <= 0:
-            return [lst]
-        k, rem = divmod(len(lst), n)
-        chunks = []
-        i = 0
-        for c in range(n):
-            size = k + (1 if c < rem else 0)
-            chunks.append(lst[i:i + size])
-            i += size
-        return [c for c in chunks if c]
+        self.logger.info(f"Using XHR scraper (50 internal concurrent requests) for '{niche}'")
+        # Just delegate to the standard XHR scraper
+        return self.scraper.scrape_niche(niche, location, on_progress)
 
 
-def _xhr_worker(args) -> list[dict]:
-    """
-    Worker function for concurrent XHR scraping.
-    Runs in a separate process.
-    """
-    import asyncio
-    from scrapers.xhr_scraper import XHRGoogleMapsScraper, _make_fingerprint
-    from utils.rate_limiter import RateLimiter
-    from utils.proxy_manager import ProxyManager
-    
-    terms, location, config, worker_id = args
-    
-    # Set up fresh instances in this process
-    rate_limiter = RateLimiter(config)
-    proxy_mgr = ProxyManager(config)
-    proxy_mgr.refresh()
-    
-    logger = logging.getLogger(f"XHRWorker-{worker_id}")
-    logger.info(f"Worker {worker_id}: processing {len(terms)} terms")
-    
-    # Create a minimal scraper that just does URL collection + extraction
-    scraper = XHRGoogleMapsScraper(config, rate_limiter, proxy_mgr)
-    
-    # Run the scrape
-    try:
-        # We'll call the internal methods directly to use our term list
-        return asyncio.run(_scrape_with_terms(scraper, terms, location))
-    except Exception as exc:
-        logger.error(f"Worker {worker_id} failed: {exc}")
-        return []
-
-
-def _get_httpx_client_kwargs(proxy_map=None, **extra):
-    """Build httpx client kwargs with correct proxy parameter for installed version."""
-    kwargs = {
-        "timeout": httpx.Timeout(30.0, connect=10.0),
-        "follow_redirects": True,
-        "http2": True,
-        **extra
-    }
-    if proxy_map:
-        try:
-            import inspect
-            sig = inspect.signature(httpx.AsyncClient.__init__)
-            if 'proxy' in sig.parameters:
-                kwargs["proxy"] = proxy_map
-            else:
-                kwargs["proxies"] = proxy_map
-        except Exception:
-            kwargs["proxy"] = proxy_map
-    return kwargs
-
-
-async def _scrape_with_terms(scraper, terms: list[str], location: dict) -> list[dict]:
-    """Async helper to scrape specific terms."""
-    import httpx
-    from urllib.parse import quote_plus
-    from scrapers.xhr_scraper import _SEARCH_URL, _BLOCK_RE, _make_fingerprint
-    
-    fingerprint = _make_fingerprint()
-    proxy_url = scraper._get_proxy_url()
-    proxy_map = (
-        {"http://": proxy_url, "https://": proxy_url}
-        if proxy_url else None
-    )
-    
-    city_state = f"{location['city']}, {location['state']}"
-    all_urls = []
-    seen = set()
-    
-    client_kwargs = _get_httpx_client_kwargs(
-        proxy_map=proxy_map,
-        headers=fingerprint["headers"]
-    )
-    
-    async with httpx.AsyncClient(**client_kwargs) as client:
-        # Phase A: Collect URLs for our assigned terms
-        for term in terms:
-            query = f"{term} in {city_state}"
-            url = _SEARCH_URL.format(query=quote_plus(query))
-            
-            try:
-                resp = await client.get(
-                    url,
-                    headers={**fingerprint["headers"], "Referer": "https://www.google.com/"},
-                )
-                
-                if resp.status_code == 429 or _BLOCK_RE.search(resp[:3000]):
-                    fingerprint = _make_fingerprint()
-                    await asyncio.sleep(random.uniform(3, 8))
-                    continue
-                
-                if resp.status_code == 200:
-                    new_urls = scraper._extract_urls_from_html(resp.text, seen)
-                    for u in new_urls:
-                        if u not in seen:
-                            seen.add(u)
-                            all_urls.append(u)
-                            
-            except Exception as exc:
-                scraper.logger.debug(f"Term '{term}' failed: {exc}")
-            
-            await asyncio.sleep(random.uniform(0.3, 0.8))
-    
-    # Phase B: Extract business details
-    if not all_urls:
-        return []
-    
-    client_kwargs_b = _get_httpx_client_kwargs(
-        proxy_map=proxy_map,
-        headers=fingerprint["headers"]
-    )
-    
-    async with httpx.AsyncClient(**client_kwargs_b) as client:
-        sem = asyncio.Semaphore(scraper._concurrency)
-        tasks = [
-            _fetch_business_worker(scraper, client, url, sem, fingerprint)
-            for url in all_urls[:60]  # Cap per worker
-        ]
-        results = await asyncio.gather(*tasks)
-    
-    return [r for r in results if r is not None]
-
-
-async def _fetch_business_worker(scraper, client, url, sem, fingerprint):
-    """Fetch a single business in worker."""
-    import httpx
-    from scrapers.xhr_scraper import _BLOCK_RE
-    
-    async with sem:
-        for attempt in range(3):
-            try:
-                resp = await client.get(
-                    url,
-                    headers={
-                        **fingerprint["headers"],
-                        "Referer": "https://www.google.com/maps/",
-                    },
-                )
-                
-                if resp.status_code == 429 or _BLOCK_RE.search(resp.text[:3000]):
-                    await asyncio.sleep(2 ** attempt)
-                    fingerprint = _make_fingerprint()
-                    continue
-                
-                if resp.status_code == 200:
-                    # Parse using the scraper's method
-                    return scraper._parse_business_html(resp.text, url, "")
-                    
-            except (httpx.TimeoutException, httpx.ConnectError):
-                await asyncio.sleep(2 ** attempt)
-            except Exception:
-                pass
-        
-        return None
-
-# ---------------------------------------------------------------------
+# ----------------------------------------------------------------------
 
 
 # ── Module-level progress updater ─────────────────────────────────────────────
@@ -690,17 +486,8 @@ def run_pipeline(config: dict, args: argparse.Namespace, logger: logging.Logger)
 
         ScraperClass = _load_scraper_class(config)
         
-        # Use concurrent XHR by default when XHR parser is selected
-        # Default to 4 workers, can be overridden with --concurrent-xhr
-        if config["scraping"].get("parser") == "xhr":
-            concurrent_workers = args.concurrent_xhr if args.concurrent_xhr is not None else 4
-            if concurrent_workers > 1:
-                scraper = ConcurrentXHRScraper(config, num_workers=concurrent_workers)
-                logger.info(f"Using concurrent XHR scraper with {concurrent_workers} workers")
-            else:
-                scraper = ScraperClass(config, rate_limiter, proxy_mgr)
-        else:
-            scraper = ScraperClass(config, rate_limiter, proxy_mgr)
+        # Use XHR scraper (it already has 50 concurrent requests internally)
+        scraper = ScraperClass(config, rate_limiter, proxy_mgr)
 
         # Context-manager support: Selenium/Playwright scrapers may need __enter__
         if hasattr(scraper, "__enter__"):
