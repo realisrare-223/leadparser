@@ -1,0 +1,406 @@
+2026-03-08 03:13:27,081 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_031327.log
+2026-03-08 03:13:27,328 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_031327.log
+2026-03-08 03:13:27,830 | leadparser.main      | INFO     | Live log streaming active — job 105dd7e0
+2026-03-08 03:13:27,830 | leadparser.main      | INFO     | Distributing 100 leads across 3 niche+city combinations (~33 per combination, remainder: 1)
+2026-03-08 03:13:28,112 | leadparser.main      | INFO     | Live log streaming active — job 852cbf97
+2026-03-08 03:13:28,113 | leadparser.main      | INFO     | Distributing 100 leads across 3 niche+city combinations (~33 per combination, remainder: 1)
+2026-03-08 03:13:28,891 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 03:13:28,892 | leadparser.supabase  | INFO     | Session 20260308_031328 | niches: ['food', 'automotive', 'barber shops'] | city: Vancouver
+2026-03-08 03:13:28,892 | leadparser.main      | INFO     | Session #20260308_031328 | 3 niche(s) | 1 location(s) | 3 total combinations | target: 100 filtered leads
+2026-03-08 03:13:29,022 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:13:29,136 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 03:13:29,136 | leadparser.supabase  | INFO     | Session 20260308_031329 | niches: ['food', 'automotive', 'barber shops'] | city: Calgary
+2026-03-08 03:13:29,136 | leadparser.main      | INFO     | Session #20260308_031329 | 3 niche(s) | 1 location(s) | 3 total combinations | target: 100 filtered leads
+2026-03-08 03:13:29,270 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:13:29,420 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'food'
+2026-03-08 03:13:29,648 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'food'
+2026-03-08 03:13:29,771 | XHRGoogleMapsScraper | INFO     |   'food': +0 (total: 0/340)
+2026-03-08 03:13:29,878 | XHRGoogleMapsScraper | INFO     |   'food': +0 (total: 0/340)
+2026-03-08 03:13:31,195 | XHRGoogleMapsScraper | INFO     |   'restaurants': +0 (total: 0/340)
+2026-03-08 03:13:31,422 | XHRGoogleMapsScraper | INFO     |   'restaurants': +0 (total: 0/340)
+2026-03-08 03:13:32,361 | XHRGoogleMapsScraper | INFO     |   'diners': +0 (total: 0/340)
+2026-03-08 03:13:32,532 | XHRGoogleMapsScraper | INFO     |   'diners': +0 (total: 0/340)
+2026-03-08 03:13:33,150 | XHRGoogleMapsScraper | INFO     |   'eateries': +0 (total: 0/340)
+2026-03-08 03:13:33,576 | XHRGoogleMapsScraper | INFO     |   'eateries': +0 (total: 0/340)
+2026-03-08 03:13:34,227 | XHRGoogleMapsScraper | INFO     |   'food shops': +0 (total: 0/340)
+2026-03-08 03:13:34,804 | XHRGoogleMapsScraper | INFO     |   'food shops': +0 (total: 0/340)
+2026-03-08 03:13:35,100 | XHRGoogleMapsScraper | INFO     |   'cafes': +0 (total: 0/340)
+2026-03-08 03:13:36,206 | XHRGoogleMapsScraper | INFO     |   'cafes': +0 (total: 0/340)
+2026-03-08 03:13:36,781 | XHRGoogleMapsScraper | INFO     |   'bistros': +0 (total: 0/340)
+2026-03-08 03:13:37,005 | XHRGoogleMapsScraper | INFO     |   'bistros': +0 (total: 0/340)
+2026-03-08 03:13:38,011 | XHRGoogleMapsScraper | INFO     |   'takeout food': +0 (total: 0/340)
+2026-03-08 03:13:38,594 | XHRGoogleMapsScraper | INFO     |   'takeout food': +0 (total: 0/340)
+2026-03-08 03:13:39,397 | XHRGoogleMapsScraper | INFO     |   'local food spots': +0 (total: 0/340)
+2026-03-08 03:13:39,902 | XHRGoogleMapsScraper | INFO     |   'local food spots': +0 (total: 0/340)
+2026-03-08 03:13:40,712 | XHRGoogleMapsScraper | INFO     |   'places to eat': +0 (total: 0/340)
+2026-03-08 03:13:41,336 | XHRGoogleMapsScraper | INFO     |   'places to eat': +0 (total: 0/340)
+2026-03-08 03:13:41,723 | XHRGoogleMapsScraper | INFO     |   'local eats': +0 (total: 0/340)
+2026-03-08 03:13:42,280 | XHRGoogleMapsScraper | INFO     |   'local eats': +0 (total: 0/340)
+2026-03-08 03:13:42,866 | XHRGoogleMapsScraper | INFO     |   'food near me': +0 (total: 0/340)
+2026-03-08 03:13:43,524 | XHRGoogleMapsScraper | INFO     |   'food near me': +0 (total: 0/340)
+2026-03-08 03:13:44,185 | XHRGoogleMapsScraper | INFO     |   'dining near me': +0 (total: 0/340)
+2026-03-08 03:13:44,875 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:13:44,876 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Calgary; running total: 0
+2026-03-08 03:13:44,877 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:13:45,082 | XHRGoogleMapsScraper | INFO     |   'dining near me': +0 (total: 0/340)
+2026-03-08 03:13:45,268 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'automotive'
+2026-03-08 03:13:45,486 | XHRGoogleMapsScraper | INFO     |   'automotive': +0 (total: 0/330)
+2026-03-08 03:13:46,582 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:13:46,583 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Vancouver; running total: 0
+2026-03-08 03:13:46,584 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:13:46,946 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'automotive'
+2026-03-08 03:13:47,005 | XHRGoogleMapsScraper | INFO     |   'auto repair shops': +0 (total: 0/330)
+2026-03-08 03:13:47,188 | XHRGoogleMapsScraper | INFO     |   'automotive': +0 (total: 0/330)
+2026-03-08 03:13:48,308 | XHRGoogleMapsScraper | INFO     |   'auto detailing': +0 (total: 0/330)
+2026-03-08 03:13:48,411 | XHRGoogleMapsScraper | INFO     |   'auto repair shops': +0 (total: 0/330)
+2026-03-08 03:13:49,207 | XHRGoogleMapsScraper | INFO     |   'auto detailing': +0 (total: 0/330)
+2026-03-08 03:13:49,495 | XHRGoogleMapsScraper | INFO     |   'auto body shops': +0 (total: 0/330)
+2026-03-08 03:13:50,771 | XHRGoogleMapsScraper | INFO     |   'tire shops': +0 (total: 0/330)
+2026-03-08 03:13:50,810 | XHRGoogleMapsScraper | INFO     |   'auto body shops': +0 (total: 0/330)
+2026-03-08 03:13:52,207 | XHRGoogleMapsScraper | INFO     |   'car wash': +0 (total: 0/330)
+2026-03-08 03:13:52,261 | XHRGoogleMapsScraper | INFO     |   'tire shops': +0 (total: 0/330)
+2026-03-08 03:13:53,138 | XHRGoogleMapsScraper | INFO     |   'car wash': +0 (total: 0/330)
+2026-03-08 03:13:53,962 | XHRGoogleMapsScraper | INFO     |   'towing services': +0 (total: 0/330)
+2026-03-08 03:13:54,448 | XHRGoogleMapsScraper | INFO     |   'towing services': +0 (total: 0/330)
+2026-03-08 03:13:54,857 | XHRGoogleMapsScraper | INFO     |   'auto glass repair': +0 (total: 0/330)
+2026-03-08 03:13:55,206 | XHRGoogleMapsScraper | INFO     |   'auto glass repair': +0 (total: 0/330)
+2026-03-08 03:13:55,922 | XHRGoogleMapsScraper | INFO     |   'car dealerships': +0 (total: 0/330)
+2026-03-08 03:13:55,993 | XHRGoogleMapsScraper | INFO     |   'car dealerships': +0 (total: 0/330)
+2026-03-08 03:13:57,204 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:13:57,205 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Vancouver; running total: 0
+2026-03-08 03:13:57,206 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:13:57,517 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:13:57,519 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Calgary; running total: 0
+2026-03-08 03:13:57,519 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:13:57,558 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'barber shops'
+2026-03-08 03:13:57,810 | XHRGoogleMapsScraper | INFO     |   'barber shops': +0 (total: 0/330)
+2026-03-08 03:13:57,877 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'barber shops'
+2026-03-08 03:13:58,119 | XHRGoogleMapsScraper | INFO     |   'barber shops': +0 (total: 0/330)
+2026-03-08 03:13:59,178 | XHRGoogleMapsScraper | INFO     |   'local barber': +0 (total: 0/330)
+2026-03-08 03:13:59,426 | XHRGoogleMapsScraper | INFO     |   'local barber': +0 (total: 0/330)
+2026-03-08 03:14:00,142 | XHRGoogleMapsScraper | INFO     |   'fade haircut': +0 (total: 0/330)
+2026-03-08 03:14:00,839 | XHRGoogleMapsScraper | INFO     |   'fade haircut': +0 (total: 0/330)
+2026-03-08 03:14:01,528 | XHRGoogleMapsScraper | INFO     |   'beard trim': +0 (total: 0/330)
+2026-03-08 03:14:01,535 | XHRGoogleMapsScraper | INFO     |   'beard trim': +0 (total: 0/330)
+2026-03-08 03:14:02,979 | XHRGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 0/330)
+2026-03-08 03:14:03,035 | XHRGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 0/330)
+2026-03-08 03:14:04,034 | XHRGoogleMapsScraper | INFO     |   'men's grooming': +0 (total: 0/330)
+2026-03-08 03:14:04,287 | XHRGoogleMapsScraper | INFO     |   'men's grooming': +0 (total: 0/330)
+2026-03-08 03:14:05,072 | XHRGoogleMapsScraper | INFO     |   'barbers': +0 (total: 0/330)
+2026-03-08 03:14:05,434 | XHRGoogleMapsScraper | INFO     |   'barbers': +0 (total: 0/330)
+2026-03-08 03:14:06,245 | XHRGoogleMapsScraper | INFO     |   'men's hair salons': +0 (total: 0/330)
+2026-03-08 03:14:06,304 | XHRGoogleMapsScraper | INFO     |   'men's hair salons': +0 (total: 0/330)
+2026-03-08 03:14:07,469 | XHRGoogleMapsScraper | INFO     |   'barbershops': +0 (total: 0/330)
+2026-03-08 03:14:07,942 | XHRGoogleMapsScraper | INFO     |   'barbershops': +0 (total: 0/330)
+2026-03-08 03:14:08,635 | XHRGoogleMapsScraper | INFO     |   'hair cut shops': +0 (total: 0/330)
+2026-03-08 03:14:09,042 | XHRGoogleMapsScraper | INFO     |   'hair cut shops': +0 (total: 0/330)
+2026-03-08 03:14:09,352 | XHRGoogleMapsScraper | INFO     |   'barber': +0 (total: 0/330)
+2026-03-08 03:14:10,140 | XHRGoogleMapsScraper | INFO     |   'barber': +0 (total: 0/330)
+2026-03-08 03:14:10,432 | XHRGoogleMapsScraper | INFO     |   'barbershop': +0 (total: 0/330)
+2026-03-08 03:14:11,426 | XHRGoogleMapsScraper | INFO     |   'hair barber': +0 (total: 0/330)
+2026-03-08 03:14:11,845 | XHRGoogleMapsScraper | INFO     |   'barbershop': +0 (total: 0/330)
+2026-03-08 03:14:12,644 | XHRGoogleMapsScraper | INFO     |   'men's haircut': +0 (total: 0/330)
+2026-03-08 03:14:13,052 | XHRGoogleMapsScraper | INFO     |   'hair barber': +0 (total: 0/330)
+2026-03-08 03:14:13,799 | XHRGoogleMapsScraper | INFO     |   'hair cutting salon': +0 (total: 0/330)
+2026-03-08 03:14:13,875 | XHRGoogleMapsScraper | INFO     |   'men's haircut': +0 (total: 0/330)
+2026-03-08 03:14:14,891 | XHRGoogleMapsScraper | INFO     |   'hair cutting salon': +0 (total: 0/330)
+2026-03-08 03:14:15,447 | XHRGoogleMapsScraper | INFO     |   'haircut near me': +0 (total: 0/330)
+2026-03-08 03:14:16,460 | XHRGoogleMapsScraper | INFO     |   'haircut near me': +0 (total: 0/330)
+2026-03-08 03:14:16,659 | XHRGoogleMapsScraper | INFO     |   'haircuts for men': +0 (total: 0/330)
+2026-03-08 03:14:17,373 | XHRGoogleMapsScraper | INFO     |   'haircuts for men': +0 (total: 0/330)
+2026-03-08 03:14:18,246 | XHRGoogleMapsScraper | INFO     |   'men's haircutting': +0 (total: 0/330)
+2026-03-08 03:14:18,921 | XHRGoogleMapsScraper | INFO     |   'men's haircutting': +0 (total: 0/330)
+2026-03-08 03:14:20,002 | XHRGoogleMapsScraper | INFO     |   'low fade haircut': +0 (total: 0/330)
+2026-03-08 03:14:20,142 | XHRGoogleMapsScraper | INFO     |   'low fade haircut': +0 (total: 0/330)
+2026-03-08 03:14:21,210 | XHRGoogleMapsScraper | INFO     |   'taper fade': +0 (total: 0/330)
+2026-03-08 03:14:21,484 | XHRGoogleMapsScraper | INFO     |   'taper fade': +0 (total: 0/330)
+2026-03-08 03:14:22,478 | XHRGoogleMapsScraper | INFO     |   'shape up haircut': +0 (total: 0/330)
+2026-03-08 03:14:22,627 | XHRGoogleMapsScraper | INFO     |   'shape up haircut': +0 (total: 0/330)
+2026-03-08 03:14:23,386 | XHRGoogleMapsScraper | INFO     |   'classic barber': +0 (total: 0/330)
+2026-03-08 03:14:23,886 | XHRGoogleMapsScraper | INFO     |   'classic barber': +0 (total: 0/330)
+2026-03-08 03:14:24,564 | XHRGoogleMapsScraper | INFO     |   'old school barber': +0 (total: 0/330)
+2026-03-08 03:14:25,495 | XHRGoogleMapsScraper | INFO     |   'old school barber': +0 (total: 0/330)
+2026-03-08 03:14:26,312 | XHRGoogleMapsScraper | INFO     |   'master barber': +0 (total: 0/330)
+2026-03-08 03:14:26,801 | XHRGoogleMapsScraper | INFO     |   'master barber': +0 (total: 0/330)
+2026-03-08 03:14:27,097 | XHRGoogleMapsScraper | INFO     |   'hair clipper shop': +0 (total: 0/330)
+2026-03-08 03:14:27,748 | XHRGoogleMapsScraper | INFO     |   'grooming salon': +0 (total: 0/330)
+2026-03-08 03:14:28,199 | XHRGoogleMapsScraper | INFO     |   'hair clipper shop': +0 (total: 0/330)
+2026-03-08 03:14:28,867 | XHRGoogleMapsScraper | INFO     |   'grooming salon': +0 (total: 0/330)
+2026-03-08 03:14:29,235 | XHRGoogleMapsScraper | INFO     |   'men's grooming lounge': +0 (total: 0/330)
+2026-03-08 03:14:30,142 | XHRGoogleMapsScraper | INFO     |   'men's grooming lounge': +0 (total: 0/330)
+2026-03-08 03:14:30,330 | XHRGoogleMapsScraper | INFO     |   'hair salon for men': +0 (total: 0/330)
+2026-03-08 03:14:31,139 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:14:31,284 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Calgary; running total: 0
+2026-03-08 03:14:31,284 | leadparser.main      | INFO     |   Pass 1 result: 0/100 leads pass filters
+2026-03-08 03:14:31,284 | leadparser.main      | INFO     |   Retry pass 2/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 03:14:31,284 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:14:31,367 | XHRGoogleMapsScraper | INFO     |   'hair salon for men': +0 (total: 0/330)
+2026-03-08 03:14:31,660 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'food'
+2026-03-08 03:14:31,934 | XHRGoogleMapsScraper | INFO     |   'food': +0 (total: 0/330)
+2026-03-08 03:14:32,320 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:14:32,451 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Vancouver; running total: 0
+2026-03-08 03:14:32,451 | leadparser.main      | INFO     |   Pass 1 result: 0/100 leads pass filters
+2026-03-08 03:14:32,451 | leadparser.main      | INFO     |   Retry pass 2/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 03:14:32,452 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:14:32,800 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'food'
+2026-03-08 03:14:32,880 | XHRGoogleMapsScraper | INFO     |   'restaurants': +0 (total: 0/330)
+2026-03-08 03:14:33,056 | XHRGoogleMapsScraper | INFO     |   'food': +0 (total: 0/330)
+2026-03-08 03:14:33,790 | XHRGoogleMapsScraper | INFO     |   'restaurants': +0 (total: 0/330)
+2026-03-08 03:14:34,214 | XHRGoogleMapsScraper | INFO     |   'diners': +0 (total: 0/330)
+2026-03-08 03:14:34,466 | XHRGoogleMapsScraper | INFO     |   'diners': +0 (total: 0/330)
+2026-03-08 03:14:35,394 | XHRGoogleMapsScraper | INFO     |   'eateries': +0 (total: 0/330)
+2026-03-08 03:14:36,148 | XHRGoogleMapsScraper | INFO     |   'eateries': +0 (total: 0/330)
+2026-03-08 03:14:36,348 | XHRGoogleMapsScraper | INFO     |   'food shops': +0 (total: 0/330)
+2026-03-08 03:14:37,567 | XHRGoogleMapsScraper | INFO     |   'food shops': +0 (total: 0/330)
+2026-03-08 03:14:37,863 | XHRGoogleMapsScraper | INFO     |   'cafes': +0 (total: 0/330)
+2026-03-08 03:14:38,486 | XHRGoogleMapsScraper | INFO     |   'cafes': +0 (total: 0/330)
+2026-03-08 03:14:39,135 | XHRGoogleMapsScraper | INFO     |   'bistros': +0 (total: 0/330)
+2026-03-08 03:14:39,297 | XHRGoogleMapsScraper | INFO     |   'bistros': +0 (total: 0/330)
+2026-03-08 03:14:39,939 | XHRGoogleMapsScraper | INFO     |   'takeout food': +0 (total: 0/330)
+2026-03-08 03:14:40,533 | XHRGoogleMapsScraper | INFO     |   'takeout food': +0 (total: 0/330)
+2026-03-08 03:14:41,392 | XHRGoogleMapsScraper | INFO     |   'local food spots': +0 (total: 0/330)
+2026-03-08 03:14:41,509 | XHRGoogleMapsScraper | INFO     |   'local food spots': +0 (total: 0/330)
+2026-03-08 03:14:42,214 | XHRGoogleMapsScraper | INFO     |   'places to eat': +0 (total: 0/330)
+2026-03-08 03:14:42,875 | XHRGoogleMapsScraper | INFO     |   'places to eat': +0 (total: 0/330)
+2026-03-08 03:14:43,716 | XHRGoogleMapsScraper | INFO     |   'local eats': +0 (total: 0/330)
+2026-03-08 03:14:44,337 | XHRGoogleMapsScraper | INFO     |   'local eats': +0 (total: 0/330)
+2026-03-08 03:14:44,496 | XHRGoogleMapsScraper | INFO     |   'food near me': +0 (total: 0/330)
+2026-03-08 03:14:45,164 | XHRGoogleMapsScraper | INFO     |   'food near me': +0 (total: 0/330)
+2026-03-08 03:14:45,917 | XHRGoogleMapsScraper | INFO     |   'dining near me': +0 (total: 0/330)
+2026-03-08 03:14:46,421 | XHRGoogleMapsScraper | INFO     |   'dining near me': +0 (total: 0/330)
+2026-03-08 03:14:47,328 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:14:47,329 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Vancouver; running total: 0
+2026-03-08 03:14:47,330 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:14:47,481 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:14:47,482 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Calgary; running total: 0
+2026-03-08 03:14:47,482 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:14:47,721 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'automotive'
+2026-03-08 03:14:47,854 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'automotive'
+2026-03-08 03:14:47,970 | XHRGoogleMapsScraper | INFO     |   'automotive': +0 (total: 0/330)
+2026-03-08 03:14:48,092 | XHRGoogleMapsScraper | INFO     |   'automotive': +0 (total: 0/330)
+2026-03-08 03:14:49,266 | XHRGoogleMapsScraper | INFO     |   'auto repair shops': +0 (total: 0/330)
+2026-03-08 03:14:49,456 | XHRGoogleMapsScraper | INFO     |   'auto repair shops': +0 (total: 0/330)
+2026-03-08 03:14:50,109 | XHRGoogleMapsScraper | INFO     |   'auto detailing': +0 (total: 0/330)
+2026-03-08 03:14:50,935 | XHRGoogleMapsScraper | INFO     |   'auto detailing': +0 (total: 0/330)
+
+2026-03-08 03:14:51,999 | XHRGoogleMapsScraper | INFO     |   'auto body shops': +0 (total: 0/330)
+2026-03-08 03:14:52,095 | XHRGoogleMapsScraper | INFO     |   'tire shops': +0 (total: 0/330)
+2026-03-08 03:14:52,908 | XHRGoogleMapsScraper | INFO     |   'tire shops': +0 (total: 0/330)
+2026-03-08 03:14:52,929 | XHRGoogleMapsScraper | INFO     |   'car wash': +0 (total: 0/330)
+2026-03-08 03:14:53,731 | XHRGoogleMapsScraper | INFO     |   'car wash': +0 (total: 0/330)
+2026-03-08 03:14:53,753 | XHRGoogleMapsScraper | INFO     |   'towing services': +0 (total: 0/330)
+2026-03-08 03:14:54,825 | XHRGoogleMapsScraper | INFO     |   'auto glass repair': +0 (total: 0/330)
+2026-03-08 03:14:55,221 | XHRGoogleMapsScraper | INFO     |   'towing services': +0 (total: 0/330)
+2026-03-08 03:14:55,659 | XHRGoogleMapsScraper | INFO     |   'car dealerships': +0 (total: 0/330)
+2026-03-08 03:14:56,757 | XHRGoogleMapsScraper | INFO     |   'auto glass repair': +0 (total: 0/330)
+2026-03-08 03:14:57,103 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:14:57,234 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Calgary; running total: 0
+2026-03-08 03:14:57,234 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:14:57,585 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'barber shops'
+2026-03-08 03:14:57,817 | XHRGoogleMapsScraper | INFO     |   'barber shops': +0 (total: 0/330)
+2026-03-08 03:14:58,229 | XHRGoogleMapsScraper | INFO     |   'car dealerships': +0 (total: 0/330)
+2026-03-08 03:14:58,720 | XHRGoogleMapsScraper | INFO     |   'local barber': +0 (total: 0/330)
+2026-03-08 03:14:59,253 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:14:59,254 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Vancouver; running total: 0
+2026-03-08 03:14:59,255 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:14:59,601 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'barber shops'
+2026-03-08 03:14:59,844 | XHRGoogleMapsScraper | INFO     |   'barber shops': +0 (total: 0/330)
+2026-03-08 03:15:00,249 | XHRGoogleMapsScraper | INFO     |   'fade haircut': +0 (total: 0/330)
+2026-03-08 03:15:00,866 | XHRGoogleMapsScraper | INFO     |   'local barber': +0 (total: 0/330)
+2026-03-08 03:15:01,313 | XHRGoogleMapsScraper | INFO     |   'beard trim': +0 (total: 0/330)
+2026-03-08 03:15:02,020 | XHRGoogleMapsScraper | INFO     |   'fade haircut': +0 (total: 0/330)
+2026-03-08 03:15:02,551 | XHRGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 0/330)
+2026-03-08 03:15:02,699 | XHRGoogleMapsScraper | INFO     |   'beard trim': +0 (total: 0/330)
+2026-03-08 03:15:03,637 | XHRGoogleMapsScraper | INFO     |   'men's grooming': +0 (total: 0/330)
+2026-03-08 03:15:03,960 | XHRGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 0/330)
+2026-03-08 03:15:05,378 | XHRGoogleMapsScraper | INFO     |   'barbers': +0 (total: 0/330)
+2026-03-08 03:15:05,561 | XHRGoogleMapsScraper | INFO     |   'men's grooming': +0 (total: 0/330)
+2026-03-08 03:15:06,447 | XHRGoogleMapsScraper | INFO     |   'men's hair salons': +0 (total: 0/330)
+2026-03-08 03:15:07,251 | XHRGoogleMapsScraper | INFO     |   'barbers': +0 (total: 0/330)
+2026-03-08 03:15:07,796 | XHRGoogleMapsScraper | INFO     |   'barbershops': +0 (total: 0/330)
+2026-03-08 03:15:08,734 | XHRGoogleMapsScraper | INFO     |   'men's hair salons': +0 (total: 0/330)
+2026-03-08 03:15:09,382 | XHRGoogleMapsScraper | INFO     |   'hair cut shops': +0 (total: 0/330)
+2026-03-08 03:15:09,693 | XHRGoogleMapsScraper | INFO     |   'barbershops': +0 (total: 0/330)
+2026-03-08 03:15:10,770 | XHRGoogleMapsScraper | INFO     |   'hair cut shops': +0 (total: 0/330)
+2026-03-08 03:15:10,944 | XHRGoogleMapsScraper | INFO     |   'barber': +0 (total: 0/330)
+2026-03-08 03:15:11,752 | XHRGoogleMapsScraper | INFO     |   'barber': +0 (total: 0/330)
+2026-03-08 03:15:12,050 | XHRGoogleMapsScraper | INFO     |   'barbershop': +0 (total: 0/330)
+2026-03-08 03:15:12,921 | XHRGoogleMapsScraper | INFO     |   'barbershop': +0 (total: 0/330)
+2026-03-08 03:15:13,010 | XHRGoogleMapsScraper | INFO     |   'hair barber': +0 (total: 0/330)
+2026-03-08 03:15:13,852 | XHRGoogleMapsScraper | INFO     |   'men's haircut': +0 (total: 0/330)
+2026-03-08 03:15:14,663 | XHRGoogleMapsScraper | INFO     |   'hair barber': +0 (total: 0/330)
+2026-03-08 03:15:14,764 | XHRGoogleMapsScraper | INFO     |   'hair cutting salon': +0 (total: 0/330)
+2026-03-08 03:15:16,274 | XHRGoogleMapsScraper | INFO     |   'men's haircut': +0 (total: 0/330)
+2026-03-08 03:15:16,429 | XHRGoogleMapsScraper | INFO     |   'haircut near me': +0 (total: 0/330)
+2026-03-08 03:15:17,426 | XHRGoogleMapsScraper | INFO     |   'haircuts for men': +0 (total: 0/330)
+2026-03-08 03:15:17,626 | XHRGoogleMapsScraper | INFO     |   'hair cutting salon': +0 (total: 0/330)
+2026-03-08 03:15:18,414 | XHRGoogleMapsScraper | INFO     |   'men's haircutting': +0 (total: 0/330)
+2026-03-08 03:15:19,083 | XHRGoogleMapsScraper | INFO     |   'haircut near me': +0 (total: 0/330)
+2026-03-08 03:15:19,846 | XHRGoogleMapsScraper | INFO     |   'haircuts for men': +0 (total: 0/330)
+2026-03-08 03:15:19,946 | XHRGoogleMapsScraper | INFO     |   'low fade haircut': +0 (total: 0/330)
+2026-03-08 03:15:21,051 | XHRGoogleMapsScraper | INFO     |   'men's haircutting': +0 (total: 0/330)
+2026-03-08 03:15:21,410 | XHRGoogleMapsScraper | INFO     |   'taper fade': +0 (total: 0/330)
+2026-03-08 03:15:22,606 | XHRGoogleMapsScraper | INFO     |   'low fade haircut': +0 (total: 0/330)
+2026-03-08 03:15:23,010 | XHRGoogleMapsScraper | INFO     |   'shape up haircut': +0 (total: 0/330)
+2026-03-08 03:15:24,077 | XHRGoogleMapsScraper | INFO     |   'classic barber': +0 (total: 0/330)
+2026-03-08 03:15:24,151 | XHRGoogleMapsScraper | INFO     |   'taper fade': +0 (total: 0/330)
+2026-03-08 03:15:24,718 | XHRGoogleMapsScraper | INFO     |   'old school barber': +0 (total: 0/330)
+2026-03-08 03:15:25,121 | XHRGoogleMapsScraper | INFO     |   'shape up haircut': +0 (total: 0/330)
+2026-03-08 03:15:25,842 | XHRGoogleMapsScraper | INFO     |   'master barber': +0 (total: 0/330)
+2026-03-08 03:15:26,172 | XHRGoogleMapsScraper | INFO     |   'classic barber': +0 (total: 0/330)
+2026-03-08 03:15:26,697 | XHRGoogleMapsScraper | INFO     |   'hair clipper shop': +0 (total: 0/330)
+2026-03-08 03:15:27,094 | XHRGoogleMapsScraper | INFO     |   'old school barber': +0 (total: 0/330)
+2026-03-08 03:15:27,842 | XHRGoogleMapsScraper | INFO     |   'grooming salon': +0 (total: 0/330)
+2026-03-08 03:15:27,890 | XHRGoogleMapsScraper | INFO     |   'master barber': +0 (total: 0/330)
+2026-03-08 03:15:28,973 | XHRGoogleMapsScraper | INFO     |   'men's grooming lounge': +0 (total: 0/330)
+2026-03-08 03:15:29,555 | XHRGoogleMapsScraper | INFO     |   'hair clipper shop': +0 (total: 0/330)
+2026-03-08 03:15:30,116 | XHRGoogleMapsScraper | INFO     |   'hair salon for men': +0 (total: 0/330)
+2026-03-08 03:15:30,322 | XHRGoogleMapsScraper | INFO     |   'grooming salon': +0 (total: 0/330)
+2026-03-08 03:15:31,382 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:15:31,384 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Calgary; running total: 0
+2026-03-08 03:15:31,384 | leadparser.main      | INFO     |   Pass 2 result: 0/100 leads pass filters
+2026-03-08 03:15:31,384 | leadparser.main      | INFO     |   Retry pass 3/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 03:15:31,385 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:15:31,406 | XHRGoogleMapsScraper | INFO     |   'men's grooming lounge': +0 (total: 0/330)
+2026-03-08 03:15:31,726 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'food'
+2026-03-08 03:15:31,963 | XHRGoogleMapsScraper | INFO     |   'food': +0 (total: 0/330)
+2026-03-08 03:15:32,692 | XHRGoogleMapsScraper | INFO     |   'hair salon for men': +0 (total: 0/330)
+2026-03-08 03:15:33,419 | XHRGoogleMapsScraper | INFO     |   'restaurants': +0 (total: 0/330)
+2026-03-08 03:15:33,629 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:15:33,631 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Vancouver; running total: 0
+2026-03-08 03:15:33,631 | leadparser.main      | INFO     |   Pass 2 result: 0/100 leads pass filters
+2026-03-08 03:15:33,631 | leadparser.main      | INFO     |   Retry pass 3/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 03:15:33,632 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:15:33,977 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'food'
+2026-03-08 03:15:34,212 | XHRGoogleMapsScraper | INFO     |   'food': +0 (total: 0/330)
+2026-03-08 03:15:34,588 | XHRGoogleMapsScraper | INFO     |   'diners': +0 (total: 0/330)
+2026-03-08 03:15:35,037 | XHRGoogleMapsScraper | INFO     |   'restaurants': +0 (total: 0/330)
+2026-03-08 03:15:36,066 | XHRGoogleMapsScraper | INFO     |   'eateries': +0 (total: 0/330)
+2026-03-08 03:15:36,365 | XHRGoogleMapsScraper | INFO     |   'diners': +0 (total: 0/330)
+2026-03-08 03:15:36,694 | XHRGoogleMapsScraper | INFO     |   'food shops': +0 (total: 0/330)
+2026-03-08 03:15:37,118 | XHRGoogleMapsScraper | INFO     |   'eateries': +0 (total: 0/330)
+2026-03-08 03:15:37,949 | XHRGoogleMapsScraper | INFO     |   'cafes': +0 (total: 0/330)
+2026-03-08 03:15:37,996 | XHRGoogleMapsScraper | INFO     |   'food shops': +0 (total: 0/330)
+2026-03-08 03:15:38,866 | XHRGoogleMapsScraper | INFO     |   'bistros': +0 (total: 0/330)
+2026-03-08 03:15:39,610 | XHRGoogleMapsScraper | INFO     |   'cafes': +0 (total: 0/330)
+2026-03-08 03:15:40,402 | XHRGoogleMapsScraper | INFO     |   'takeout food': +0 (total: 0/330)
+2026-03-08 03:15:40,526 | XHRGoogleMapsScraper | INFO     |   'bistros': +0 (total: 0/330)
+2026-03-08 03:15:41,337 | XHRGoogleMapsScraper | INFO     |   'takeout food': +0 (total: 0/330)
+2026-03-08 03:15:41,960 | XHRGoogleMapsScraper | INFO     |   'local food spots': +0 (total: 0/330)
+2026-03-08 03:15:42,899 | XHRGoogleMapsScraper | INFO     |   'places to eat': +0 (total: 0/330)
+2026-03-08 03:15:43,199 | XHRGoogleMapsScraper | INFO     |   'local food spots': +0 (total: 0/330)
+2026-03-08 03:15:43,973 | XHRGoogleMapsScraper | INFO     |   'local eats': +0 (total: 0/330)
+2026-03-08 03:15:44,772 | XHRGoogleMapsScraper | INFO     |   'places to eat': +0 (total: 0/330)
+2026-03-08 03:15:45,326 | XHRGoogleMapsScraper | INFO     |   'food near me': +0 (total: 0/330)
+2026-03-08 03:15:46,035 | XHRGoogleMapsScraper | INFO     |   'dining near me': +0 (total: 0/330)
+2026-03-08 03:15:46,350 | XHRGoogleMapsScraper | INFO     |   'local eats': +0 (total: 0/330)
+2026-03-08 03:15:47,247 | XHRGoogleMapsScraper | INFO     |   'food near me': +0 (total: 0/330)
+2026-03-08 03:15:47,470 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:15:47,603 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Calgary; running total: 0
+2026-03-08 03:15:47,604 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:15:47,950 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'automotive'
+2026-03-08 03:15:48,220 | XHRGoogleMapsScraper | INFO     |   'automotive': +0 (total: 0/330)
+2026-03-08 03:15:48,615 | XHRGoogleMapsScraper | INFO     |   'dining near me': +0 (total: 0/330)
+2026-03-08 03:15:49,491 | XHRGoogleMapsScraper | INFO     |   'auto repair shops': +0 (total: 0/330)
+2026-03-08 03:15:49,738 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:15:49,867 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Vancouver; running total: 0
+2026-03-08 03:15:49,868 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:15:50,212 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'automotive'
+2026-03-08 03:15:50,334 | XHRGoogleMapsScraper | INFO     |   'auto detailing': +0 (total: 0/330)
+2026-03-08 03:15:50,442 | XHRGoogleMapsScraper | INFO     |   'automotive': +0 (total: 0/330)
+2026-03-08 03:15:51,613 | XHRGoogleMapsScraper | INFO     |   'auto body shops': +0 (total: 0/330)
+2026-03-08 03:15:51,686 | XHRGoogleMapsScraper | INFO     |   'auto repair shops': +0 (total: 0/330)
+2026-03-08 03:15:52,661 | XHRGoogleMapsScraper | INFO     |   'tire shops': +0 (total: 0/330)
+2026-03-08 03:15:52,809 | XHRGoogleMapsScraper | INFO     |   'auto detailing': +0 (total: 0/330)
+2026-03-08 03:15:53,588 | XHRGoogleMapsScraper | INFO     |   'auto body shops': +0 (total: 0/330)
+2026-03-08 03:15:54,081 | XHRGoogleMapsScraper | INFO     |   'car wash': +0 (total: 0/330)
+2026-03-08 03:15:54,639 | XHRGoogleMapsScraper | INFO     |   'tire shops': +0 (total: 0/330)
+2026-03-08 03:15:55,319 | XHRGoogleMapsScraper | INFO     |   'car wash': +0 (total: 0/330)
+2026-03-08 03:15:55,677 | XHRGoogleMapsScraper | INFO     |   'towing services': +0 (total: 0/330)
+2026-03-08 03:15:56,886 | XHRGoogleMapsScraper | INFO     |   'towing services': +0 (total: 0/330)
+2026-03-08 03:15:57,191 | XHRGoogleMapsScraper | INFO     |   'auto glass repair': +0 (total: 0/330)
+2026-03-08 03:15:57,925 | XHRGoogleMapsScraper | INFO     |   'auto glass repair': +0 (total: 0/330)
+2026-03-08 03:15:58,717 | XHRGoogleMapsScraper | INFO     |   'car dealerships': +0 (total: 0/330)
+2026-03-08 03:15:59,138 | XHRGoogleMapsScraper | INFO     |   'car dealerships': +0 (total: 0/330)
+2026-03-08 03:15:59,938 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:16:00,081 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Calgary; running total: 0
+2026-03-08 03:16:00,082 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:16:00,345 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:16:00,428 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'barber shops'
+2026-03-08 03:16:00,490 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Vancouver; running total: 0
+2026-03-08 03:16:00,491 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:16:00,671 | XHRGoogleMapsScraper | INFO     |   'barber shops': +0 (total: 0/330)
+2026-03-08 03:16:00,833 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'barber shops'
+2026-03-08 03:16:01,086 | XHRGoogleMapsScraper | INFO     |   'barber shops': +0 (total: 0/330)
+2026-03-08 03:16:01,477 | XHRGoogleMapsScraper | INFO     |   'local barber': +0 (total: 0/330)
+2026-03-08 03:16:02,154 | XHRGoogleMapsScraper | INFO     |   'fade haircut': +0 (total: 0/330)
+2026-03-08 03:16:02,354 | XHRGoogleMapsScraper | INFO     |   'local barber': +0 (total: 0/330)
+2026-03-08 03:16:03,306 | XHRGoogleMapsScraper | INFO     |   'beard trim': +0 (total: 0/330)
+2026-03-08 03:16:03,695 | XHRGoogleMapsScraper | INFO     |   'fade haircut': +0 (total: 0/330)
+2026-03-08 03:16:04,478 | XHRGoogleMapsScraper | INFO     |   'beard trim': +0 (total: 0/330)
+2026-03-08 03:16:04,734 | XHRGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 0/330)
+2026-03-08 03:16:05,216 | XHRGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 0/330)
+2026-03-08 03:16:05,678 | XHRGoogleMapsScraper | INFO     |   'men's grooming': +0 (total: 0/330)
+2026-03-08 03:16:06,564 | XHRGoogleMapsScraper | INFO     |   'men's grooming': +0 (total: 0/330)
+2026-03-08 03:16:07,268 | XHRGoogleMapsScraper | INFO     |   'barbers': +0 (total: 0/330)
+2026-03-08 03:16:07,786 | XHRGoogleMapsScraper | INFO     |   'barbers': +0 (total: 0/330)
+2026-03-08 03:16:08,175 | XHRGoogleMapsScraper | INFO     |   'men's hair salons': +0 (total: 0/330)
+2026-03-08 03:16:09,115 | XHRGoogleMapsScraper | INFO     |   'men's hair salons': +0 (total: 0/330)
+2026-03-08 03:16:09,126 | XHRGoogleMapsScraper | INFO     |   'barbershops': +0 (total: 0/330)
+2026-03-08 03:16:10,018 | XHRGoogleMapsScraper | INFO     |   'hair cut shops': +0 (total: 0/330)
+2026-03-08 03:16:10,301 | XHRGoogleMapsScraper | INFO     |   'barbershops': +0 (total: 0/330)
+2026-03-08 03:16:11,196 | XHRGoogleMapsScraper | INFO     |   'barber': +0 (total: 0/330)
+2026-03-08 03:16:11,319 | XHRGoogleMapsScraper | INFO     |   'hair cut shops': +0 (total: 0/330)
+2026-03-08 03:16:12,123 | XHRGoogleMapsScraper | INFO     |   'barbershop': +0 (total: 0/330)
+2026-03-08 03:16:12,260 | XHRGoogleMapsScraper | INFO     |   'barber': +0 (total: 0/330)
+2026-03-08 03:16:13,306 | XHRGoogleMapsScraper | INFO     |   'hair barber': +0 (total: 0/330)
+2026-03-08 03:16:13,763 | XHRGoogleMapsScraper | INFO     |   'barbershop': +0 (total: 0/330)
+2026-03-08 03:16:14,125 | XHRGoogleMapsScraper | INFO     |   'men's haircut': +0 (total: 0/330)
+2026-03-08 03:16:14,919 | XHRGoogleMapsScraper | INFO     |   'hair barber': +0 (total: 0/330)
+2026-03-08 03:16:15,202 | XHRGoogleMapsScraper | INFO     |   'hair cutting salon': +0 (total: 0/330)
+2026-03-08 03:16:16,578 | XHRGoogleMapsScraper | INFO     |   'men's haircut': +0 (total: 0/330)
+2026-03-08 03:16:16,848 | XHRGoogleMapsScraper | INFO     |   'haircut near me': +0 (total: 0/330)
+2026-03-08 03:16:17,727 | XHRGoogleMapsScraper | INFO     |   'hair cutting salon': +0 (total: 0/330)
+2026-03-08 03:16:17,928 | XHRGoogleMapsScraper | INFO     |   'haircuts for men': +0 (total: 0/330)
+2026-03-08 03:16:18,764 | XHRGoogleMapsScraper | INFO     |   'haircut near me': +0 (total: 0/330)
+2026-03-08 03:16:18,905 | XHRGoogleMapsScraper | INFO     |   'men's haircutting': +0 (total: 0/330)
+2026-03-08 03:16:19,890 | XHRGoogleMapsScraper | INFO     |   'low fade haircut': +0 (total: 0/330)
+2026-03-08 03:16:20,412 | XHRGoogleMapsScraper | INFO     |   'haircuts for men': +0 (total: 0/330)
+2026-03-08 03:16:20,886 | XHRGoogleMapsScraper | INFO     |   'taper fade': +0 (total: 0/330)
+2026-03-08 03:16:21,570 | XHRGoogleMapsScraper | INFO     |   'men's haircutting': +0 (total: 0/330)
+2026-03-08 03:16:22,003 | XHRGoogleMapsScraper | INFO     |   'shape up haircut': +0 (total: 0/330)
+2026-03-08 03:16:23,059 | XHRGoogleMapsScraper | INFO     |   'low fade haircut': +0 (total: 0/330)
+2026-03-08 03:16:23,145 | XHRGoogleMapsScraper | INFO     |   'classic barber': +0 (total: 0/330)
+2026-03-08 03:16:24,246 | XHRGoogleMapsScraper | INFO     |   'taper fade': +0 (total: 0/330)
+2026-03-08 03:16:24,759 | XHRGoogleMapsScraper | INFO     |   'old school barber': +0 (total: 0/330)
+2026-03-08 03:16:25,629 | XHRGoogleMapsScraper | INFO     |   'shape up haircut': +0 (total: 0/330)
+2026-03-08 03:16:26,361 | XHRGoogleMapsScraper | INFO     |   'master barber': +0 (total: 0/330)
+2026-03-08 03:16:26,988 | XHRGoogleMapsScraper | INFO     |   'classic barber': +0 (total: 0/330)
+2026-03-08 03:16:28,032 | XHRGoogleMapsScraper | INFO     |   'old school barber': +0 (total: 0/330)
+2026-03-08 03:16:28,041 | XHRGoogleMapsScraper | INFO     |   'hair clipper shop': +0 (total: 0/330)
+2026-03-08 03:16:28,887 | XHRGoogleMapsScraper | INFO     |   'master barber': +0 (total: 0/330)
+2026-03-08 03:16:29,215 | XHRGoogleMapsScraper | INFO     |   'grooming salon': +0 (total: 0/330)
+2026-03-08 03:16:30,186 | XHRGoogleMapsScraper | INFO     |   'hair clipper shop': +0 (total: 0/330)
+2026-03-08 03:16:30,439 | XHRGoogleMapsScraper | INFO     |   'men's grooming lounge': +0 (total: 0/330)
+2026-03-08 03:16:31,229 | XHRGoogleMapsScraper | INFO     |   'grooming salon': +0 (total: 0/330)
+2026-03-08 03:16:31,585 | XHRGoogleMapsScraper | INFO     |   'hair salon for men': +0 (total: 0/330)
+2026-03-08 03:16:32,774 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:16:32,783 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Calgary; running total: 0
+2026-03-08 03:16:32,783 | leadparser.main      | INFO     |   Pass 3 result: 0/100 leads pass filters
+2026-03-08 03:16:32,783 | leadparser.main      | WARNING  | Exhausted 3 passes — 0/100 filtered leads available.
+2026-03-08 03:16:32,816 | XHRGoogleMapsScraper | INFO     |   'men's grooming lounge': +0 (total: 0/330)
+2026-03-08 03:16:32,910 | leadparser.main      | INFO     | Filters applied: 0 raw -> 0 passed
+2026-03-08 03:16:33,175 | leadparser.main      | INFO     | Supabase insert: 0 new, 0 dupes, 0 errors
+2026-03-08 03:16:33,953 | leadparser.main      | INFO     | CSV export: 57 leads -> data\leads_20260308_031633.csv
+2026-03-08 03:16:33,981 | XHRGoogleMapsScraper | INFO     |   'hair salon for men': +0 (total: 0/330)
+2026-03-08 03:16:34,098 | leadparser.supabase  | INFO     | Session complete | stats: {'niches': 3, 'cities': 1, 'combinations': 3, 'raw_total': 0, 'total': 0, 'new': 0, 'duplicates': 0, 'errors': 0, 'csv_path': 'data\\leads_20260308_031633.csv'}
+2026-03-08 03:16:34,232 | leadparser.main      | INFO     | Total runtime: 186s
+2026-03-08 03:16:34,640 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:16:34,641 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Vancouver; running total: 0
+2026-03-08 03:16:34,641 | leadparser.main      | INFO     |   Pass 3 result: 0/100 leads pass filters
+2026-03-08 03:16:34,641 | leadparser.main      | WARNING  | Exhausted 3 passes — 0/100 filtered leads available.
+2026-03-08 03:16:34,774 | leadparser.main      | INFO     | Filters applied: 0 raw -> 0 passed
+2026-03-08 03:16:35,033 | leadparser.main      | INFO     | Supabase insert: 0 new, 0 dupes, 0 errors
+2026-03-08 03:16:35,846 | leadparser.main      | INFO     | CSV export: 57 leads -> data\leads_20260308_031635.csv
+2026-03-08 03:16:35,846 | leadparser.supabase  | INFO     | Session complete | stats: {'niches': 3, 'cities': 1, 'combinations': 3, 'raw_total': 0, 'total': 0, 'new': 0, 'duplicates': 0, 'errors': 0, 'csv_path': 'data\\leads_20260308_031635.csv'}
+2026-03-08 03:16:36,125 | leadparser.main      | INFO     | Total runtime: 188s

@@ -1,0 +1,203 @@
+2026-03-08 03:13:26,799 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_031326.log
+2026-03-08 03:13:27,476 | leadparser.main      | INFO     | Live log streaming active — job 01a1ad3d
+2026-03-08 03:13:27,476 | leadparser.main      | INFO     | Distributing 100 leads across 3 niche+city combinations (~33 per combination, remainder: 1)
+2026-03-08 03:13:28,601 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 03:13:28,602 | leadparser.supabase  | INFO     | Session 20260308_031328 | niches: ['food', 'automotive', 'barber shops'] | city: Edmonton
+2026-03-08 03:13:29,485 | leadparser.main      | INFO     | Session #20260308_031328 | 3 niche(s) | 1 location(s) | 3 total combinations | target: 100 filtered leads
+2026-03-08 03:13:29,622 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:13:29,970 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'food'
+2026-03-08 03:13:30,206 | XHRGoogleMapsScraper | INFO     |   'food': +0 (total: 0/340)
+2026-03-08 03:13:31,409 | XHRGoogleMapsScraper | INFO     |   'restaurants': +0 (total: 0/340)
+2026-03-08 03:13:32,487 | XHRGoogleMapsScraper | INFO     |   'diners': +0 (total: 0/340)
+2026-03-08 03:13:33,900 | XHRGoogleMapsScraper | INFO     |   'eateries': +0 (total: 0/340)
+2026-03-08 03:13:35,425 | XHRGoogleMapsScraper | INFO     |   'food shops': +0 (total: 0/340)
+2026-03-08 03:13:36,347 | XHRGoogleMapsScraper | INFO     |   'cafes': +0 (total: 0/340)
+2026-03-08 03:13:37,354 | XHRGoogleMapsScraper | INFO     |   'bistros': +0 (total: 0/340)
+2026-03-08 03:13:38,582 | XHRGoogleMapsScraper | INFO     |   'takeout food': +0 (total: 0/340)
+2026-03-08 03:13:39,505 | XHRGoogleMapsScraper | INFO     |   'local food spots': +0 (total: 0/340)
+2026-03-08 03:13:40,588 | XHRGoogleMapsScraper | INFO     |   'places to eat': +0 (total: 0/340)
+2026-03-08 03:13:42,171 | XHRGoogleMapsScraper | INFO     |   'local eats': +0 (total: 0/340)
+2026-03-08 03:13:43,028 | XHRGoogleMapsScraper | INFO     |   'food near me': +0 (total: 0/340)
+2026-03-08 03:13:43,717 | XHRGoogleMapsScraper | INFO     |   'dining near me': +0 (total: 0/340)
+2026-03-08 03:13:44,546 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:13:44,682 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Edmonton; running total: 0
+2026-03-08 03:13:44,682 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:13:45,075 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'automotive'
+2026-03-08 03:13:45,314 | XHRGoogleMapsScraper | INFO     |   'automotive': +0 (total: 0/330)
+2026-03-08 03:13:46,185 | XHRGoogleMapsScraper | INFO     |   'auto repair shops': +0 (total: 0/330)
+2026-03-08 03:13:47,369 | XHRGoogleMapsScraper | INFO     |   'auto detailing': +0 (total: 0/330)
+2026-03-08 03:13:48,081 | XHRGoogleMapsScraper | INFO     |   'auto body shops': +0 (total: 0/330)
+2026-03-08 03:13:49,083 | XHRGoogleMapsScraper | INFO     |   'tire shops': +0 (total: 0/330)
+2026-03-08 03:13:50,628 | XHRGoogleMapsScraper | INFO     |   'car wash': +0 (total: 0/330)
+2026-03-08 03:13:51,336 | XHRGoogleMapsScraper | INFO     |   'towing services': +0 (total: 0/330)
+2026-03-08 03:13:52,313 | XHRGoogleMapsScraper | INFO     |   'auto glass repair': +0 (total: 0/330)
+2026-03-08 03:13:53,283 | XHRGoogleMapsScraper | INFO     |   'car dealerships': +0 (total: 0/330)
+2026-03-08 03:13:54,476 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:13:54,616 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Edmonton; running total: 0
+2026-03-08 03:13:54,617 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:13:54,967 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'barber shops'
+2026-03-08 03:13:55,217 | XHRGoogleMapsScraper | INFO     |   'barber shops': +0 (total: 0/330)
+2026-03-08 03:13:56,863 | XHRGoogleMapsScraper | INFO     |   'local barber': +0 (total: 0/330)
+2026-03-08 03:13:58,394 | XHRGoogleMapsScraper | INFO     |   'fade haircut': +0 (total: 0/330)
+2026-03-08 03:13:59,440 | XHRGoogleMapsScraper | INFO     |   'beard trim': +0 (total: 0/330)
+2026-03-08 03:14:00,234 | XHRGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 0/330)
+2026-03-08 03:14:01,709 | XHRGoogleMapsScraper | INFO     |   'men's grooming': +0 (total: 0/330)
+2026-03-08 03:14:03,412 | XHRGoogleMapsScraper | INFO     |   'barbers': +0 (total: 0/330)
+2026-03-08 03:14:04,350 | XHRGoogleMapsScraper | INFO     |   'men's hair salons': +0 (total: 0/330)
+2026-03-08 03:14:05,446 | XHRGoogleMapsScraper | INFO     |   'barbershops': +0 (total: 0/330)
+2026-03-08 03:14:06,581 | XHRGoogleMapsScraper | INFO     |   'hair cut shops': +0 (total: 0/330)
+2026-03-08 03:14:07,635 | XHRGoogleMapsScraper | INFO     |   'barber': +0 (total: 0/330)
+2026-03-08 03:14:09,081 | XHRGoogleMapsScraper | INFO     |   'barbershop': +0 (total: 0/330)
+2026-03-08 03:14:10,306 | XHRGoogleMapsScraper | INFO     |   'hair barber': +0 (total: 0/330)
+2026-03-08 03:14:12,046 | XHRGoogleMapsScraper | INFO     |   'men's haircut': +0 (total: 0/330)
+2026-03-08 03:14:13,509 | XHRGoogleMapsScraper | INFO     |   'hair cutting salon': +0 (total: 0/330)
+2026-03-08 03:14:15,176 | XHRGoogleMapsScraper | INFO     |   'haircut near me': +0 (total: 0/330)
+2026-03-08 03:14:16,309 | XHRGoogleMapsScraper | INFO     |   'haircuts for men': +0 (total: 0/330)
+2026-03-08 03:14:17,948 | XHRGoogleMapsScraper | INFO     |   'men's haircutting': +0 (total: 0/330)
+2026-03-08 03:14:18,785 | XHRGoogleMapsScraper | INFO     |   'low fade haircut': +0 (total: 0/330)
+2026-03-08 03:14:20,239 | XHRGoogleMapsScraper | INFO     |   'taper fade': +0 (total: 0/330)
+2026-03-08 03:14:21,172 | XHRGoogleMapsScraper | INFO     |   'shape up haircut': +0 (total: 0/330)
+2026-03-08 03:14:22,132 | XHRGoogleMapsScraper | INFO     |   'classic barber': +0 (total: 0/330)
+2026-03-08 03:14:23,605 | XHRGoogleMapsScraper | INFO     |   'old school barber': +0 (total: 0/330)
+2026-03-08 03:14:25,157 | XHRGoogleMapsScraper | INFO     |   'master barber': +0 (total: 0/330)
+2026-03-08 03:14:26,067 | XHRGoogleMapsScraper | INFO     |   'hair clipper shop': +0 (total: 0/330)
+2026-03-08 03:14:27,466 | XHRGoogleMapsScraper | INFO     |   'grooming salon': +0 (total: 0/330)
+2026-03-08 03:14:28,734 | XHRGoogleMapsScraper | INFO     |   'men's grooming lounge': +0 (total: 0/330)
+2026-03-08 03:14:29,638 | XHRGoogleMapsScraper | INFO     |   'hair salon for men': +0 (total: 0/330)
+2026-03-08 03:14:31,108 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:14:31,110 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Edmonton; running total: 0
+2026-03-08 03:14:31,110 | leadparser.main      | INFO     |   Pass 1 result: 0/100 leads pass filters
+2026-03-08 03:14:31,110 | leadparser.main      | INFO     |   Retry pass 2/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 03:14:31,111 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:14:31,487 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'food'
+2026-03-08 03:14:31,727 | XHRGoogleMapsScraper | INFO     |   'food': +0 (total: 0/330)
+2026-03-08 03:14:33,055 | XHRGoogleMapsScraper | INFO     |   'restaurants': +0 (total: 0/330)
+2026-03-08 03:14:33,926 | XHRGoogleMapsScraper | INFO     |   'diners': +0 (total: 0/330)
+2026-03-08 03:14:35,233 | XHRGoogleMapsScraper | INFO     |   'eateries': +0 (total: 0/330)
+2026-03-08 03:14:36,798 | XHRGoogleMapsScraper | INFO     |   'food shops': +0 (total: 0/330)
+2026-03-08 03:14:37,905 | XHRGoogleMapsScraper | INFO     |   'cafes': +0 (total: 0/330)
+2026-03-08 03:14:39,436 | XHRGoogleMapsScraper | INFO     |   'bistros': +0 (total: 0/330)
+2026-03-08 03:14:40,744 | XHRGoogleMapsScraper | INFO     |   'takeout food': +0 (total: 0/330)
+2026-03-08 03:14:41,643 | XHRGoogleMapsScraper | INFO     |   'local food spots': +0 (total: 0/330)
+2026-03-08 03:14:42,781 | XHRGoogleMapsScraper | INFO     |   'places to eat': +0 (total: 0/330)
+2026-03-08 03:14:43,828 | XHRGoogleMapsScraper | INFO     |   'local eats': +0 (total: 0/330)
+2026-03-08 03:14:45,146 | XHRGoogleMapsScraper | INFO     |   'food near me': +0 (total: 0/330)
+2026-03-08 03:14:46,207 | XHRGoogleMapsScraper | INFO     |   'dining near me': +0 (total: 0/330)
+2026-03-08 03:14:47,094 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:14:47,095 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Edmonton; running total: 0
+2026-03-08 03:14:47,096 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:14:47,460 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'automotive'
+2026-03-08 03:14:47,684 | XHRGoogleMapsScraper | INFO     |   'automotive': +0 (total: 0/330)
+2026-03-08 03:14:48,407 | XHRGoogleMapsScraper | INFO     |   'auto repair shops': +0 (total: 0/330)
+2026-03-08 03:14:49,494 | XHRGoogleMapsScraper | INFO     |   'auto detailing': +0 (total: 0/330)
+2026-03-08 03:14:50,512 | XHRGoogleMapsScraper | INFO     |   'auto body shops': +0 (total: 0/330)
+2026-03-08 03:14:51,457 | XHRGoogleMapsScraper | INFO     |   'tire shops': +0 (total: 0/330)
+2026-03-08 03:14:52,590 | XHRGoogleMapsScraper | INFO     |   'car wash': +0 (total: 0/330)
+2026-03-08 03:14:54,195 | XHRGoogleMapsScraper | INFO     |   'towing services': +0 (total: 0/330)
+2026-03-08 03:14:55,384 | XHRGoogleMapsScraper | INFO     |   'auto glass repair': +0 (total: 0/330)
+2026-03-08 03:14:56,317 | XHRGoogleMapsScraper | INFO     |   'car dealerships': +0 (total: 0/330)
+2026-03-08 03:14:57,401 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:14:57,535 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Edmonton; running total: 0
+2026-03-08 03:14:57,536 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:14:57,889 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'barber shops'
+2026-03-08 03:14:58,151 | XHRGoogleMapsScraper | INFO     |   'barber shops': +0 (total: 0/330)
+2026-03-08 03:14:59,165 | XHRGoogleMapsScraper | INFO     |   'local barber': +0 (total: 0/330)
+2026-03-08 03:15:00,165 | XHRGoogleMapsScraper | INFO     |   'fade haircut': +0 (total: 0/330)
+2026-03-08 03:15:01,629 | XHRGoogleMapsScraper | INFO     |   'beard trim': +0 (total: 0/330)
+2026-03-08 03:15:02,429 | XHRGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 0/330)
+2026-03-08 03:15:03,601 | XHRGoogleMapsScraper | INFO     |   'men's grooming': +0 (total: 0/330)
+2026-03-08 03:15:04,289 | XHRGoogleMapsScraper | INFO     |   'barbers': +0 (total: 0/330)
+2026-03-08 03:15:05,204 | XHRGoogleMapsScraper | INFO     |   'men's hair salons': +0 (total: 0/330)
+2026-03-08 03:15:06,665 | XHRGoogleMapsScraper | INFO     |   'barbershops': +0 (total: 0/330)
+2026-03-08 03:15:07,426 | XHRGoogleMapsScraper | INFO     |   'hair cut shops': +0 (total: 0/330)
+2026-03-08 03:15:08,439 | XHRGoogleMapsScraper | INFO     |   'barber': +0 (total: 0/330)
+2026-03-08 03:15:09,594 | XHRGoogleMapsScraper | INFO     |   'barbershop': +0 (total: 0/330)
+2026-03-08 03:15:10,237 | XHRGoogleMapsScraper | INFO     |   'hair barber': +0 (total: 0/330)
+2026-03-08 03:15:11,450 | XHRGoogleMapsScraper | INFO     |   'men's haircut': +0 (total: 0/330)
+2026-03-08 03:15:12,331 | XHRGoogleMapsScraper | INFO     |   'hair cutting salon': +0 (total: 0/330)
+2026-03-08 03:15:13,892 | XHRGoogleMapsScraper | INFO     |   'haircut near me': +0 (total: 0/330)
+2026-03-08 03:15:14,860 | XHRGoogleMapsScraper | INFO     |   'haircuts for men': +0 (total: 0/330)
+2026-03-08 03:15:16,487 | XHRGoogleMapsScraper | INFO     |   'men's haircutting': +0 (total: 0/330)
+2026-03-08 03:15:17,948 | XHRGoogleMapsScraper | INFO     |   'low fade haircut': +0 (total: 0/330)
+2026-03-08 03:15:18,713 | XHRGoogleMapsScraper | INFO     |   'taper fade': +0 (total: 0/330)
+2026-03-08 03:15:19,387 | XHRGoogleMapsScraper | INFO     |   'shape up haircut': +0 (total: 0/330)
+2026-03-08 03:15:20,180 | XHRGoogleMapsScraper | INFO     |   'classic barber': +0 (total: 0/330)
+2026-03-08 03:15:21,735 | XHRGoogleMapsScraper | INFO     |   'old school barber': +0 (total: 0/330)
+2026-03-08 03:15:22,805 | XHRGoogleMapsScraper | INFO     |   'master barber': +0 (total: 0/330)
+2026-03-08 03:15:23,566 | XHRGoogleMapsScraper | INFO     |   'hair clipper shop': +0 (total: 0/330)
+2026-03-08 03:15:24,397 | XHRGoogleMapsScraper | INFO     |   'grooming salon': +0 (total: 0/330)
+2026-03-08 03:15:25,728 | XHRGoogleMapsScraper | INFO     |   'men's grooming lounge': +0 (total: 0/330)
+2026-03-08 03:15:27,098 | XHRGoogleMapsScraper | INFO     |   'hair salon for men': +0 (total: 0/330)
+2026-03-08 03:15:28,407 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:15:28,408 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Edmonton; running total: 0
+2026-03-08 03:15:28,408 | leadparser.main      | INFO     |   Pass 2 result: 0/100 leads pass filters
+2026-03-08 03:15:28,408 | leadparser.main      | INFO     |   Retry pass 3/3: raising raw ceiling to 660 to collect more matches
+2026-03-08 03:15:28,409 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:15:28,755 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'food'
+2026-03-08 03:15:29,001 | XHRGoogleMapsScraper | INFO     |   'food': +0 (total: 0/330)
+2026-03-08 03:15:30,037 | XHRGoogleMapsScraper | INFO     |   'restaurants': +0 (total: 0/330)
+2026-03-08 03:15:31,203 | XHRGoogleMapsScraper | INFO     |   'diners': +0 (total: 0/330)
+2026-03-08 03:15:32,186 | XHRGoogleMapsScraper | INFO     |   'eateries': +0 (total: 0/330)
+2026-03-08 03:15:33,141 | XHRGoogleMapsScraper | INFO     |   'food shops': +0 (total: 0/330)
+2026-03-08 03:15:34,233 | XHRGoogleMapsScraper | INFO     |   'cafes': +0 (total: 0/330)
+2026-03-08 03:15:35,283 | XHRGoogleMapsScraper | INFO     |   'bistros': +0 (total: 0/330)
+2026-03-08 03:15:36,274 | XHRGoogleMapsScraper | INFO     |   'takeout food': +0 (total: 0/330)
+2026-03-08 03:15:37,825 | XHRGoogleMapsScraper | INFO     |   'local food spots': +0 (total: 0/330)
+2026-03-08 03:15:39,288 | XHRGoogleMapsScraper | INFO     |   'places to eat': +0 (total: 0/330)
+2026-03-08 03:15:40,745 | XHRGoogleMapsScraper | INFO     |   'local eats': +0 (total: 0/330)
+2026-03-08 03:15:41,972 | XHRGoogleMapsScraper | INFO     |   'food near me': +0 (total: 0/330)
+2026-03-08 03:15:42,753 | XHRGoogleMapsScraper | INFO     |   'dining near me': +0 (total: 0/330)
+2026-03-08 03:15:43,454 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:15:43,455 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'food' in Edmonton; running total: 0
+2026-03-08 03:15:43,456 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:15:43,803 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'automotive'
+2026-03-08 03:15:44,042 | XHRGoogleMapsScraper | INFO     |   'automotive': +0 (total: 0/330)
+2026-03-08 03:15:45,528 | XHRGoogleMapsScraper | INFO     |   'auto repair shops': +0 (total: 0/330)
+2026-03-08 03:15:46,568 | XHRGoogleMapsScraper | INFO     |   'auto detailing': +0 (total: 0/330)
+2026-03-08 03:15:47,475 | XHRGoogleMapsScraper | INFO     |   'auto body shops': +0 (total: 0/330)
+2026-03-08 03:15:48,942 | XHRGoogleMapsScraper | INFO     |   'tire shops': +0 (total: 0/330)
+2026-03-08 03:15:50,307 | XHRGoogleMapsScraper | INFO     |   'car wash': +0 (total: 0/330)
+2026-03-08 03:15:51,224 | XHRGoogleMapsScraper | INFO     |   'towing services': +0 (total: 0/330)
+2026-03-08 03:15:51,972 | XHRGoogleMapsScraper | INFO     |   'auto glass repair': +0 (total: 0/330)
+2026-03-08 03:15:53,194 | XHRGoogleMapsScraper | INFO     |   'car dealerships': +0 (total: 0/330)
+2026-03-08 03:15:54,258 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:15:54,259 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'automotive' in Edmonton; running total: 0
+2026-03-08 03:15:54,260 | XHRGoogleMapsScraper | INFO     | XHR using direct connection (no proxy)
+2026-03-08 03:15:54,611 | XHRGoogleMapsScraper | INFO     | XHR Phase A: collecting URLs for 'barber shops'
+2026-03-08 03:15:54,848 | XHRGoogleMapsScraper | INFO     |   'barber shops': +0 (total: 0/330)
+2026-03-08 03:15:55,848 | XHRGoogleMapsScraper | INFO     |   'local barber': +0 (total: 0/330)
+2026-03-08 03:15:56,626 | XHRGoogleMapsScraper | INFO     |   'fade haircut': +0 (total: 0/330)
+2026-03-08 03:15:57,687 | XHRGoogleMapsScraper | INFO     |   'beard trim': +0 (total: 0/330)
+2026-03-08 03:15:58,865 | XHRGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 0/330)
+2026-03-08 03:16:00,381 | XHRGoogleMapsScraper | INFO     |   'men's grooming': +0 (total: 0/330)
+2026-03-08 03:16:02,020 | XHRGoogleMapsScraper | INFO     |   'barbers': +0 (total: 0/330)
+2026-03-08 03:16:03,351 | XHRGoogleMapsScraper | INFO     |   'men's hair salons': +0 (total: 0/330)
+2026-03-08 03:16:05,037 | XHRGoogleMapsScraper | INFO     |   'barbershops': +0 (total: 0/330)
+2026-03-08 03:16:06,451 | XHRGoogleMapsScraper | INFO     |   'hair cut shops': +0 (total: 0/330)
+2026-03-08 03:16:07,410 | XHRGoogleMapsScraper | INFO     |   'barber': +0 (total: 0/330)
+2026-03-08 03:16:09,147 | XHRGoogleMapsScraper | INFO     |   'barbershop': +0 (total: 0/330)
+2026-03-08 03:16:10,403 | XHRGoogleMapsScraper | INFO     |   'hair barber': +0 (total: 0/330)
+2026-03-08 03:16:11,797 | XHRGoogleMapsScraper | INFO     |   'men's haircut': +0 (total: 0/330)
+2026-03-08 03:16:13,159 | XHRGoogleMapsScraper | INFO     |   'hair cutting salon': +0 (total: 0/330)
+2026-03-08 03:16:14,246 | XHRGoogleMapsScraper | INFO     |   'haircut near me': +0 (total: 0/330)
+2026-03-08 03:16:15,533 | XHRGoogleMapsScraper | INFO     |   'haircuts for men': +0 (total: 0/330)
+2026-03-08 03:16:16,450 | XHRGoogleMapsScraper | INFO     |   'men's haircutting': +0 (total: 0/330)
+2026-03-08 03:16:17,665 | XHRGoogleMapsScraper | INFO     |   'low fade haircut': +0 (total: 0/330)
+2026-03-08 03:16:19,012 | XHRGoogleMapsScraper | INFO     |   'taper fade': +0 (total: 0/330)
+2026-03-08 03:16:19,785 | XHRGoogleMapsScraper | INFO     |   'shape up haircut': +0 (total: 0/330)
+2026-03-08 03:16:20,753 | XHRGoogleMapsScraper | INFO     |   'classic barber': +0 (total: 0/330)
+2026-03-08 03:16:21,620 | XHRGoogleMapsScraper | INFO     |   'old school barber': +0 (total: 0/330)
+2026-03-08 03:16:22,512 | XHRGoogleMapsScraper | INFO     |   'master barber': +0 (total: 0/330)
+2026-03-08 03:16:23,930 | XHRGoogleMapsScraper | INFO     |   'hair clipper shop': +0 (total: 0/330)
+2026-03-08 03:16:25,302 | XHRGoogleMapsScraper | INFO     |   'grooming salon': +0 (total: 0/330)
+2026-03-08 03:16:26,243 | XHRGoogleMapsScraper | INFO     |   'men's grooming lounge': +0 (total: 0/330)
+2026-03-08 03:16:27,460 | XHRGoogleMapsScraper | INFO     |   'hair salon for men': +0 (total: 0/330)
+2026-03-08 03:16:28,262 | XHRGoogleMapsScraper | INFO     |   Phase A complete — 0 unique URLs
+2026-03-08 03:16:28,263 | leadparser.main      | INFO     |   -> 0 raw scraped, 0 new unique leads for 'barber shops' in Edmonton; running total: 0
+2026-03-08 03:16:28,263 | leadparser.main      | INFO     |   Pass 3 result: 0/100 leads pass filters
+2026-03-08 03:16:28,263 | leadparser.main      | WARNING  | Exhausted 3 passes — 0/100 filtered leads available.
+2026-03-08 03:16:28,408 | leadparser.main      | INFO     | Filters applied: 0 raw -> 0 passed
+2026-03-08 03:16:28,670 | leadparser.main      | INFO     | Supabase insert: 0 new, 0 dupes, 0 errors
+2026-03-08 03:16:29,500 | leadparser.main      | INFO     | CSV export: 57 leads -> data\leads_20260308_031629.csv
+2026-03-08 03:16:29,634 | leadparser.supabase  | INFO     | Session complete | stats: {'niches': 3, 'cities': 1, 'combinations': 3, 'raw_total': 0, 'total': 0, 'new': 0, 'duplicates': 0, 'errors': 0, 'csv_path': 'data\\leads_20260308_031629.csv'}
+2026-03-08 03:16:29,762 | leadparser.main      | INFO     | Total runtime: 182s

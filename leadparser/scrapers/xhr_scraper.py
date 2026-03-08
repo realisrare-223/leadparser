@@ -316,6 +316,13 @@ class XHRGoogleMapsScraper:
                     )
                     continue
 
+                # Debug: log a snippet of the HTML
+                html_snippet = resp.text[:2000]
+                if '/maps/place/' in html_snippet:
+                    self.logger.debug(f"  HTML contains /maps/place/ links")
+                else:
+                    self.logger.debug(f"  HTML snippet (first 500 chars): {html_snippet[:500]}")
+
                 new_urls = self._extract_urls_from_html(resp.text, global_seen)
                 for u in new_urls:
                     global_seen.add(u)
@@ -344,20 +351,40 @@ class XHRGoogleMapsScraper:
         Google server-renders the first batch of results, so these links
         appear as plain <a href="/maps/place/..."> elements.
         """
-        raw_paths = _GMB_URL_RE.findall(html)
+        # Try multiple patterns to find place URLs
+        patterns = [
+            r'href="(/maps/place/[^"]+)"',  # Standard format
+            r'href=\"(/maps/place/[^"]+)"',  # Escaped quotes
+            r'"(/maps/place/[^"]+)"',  # Just the path in quotes
+            r'href="(https://www\.google\.com/maps/place/[^"]+)"',  # Full URL
+        ]
+        
+        all_paths = []
+        for pattern in patterns:
+            all_paths.extend(re.findall(pattern, html))
+        
+        # Also try to find any URL-like strings containing /maps/place/
+        all_paths.extend(re.findall(r'(/maps/place/[^\s"\'>]+)', html))
+        
+        self.logger.debug(f"Found {len(all_paths)} raw URL matches in HTML")
+        
         seen_here: set[str] = set()
         unique: list[str]   = []
 
-        for path in raw_paths:
+        for path in all_paths:
             if "/maps/place/" not in path:
                 continue
             # Build full URL and normalise (strip trailing data= params)
-            full = f"https://www.google.com{path}"
+            if path.startswith('http'):
+                full = path
+            else:
+                full = f"https://www.google.com{path}"
             clean = re.split(r"(?=/data=)", full)[0]
             if clean not in exclude and clean not in seen_here:
                 seen_here.add(clean)
-                unique.append(full)  # keep original href for navigation
+                unique.append(full)
 
+        self.logger.debug(f"Extracted {len(unique)} unique URLs")
         return unique
 
     # ── Phase B: business extraction ──────────────────────────────────────────
