@@ -219,37 +219,37 @@ function ParserModal({
         </p>
 
         <div className="space-y-3">
-          {/* XHR - Default/Recommended */}
-          <button
-            onClick={() => onSelect('xhr')}
-            className="w-full text-left p-4 rounded-xl border border-violet-500/40 bg-violet-500/10 hover:bg-violet-500/20 transition group"
-          >
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-violet-300 font-semibold text-sm">XHR / HTTP</span>
-              <span className="text-[10px] text-violet-400 bg-violet-500/20 px-2 py-0.5 rounded-full border border-violet-500/30 font-semibold">
-                Recommended
-              </span>
-            </div>
-            <p className="text-slate-400 text-xs leading-relaxed">
-              No browser — pure async HTTP requests. Up to 100× faster with 4 concurrent workers.
-              Best for large volume runs. Automatically uses direct connection (no proxy delays).
-            </p>
-          </button>
-
-          {/* Playwright */}
+          {/* Playwright - Recommended (works) */}
           <button
             onClick={() => onSelect('playwright')}
-            className="w-full text-left p-4 rounded-xl border border-blue-500/40 bg-blue-500/10 hover:bg-blue-500/20 transition"
+            className="w-full text-left p-4 rounded-xl border border-blue-500/40 bg-blue-500/10 hover:bg-blue-500/20 transition group"
           >
             <div className="flex items-center justify-between mb-1">
               <span className="text-blue-300 font-semibold text-sm">Playwright</span>
               <span className="text-[10px] text-blue-400 bg-blue-500/20 px-2 py-0.5 rounded-full border border-blue-500/30 font-semibold">
-                Most Accurate
+                Recommended
               </span>
             </div>
             <p className="text-slate-400 text-xs leading-relaxed">
-              Real browser — 4× parallel workers. Better anti-bot evasion.
-              Use if XHR gets blocked or for difficult-to-scrape cities.
+              Real browser — 4× parallel workers. Executes JavaScript to get all results.
+              Works reliably. Slower but gets actual leads.
+            </p>
+          </button>
+
+          {/* XHR - May not work */}
+          <button
+            onClick={() => onSelect('xhr')}
+            className="w-full text-left p-4 rounded-xl border border-violet-500/40 bg-violet-500/10 hover:bg-violet-500/20 transition"
+          >
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-violet-300 font-semibold text-sm">XHR / HTTP</span>
+              <span className="text-[10px] text-violet-400 bg-violet-500/20 px-2 py-0.5 rounded-full border border-violet-500/30 font-semibold">
+                Fast (May Fail)
+              </span>
+            </div>
+            <p className="text-slate-400 text-xs leading-relaxed">
+              No browser — pure HTTP requests. 100× faster but Google may block it.
+              Try this first for speed, use Playwright if it returns 0 results.
             </p>
           </button>
         </div>
@@ -290,7 +290,7 @@ export function ScraperPanel() {
 
   // ── Parser modal ──
   const [showParserModal, setShowParserModal] = useState(false)
-  const [parser, setParser] = useState<ParserChoice>('xhr')  // Default to XHR (fastest)
+  const [parser, setParser] = useState<ParserChoice>('playwright')  // Default to Playwright (works)
 
   // ── UI state ──
   const [queuing,      setQueuing]      = useState(false)

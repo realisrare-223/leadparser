@@ -348,43 +348,62 @@ class XHRGoogleMapsScraper:
     def _extract_urls_from_html(self, html: str, exclude: set) -> list[str]:
         """
         Extract /maps/place/ profile URLs from Google Maps search HTML.
-        Google server-renders the first batch of results, so these links
-        appear as plain <a href="/maps/place/..."> elements.
+        Tries multiple methods: direct links, APP_INITIALIZATION_STATE JSON, etc.
         """
-        # Try multiple patterns to find place URLs
-        patterns = [
-            r'href="(/maps/place/[^"]+)"',  # Standard format
-            r'href=\"(/maps/place/[^"]+)"',  # Escaped quotes
-            r'"(/maps/place/[^"]+)"',  # Just the path in quotes
-            r'href="(https://www\.google\.com/maps/place/[^"]+)"',  # Full URL
-        ]
-        
-        all_paths = []
-        for pattern in patterns:
-            all_paths.extend(re.findall(pattern, html))
-        
-        # Also try to find any URL-like strings containing /maps/place/
-        all_paths.extend(re.findall(r'(/maps/place/[^\s"\'>]+)', html))
-        
-        self.logger.debug(f"Found {len(all_paths)} raw URL matches in HTML")
-        
+        unique: list[str] = []
         seen_here: set[str] = set()
-        unique: list[str]   = []
-
-        for path in all_paths:
-            if "/maps/place/" not in path:
-                continue
-            # Build full URL and normalise (strip trailing data= params)
-            if path.startswith('http'):
-                full = path
-            else:
-                full = f"https://www.google.com{path}"
-            clean = re.split(r"(?=/data=)", full)[0]
-            if clean not in exclude and clean not in seen_here:
-                seen_here.add(clean)
-                unique.append(full)
-
-        self.logger.debug(f"Extracted {len(unique)} unique URLs")
+        
+        # Method 1: Extract from APP_INITIALIZATION_STATE JSON
+        # This contains the actual place data as a JavaScript variable
+        try:
+            # Find the APP_INITIALIZATION_STATE
+            match = re.search(r'window\.APP_INITIALIZATION_STATE\s*=\s*(\[.+?\]);</script>', html, re.DOTALL)
+            if not match:
+                match = re.search(r'APP_INITIALIZATION_STATE\s*=\s*(\[.+?\]);', html, re.DOTALL)
+            
+            if match:
+                json_str = match.group(1)
+                # Look for place IDs (ludocid) and fids in the JSON
+                # Format: "https://www.google.com/maps/place/.../data=!4m2!3m1!1s0x..."
+                place_urls = re.findall(r'(https://www\.google\.com/maps/place/[^"\\]+)', json_str)
+                for url in place_urls:
+                    # Clean up escaped characters
+                    url = url.replace('\\u003d', '=').replace('\\u0026', '&').replace('\\', '')
+                    # Strip data parameters
+                    clean = re.split(r"(?=/data=)", url)[0]
+                    if "/maps/place/" in clean and clean not in exclude and clean not in seen_here:
+                        seen_here.add(clean)
+                        unique.append(url)
+                
+                self.logger.debug(f"Extracted {len(unique)} URLs from APP_INITIALIZATION_STATE")
+        except Exception as exc:
+            self.logger.debug(f"APP_INITIALIZATION_STATE extraction failed: {exc}")
+        
+        # Method 2: Try standard HTML href patterns (fallback)
+        if not unique:
+            patterns = [
+                r'href="(/maps/place/[^"]+)"',
+                r'href=\"(/maps/place/[^"]+)\"',
+                r'"(/maps/place/[^"]+)"',
+                r'href="(https://www\.google\.com/maps/place/[^"]+)"',
+            ]
+            
+            all_paths = []
+            for pattern in patterns:
+                all_paths.extend(re.findall(pattern, html))
+            
+            for path in all_paths:
+                if "/maps/place/" not in path:
+                    continue
+                if path.startswith('http'):
+                    full = path
+                else:
+                    full = f"https://www.google.com{path}"
+                clean = re.split(r"(?=/data=)", full)[0]
+                if clean not in exclude and clean not in seen_here:
+                    seen_here.add(clean)
+                    unique.append(full)
+        
         return unique
 
     # ── Phase B: business extraction ──────────────────────────────────────────
