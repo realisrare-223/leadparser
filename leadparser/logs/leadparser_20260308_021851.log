@@ -61,3 +61,24 @@ Call log:
 Call log:
   - navigating to "https://www.google.com/maps/search/barber+shops+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
 
+2026-03-08 02:37:37,848 | PlaywrightGoogleMapsScraper | WARNING  |   Results feed not found — possible CAPTCHA
+2026-03-08 02:37:38,037 | PlaywrightGoogleMapsScraper | INFO     |   'barber shops': +0 (total: 0/500)
+2026-03-08 02:37:38,037 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local barber in Calgary, Alberta'
+2026-03-08 02:37:38,380 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'local barber': Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.google.com/maps/search/local+barber+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/local+barber+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:37:48,386 | PlaywrightGoogleMapsScraper | WARNING  |   Results feed not found — possible CAPTCHA
+2026-03-08 02:37:48,599 | PlaywrightGoogleMapsScraper | INFO     |   'local barber': +0 (total: 0/500)
+2026-03-08 02:37:48,599 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'fade haircut in Calgary, Alberta'
+2026-03-08 02:37:48,989 | PlaywrightGoogleMapsScraper | WARNING  |   Could not load 'fade haircut': Page.goto: net::ERR_TUNNEL_CONNECTION_FAILED at https://www.google.com/maps/search/fade+haircut+in+Calgary%2C+Alberta
+Call log:
+  - navigating to "https://www.google.com/maps/search/fade+haircut+in+Calgary%2C+Alberta", waiting until "domcontentloaded"
+
+2026-03-08 02:37:48,990 | PlaywrightGoogleMapsScraper | WARNING  |   3 consecutive proxy failures — switching to direct connection
+2026-03-08 02:39:17,424 | PlaywrightGoogleMapsScraper | INFO     |   'fade haircut': +74 (total: 74/500)
+2026-03-08 02:39:17,779 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'beard trim in Calgary, Alberta'
+2026-03-08 02:40:16,152 | PlaywrightGoogleMapsScraper | INFO     |   'beard trim': +35 (total: 109/500)
+2026-03-08 02:40:16,402 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'traditional hot towel shave in Calgary, Alberta'
+2026-03-08 02:40:27,556 | PlaywrightGoogleMapsScraper | INFO     |   'traditional hot towel shave': +1 (total: 110/500)
+2026-03-08 02:40:27,802 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming in Calgary, Alberta'

@@ -1,0 +1,36 @@
+2026-03-08 02:42:18,432 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_024218.log
+2026-03-08 02:42:18,434 | leadparser.main      | INFO     | LeadParser started | log: logs\leadparser_20260308_024218.log
+2026-03-08 02:42:19,679 | leadparser.main      | INFO     | Live log streaming active — job da2183f9
+2026-03-08 02:42:19,680 | leadparser.main      | INFO     | Distributing 100 leads across 3 niche+city combinations (~33 per combination, remainder: 1)
+2026-03-08 02:42:19,685 | leadparser.main      | INFO     | Live log streaming active — job 07b85b2a
+2026-03-08 02:42:19,686 | leadparser.main      | INFO     | Distributing 100 leads across 3 niche+city combinations (~33 per combination, remainder: 1)
+2026-03-08 02:42:20,823 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 02:42:20,823 | leadparser.supabase  | INFO     | Session 20260308_024220 | niches: ['barber shops', 'automotive', 'food'] | city: Vancouver
+2026-03-08 02:42:20,823 | leadparser.main      | INFO     | Session #20260308_024220 | 3 niche(s) | 1 location(s) | 3 total combinations | target: 100 filtered leads
+2026-03-08 02:42:20,826 | leadparser.supabase  | INFO     | Supabase client initialised
+2026-03-08 02:42:20,826 | leadparser.supabase  | INFO     | Session 20260308_024220 | niches: ['barber shops', 'automotive', 'food'] | city: Edmonton
+2026-03-08 02:42:20,826 | leadparser.main      | INFO     | Session #20260308_024220 | 3 niche(s) | 1 location(s) | 3 total combinations | target: 100 filtered leads
+2026-03-08 02:42:22,326 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:42:22,347 | PlaywrightGoogleMapsScraper | INFO     | Playwright Phase A: collecting URLs for 'barber shops'
+2026-03-08 02:42:22,603 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Edmonton, Alberta'
+2026-03-08 02:42:22,607 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber shops in Vancouver, British Columbia'
+2026-03-08 02:44:05,114 | PlaywrightGoogleMapsScraper | INFO     |   'barber shops': +70 (total: 70/340)
+2026-03-08 02:44:05,339 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local barber in Edmonton, Alberta'
+2026-03-08 02:44:07,236 | PlaywrightGoogleMapsScraper | INFO     |   'barber shops': +74 (total: 74/340)
+2026-03-08 02:44:07,409 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'local barber in Vancouver, British Columbia'
+2026-03-08 02:44:20,104 | PlaywrightGoogleMapsScraper | INFO     |   'local barber': +0 (total: 70/340)
+2026-03-08 02:44:20,365 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'fade haircut in Edmonton, Alberta'
+2026-03-08 02:44:30,121 | PlaywrightGoogleMapsScraper | INFO     |   'local barber': +1 (total: 75/340)
+2026-03-08 02:44:30,388 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'fade haircut in Vancouver, British Columbia'
+2026-03-08 02:44:31,424 | PlaywrightGoogleMapsScraper | INFO     |   'fade haircut': +1 (total: 71/340)
+2026-03-08 02:44:31,629 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'beard trim in Edmonton, Alberta'
+2026-03-08 02:44:47,237 | PlaywrightGoogleMapsScraper | INFO     |   'beard trim': +0 (total: 71/340)
+2026-03-08 02:44:47,463 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'traditional hot towel shave in Edmonton, Alberta'
+2026-03-08 02:44:48,327 | PlaywrightGoogleMapsScraper | INFO     |   'fade haircut': +0 (total: 75/340)
+2026-03-08 02:44:48,619 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'beard trim in Vancouver, British Columbia'
+2026-03-08 02:45:09,358 | PlaywrightGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 71/340)
+2026-03-08 02:45:09,600 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming in Edmonton, Alberta'
+2026-03-08 02:45:33,434 | PlaywrightGoogleMapsScraper | INFO     |   'beard trim': +2 (total: 77/340)
+2026-03-08 02:45:33,719 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'traditional hot towel shave in Vancouver, British Columbia'
+2026-03-08 02:45:49,231 | PlaywrightGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 77/340)
+2026-03-08 02:45:49,537 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming in Vancouver, British Columbia'

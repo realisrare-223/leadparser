@@ -503,19 +503,11 @@ class PlaywrightGoogleMapsScraper:
         return ""
 
     async def _extract_phone_pw(self, page) -> str:
-        # Wait up to 6s for the phone element to render (loads after name)
-        for xpath in (
-            '//button[starts-with(@data-item-id,"phone:")]',
-            '//a[starts-with(@data-item-id,"phone:")]',
-            '//button[starts-with(@aria-label,"Phone:")]',
-        ):
-            try:
-                await page.wait_for_selector(f"xpath={xpath}", timeout=6_000)
-                break
-            except Exception:
-                pass
-
-        # Approach 1: data-item-id="phone:tel:+1XXXXXXXXXX"
+        """Extract phone number quickly from the page."""
+        # Fast path: try to get phone from page content without waiting
+        # Most pages have phone loaded by the time h1 is ready
+        
+        # Approach 1: data-item-id="phone:tel:+1XXXXXXXXXX" (fastest)
         for xpath in (
             '//button[starts-with(@data-item-id,"phone:")]',
             '//a[starts-with(@data-item-id,"phone:")]',
@@ -523,32 +515,62 @@ class PlaywrightGoogleMapsScraper:
             el = await page.query_selector(f"xpath={xpath}")
             if el:
                 item_id = (await el.get_attribute("data-item-id")) or ""
-                phone   = item_id.replace("phone:", "").replace("tel:", "").strip()
-                if phone:
+                phone = item_id.replace("phone:", "").replace("tel:", "").strip()
+                if phone and len(phone) >= 10:
                     return phone
 
         # Approach 2: aria-label="Phone: ..."
         for xpath in (
             '//button[starts-with(@aria-label,"Phone:")]',
             '//div[starts-with(@aria-label,"Phone:")]',
+            '//a[starts-with(@aria-label,"Phone:")]',
         ):
             el = await page.query_selector(f"xpath={xpath}")
             if el:
                 label = (await el.get_attribute("aria-label")) or ""
                 phone = label.replace("Phone:", "").strip()
-                if phone:
+                if phone and len(phone) >= 10:
                     return phone
 
-        # Approach 3: regex scan of all button texts
-        buttons = await page.query_selector_all("button")
-        for btn in buttons:
-            try:
-                txt = (await btn.inner_text()) or ""
-                m   = _PHONE_RE.search(txt)
-                if m:
-                    return m.group(0).strip()
-            except Exception:
-                continue
+        # Approach 3: JavaScript evaluation for phone links (fast)
+        try:
+            phone_from_js = await page.evaluate(r'''
+                () => {
+                    // Look for tel: links
+                    const telLinks = document.querySelectorAll('a[href^="tel:"]');
+                    for (const link of telLinks) {
+                        const phone = link.href.replace('tel:', '').trim();
+                        if (phone && phone.length >= 10) return phone;
+                    }
+                    // Look for data-item-id containing phone
+                    const phoneBtns = document.querySelectorAll('[data-item-id*="phone:"]');
+                    for (const btn of phoneBtns) {
+                        const id = btn.getAttribute('data-item-id');
+                        if (id) {
+                            const match = id.match(/tel:([\d\+\-\(\)\s]+)/);
+                            if (match) return match[1].trim();
+                        }
+                    }
+                    return '';
+                }
+            ''')
+            if phone_from_js and len(phone_from_js) >= 10:
+                return phone_from_js
+        except Exception:
+            pass
+
+        # Approach 4: quick regex scan of page text (last resort)
+        try:
+            page_text = await page.content()
+            # Look for tel: links in HTML
+            import re
+            tel_match = re.search(r'href="tel:([^"]+)"', page_text)
+            if tel_match:
+                phone = tel_match.group(1).strip()
+                if phone and len(phone) >= 10:
+                    return phone
+        except Exception:
+            pass
 
         return ""
 

@@ -82,3 +82,13 @@ Call log:
 2026-03-08 02:36:40,593 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'traditional hot towel shave in Edmonton, Alberta'
 2026-03-08 02:37:10,386 | PlaywrightGoogleMapsScraper | INFO     |   'traditional hot towel shave': +0 (total: 85/500)
 2026-03-08 02:37:10,695 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's grooming in Edmonton, Alberta'
+2026-03-08 02:37:40,818 | PlaywrightGoogleMapsScraper | INFO     |   'men's grooming': +2 (total: 87/500)
+2026-03-08 02:37:41,011 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbers in Edmonton, Alberta'
+2026-03-08 02:38:17,449 | PlaywrightGoogleMapsScraper | INFO     |   'barbers': +0 (total: 87/500)
+2026-03-08 02:38:17,758 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'men's hair salons in Edmonton, Alberta'
+2026-03-08 02:39:09,633 | PlaywrightGoogleMapsScraper | INFO     |   'men's hair salons': +1 (total: 88/500)
+2026-03-08 02:39:09,871 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barbershops in Edmonton, Alberta'
+2026-03-08 02:39:50,680 | PlaywrightGoogleMapsScraper | INFO     |   'barbershops': +0 (total: 88/500)
+2026-03-08 02:39:50,911 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'hair cut shops in Edmonton, Alberta'
+2026-03-08 02:41:06,553 | PlaywrightGoogleMapsScraper | INFO     |   'hair cut shops': +31 (total: 119/500)
+2026-03-08 02:41:06,824 | PlaywrightGoogleMapsScraper | INFO     |   Searching: 'barber in Edmonton, Alberta'
